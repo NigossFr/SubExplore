@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SubExplore.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:SubExplore.Views"
+    xmlns:main="clr-namespace:SubExplore.Views.Main"
+    Shell.NavBarIsVisible="False">
+
+    <TabBar>
+        <!-- Page Carte -->
+        <Tab Title="Carte" Icon="map">
+            <ShellContent
+                ContentTemplate="{DataTemplate main:MapPage}"
+                Route="map" />
+        </Tab>
+
+        <!-- Page Spots -->
+        <Tab Title="Spots" Icon="spot">
+            <ShellContent
+                ContentTemplate="{DataTemplate main:SpotsPage}"
+                Route="spots" />
+        </Tab>
+
+        <!-- Page Structures -->
+        <Tab Title="Structures" Icon="structures">
+            <ShellContent
+                ContentTemplate="{DataTemplate main:StructuresPage}"
+                Route="structures" />
+        </Tab>
+
+        <!-- Page Magazine -->
+        <Tab Title="Magazine" Icon="magazine">
+            <ShellContent
+                ContentTemplate="{DataTemplate main:MagazinePage}"
+                Route="magazine" />
+        </Tab>
+
+        <!-- Page Profil -->
+        <Tab Title="Profil" Icon="profile">
+            <ShellContent
+                ContentTemplate="{DataTemplate main:ProfilePage}"
+                Route="profile" />
+        </Tab>
+    </TabBar>
+</Shell>

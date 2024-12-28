@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodel="clr-namespace:SubExplore.ViewModels"
+             xmlns:maps="clr-namespace:Microsoft.Maui.Maps;assembly=Microsoft.Maui.Maps"
+             x:Class="SubExplore.Views.Main.MapPage"
+             x:DataType="viewmodel:MapViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header -->
+        <Grid Grid.Row="0" 
+              BackgroundColor="{StaticResource Primary}"
+              Padding="20,44,20,10"
+              ColumnDefinitions="Auto,*,Auto">
+
+            <!-- Menu button -->
+            <ImageButton Grid.Column="0"
+                        Source="menu.png"
+                        HeightRequest="24"
+                        WidthRequest="24"
+                        Command="{Binding OpenMenuCommand}"/>
+
+            <!-- Search bar -->
+            <Frame Grid.Column="1"
+                   Margin="10,0"
+                   Padding="15,5"
+                   BackgroundColor="White"
+                   CornerRadius="20"
+                   HasShadow="False">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Image Source="search.png"
+                           HeightRequest="20"
+                           WidthRequest="20"/>
+                    <Entry Grid.Column="1"
+                           Placeholder="Rechercher un spot..."
+                           Text="{Binding SearchText}"
+                           TextColor="{StaticResource TextPrimary}"/>
+                </Grid>
+            </Frame>
+
+            <!-- Filter button -->
+            <ImageButton Grid.Column="2"
+                        Source="filter.png"
+                        HeightRequest="24"
+                        WidthRequest="24"
+                        Command="{Binding OpenFiltersCommand}"/>
+        </Grid>
+
+        <!-- Map -->
+        <maps:Map Grid.Row="1"
+                  x:Name="map"
+                  IsShowingUser="True"
+                  IsTrafficEnabled="False"
+                  MapType="{Binding CurrentMapType}"/>
+
+        <!-- Bottom controls -->
+        <Grid Grid.Row="2"
+              BackgroundColor="White"
+              Padding="20,10"
+              ColumnDefinitions="Auto,*,Auto">
+
+            <!-- My location button -->
+            <Button Grid.Column="0"
+                    Style="{StaticResource CircleButton}"
+                    ImageSource="location.png"
+                    Command="{Binding CenterOnUserCommand}"/>
+
+            <!-- Add spot button -->
+            <Button Grid.Column="1"
+                    Text="Ajouter un spot"
+                    Command="{Binding AddSpotCommand}"
+                    Style="{StaticResource PrimaryButton}"
+                    HorizontalOptions="Center"
+                    Margin="20,0"/>
+
+            <!-- Map type toggle -->
+            <Button Grid.Column="2"
+                    Style="{StaticResource CircleButton}"
+                    ImageSource="layers.png"
+                    Command="{Binding ToggleMapTypeCommand}"/>
+        </Grid>
+
+        <!-- Spot filters panel -->
+        <Frame Grid.Row="1"
+               x:Name="filtersPanel"
+               BackgroundColor="White"
+               CornerRadius="20"
+               Margin="20"
+               Padding="20"
+               VerticalOptions="Start"
+               IsVisible="{Binding IsFiltersPanelVisible}">
+            <VerticalStackLayout Spacing="15">
+                <Label Text="Filtres"
+                       Style="{StaticResource TitleLabel}"/>
+
+                <!-- Activity types -->
+                <Label Text="Type d'activité"
+                       Style="{StaticResource SubtitleLabel}"/>
+                <HorizontalStackLayout Spacing="10">
+                    <Button Text="Plongée"
+                            Command="{Binding FilterByActivityCommand}"
+                            CommandParameter="diving"
+                            Style="{StaticResource FilterButton}"/>
+                    <Button Text="Apnée"
+                            Command="{Binding FilterByActivityCommand}"
+                            CommandParameter="freediving"
+                            Style="{StaticResource FilterButton}"/>
+                    <Button Text="Randonnée"
+                            Command="{Binding FilterByActivityCommand}"
+                            CommandParameter="snorkeling"
+                            Style="{StaticResource FilterButton}"/>
+                </HorizontalStackLayout>
+
+                <!-- Difficulty level -->
+                <Label Text="Niveau"
+                       Style="{StaticResource SubtitleLabel}"/>
+                <HorizontalStackLayout Spacing="10">
+                    <Button Text="Débutant"
+                            Command="{Binding FilterByDifficultyCommand}"
+                            CommandParameter="beginner"
+                            Style="{StaticResource FilterButton}"/>
+                    <Button Text="Intermédiaire"
+                            Command="{Binding FilterByDifficultyCommand}"
+                            CommandParameter="intermediate"
+                            Style="{StaticResource FilterButton}"/>
+                    <Button Text="Avancé"
+                            Command="{Binding FilterByDifficultyCommand}"
+                            CommandParameter="advanced"
+                            Style="{StaticResource FilterButton}"/>
+                </HorizontalStackLayout>
+
+                <!-- Apply filters button -->
+                <Button Text="Appliquer les filtres"
+                        Command="{Binding ApplyFiltersCommand}"
+                        Style="{StaticResource PrimaryButton}"/>
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+
+</ContentPage>

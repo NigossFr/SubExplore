@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="SubExplore.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:SubExplore.Views"
+    xmlns:viewmodels="clr-namespace:SubExplore.ViewModels"
+    x:DataType="viewmodels:AppShellViewModel"
+    Shell.NavBarIsVisible="False">
+
+    <Shell.BindingContext>
+        <viewmodels:AppShellViewModel />
+    </Shell.BindingContext>
+
+    <!-- Style du Shell -->
+    <Shell.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Primary">#006994</Color>
+            <Style x:Key="BaseStyle" TargetType="Element">
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.ForegroundColor" Value="White" />
+                <Setter Property="Shell.TitleColor" Value="White" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="White" />
+                <Setter Property="Shell.TabBarTitleColor" Value="White" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF" />
+            </Style>
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- Routes de l'application -->
+    <TabBar>
+        <!-- Page Carte -->
+        <Tab Title="Carte" Icon="map.png">
+            <ShellContent
+                Title="Carte"
+                ContentTemplate="{DataTemplate views:MapPage}"
+                Route="map" />
+        </Tab>
+
+        <!-- Page Spots -->
+        <Tab Title="Spots" Icon="spot.png">
+            <ShellContent
+                Title="Spots"
+                ContentTemplate="{DataTemplate views:SpotsPage}"
+                Route="spots" />
+        </Tab>
+
+        <!-- Page Structures -->
+        <Tab Title="Structures" Icon="structures.png">
+            <ShellContent
+                Title="Structures"
+                ContentTemplate="{DataTemplate views:StructuresPage}"
+                Route="structures" />
+        </Tab>
+
+        <!-- Page Magazine -->
+        <Tab Title="Magazine" Icon="magazine.png">
+            <ShellContent
+                Title="Magazine"
+                ContentTemplate="{DataTemplate views:MagazinePage}"
+                Route="magazine" />
+        </Tab>
+
+        <!-- Page Profil -->
+        <Tab Title="Profil" Icon="profile.png">
+            <ShellContent
+                Title="Profil"
+                ContentTemplate="{DataTemplate views:ProfilePage}"
+                Route="profile" />
+        </Tab>
+    </TabBar>
+
+    <!-- Menu contextuel -->
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="{StaticResource Primary}" Padding="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Image Source="logo.png" HeightRequest="80" />
+            <Label 
+                Grid.Row="1"
+                Text="{Binding Username}" 
+                TextColor="White"
+                IsVisible="{Binding IsUserLoggedIn}"
+                HorizontalOptions="Center" />
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <!-- Menu items -->
+    <FlyoutItem Title="Paramètres" Icon="settings.png" Command="{Binding NavigateToSettingsCommand}">
+        <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="settings" />
+    </FlyoutItem>
+
+    <MenuItem 
+        Text="Changer de thème"
+        Command="{Binding ToggleThemeCommand}"
+        IconImageSource="theme.png" />
+
+    <MenuItem 
+        Text="Se déconnecter"
+        Command="{Binding LogoutCommand}"
+        IsVisible="{Binding IsUserLoggedIn}"
+        IconImageSource="logout.png" />
+
+</Shell>
