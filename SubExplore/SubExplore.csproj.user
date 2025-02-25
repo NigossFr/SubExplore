@@ -6,11 +6,26 @@
     <ActiveDebugProfile>Windows Machine</ActiveDebugProfile>
   </PropertyGroup>
   <ItemGroup>
+    <MauiXaml Update="Views\Auth\ForgotPasswordPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Views\Auth\LoginPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Views\Auth\RegisterPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Views\Main\MapPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Views\Spot\AddSpotPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
   </ItemGroup>
   <ItemGroup>
+    <None Update=".gitignore">
+      <SubType>Component</SubType>
+    </None>
     <None Update="App.xaml">
       <SubType>Designer</SubType>
     </None>
@@ -31,6 +46,12 @@
     </None>
     <None Update="Resources\Styles\Styles.xaml">
       <SubType>Designer</SubType>
+    </None>
+    <None Update="Views\Main\Components\MapComponent.tsx">
+      <SubType>Code</SubType>
+    </None>
+    <None Update="Views\Main\Components\SpotPhotosComponent.tsx">
+      <SubType>Code</SubType>
     </None>
   </ItemGroup>
 </Project>

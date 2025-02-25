@@ -1,14 +1,16 @@
 ﻿using Microsoft.Extensions.Logging;
-using SubExplore.Services.Authentication;
-using SubExplore.Services.Navigation;
-using SubExplore.Services.Settings;
+using SubExplore.Services.Interfaces;
+using SubExplore.Services.Implementations;
 using SubExplore.ViewModels;
-using SubExplore.Services.Spots;
-using SubExplore.Services.Storage;
-using SubExplore.Services.Moderation;
-using SubExplore.Services.Organizations;
-using SubExplore.WinUI;
-using Windows.Networking.NetworkOperators;
+using SubExplore.Views;
+using SubExplore.Views.Auth;
+using SubExplore.Views.Main;
+using Microsoft.Extensions.Caching.Memory;
+using CommunityToolkit.Maui;
+using Polly;
+using Polly.Extensions.Http;
+using Microsoft.AspNetCore.Components.WebView.Maui;
+using Microsoft.JSInterop;
 
 namespace SubExplore;
 
@@ -19,31 +21,21 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .UseMauiMaps() // Ajout du support des cartes
+            .UseMauiMaps()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // Configuration des services HTTP
-        builder.Services.AddHttpClient("SubExploreAPI", client =>
-        {
-            client.BaseAddress = new Uri(ApiEndpoints.BaseUrl);
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-        });
+        // Ajout du support WebView/React
+        builder.Services.AddMauiBlazorWebView();
+#if DEBUG
+        builder.Services.AddBlazorWebViewDeveloperTools();
+#endif
 
-        // Services Core
-        ConfigureCoreServices(builder.Services);
-
-        // Services Métier
-        ConfigureBusinessServices(builder.Services);
-
-        // ViewModels
-        ConfigureViewModels(builder.Services);
-
-        // Pages
-        ConfigurePages(builder.Services);
+        ConfigureServices(builder.Services);
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -52,18 +44,63 @@ public static class MauiProgram
         return builder.Build();
     }
 
-    private static void ConfigureCoreServices(IServiceCollection services)
+    private static void ConfigureServices(IServiceCollection services)
     {
-        services.AddSingleton<ISettingsService, SettingsService>();
-        services.AddSingleton<INavigationService, NavigationService>();
-        services.AddSingleton<IAuthenticationService, AuthenticationService>();
-        services.AddSingleton<ILocationService, LocationService>();
+        // Services essentiels
+        ConfigureEssentialServices(services);
+
+        // Configuration HTTP
+        ConfigureHttpClients(services);
+
+        // Services de l'application
+        ConfigureApplicationServices(services);
+
+        // ViewModels
+        ConfigureViewModels(services);
+
+        // Pages
+        ConfigurePages(services);
     }
 
-    private static void ConfigureBusinessServices(IServiceCollection services)
+    private static void ConfigureEssentialServices(IServiceCollection services)
     {
-        services.AddSingleton<ISpotService, SpotService>();
+        services.AddMemoryCache();
+        services.AddSingleton<IConnectivity>(Connectivity.Current);
+        services.AddSingleton<IGeolocation>(Geolocation.Default);
+        services.AddSingleton<IMap>(Map.Default);
+        services.AddSingleton<ISecureStorage>(SecureStorage.Default);
+    }
+
+    private static void ConfigureHttpClients(IServiceCollection services)
+    {
+        // Handler pour l'authentification
+        services.AddTransient<AuthenticationDelegatingHandler>();
+
+        // Client HTTP principal
+        services.AddHttpClient("SubExploreAPI", client =>
+        {
+            client.BaseAddress = new Uri(ApiEndpoints.BaseUrl);
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            client.Timeout = TimeSpan.FromSeconds(30);
+        })
+        .AddHttpMessageHandler<AuthenticationDelegatingHandler>()
+        .SetHandlerLifetime(TimeSpan.FromMinutes(5))
+        .AddPolicyHandler(GetRetryPolicy());
+    }
+
+    private static void ConfigureApplicationServices(IServiceCollection services)
+    {
+        // Services Core
+        services.AddSingleton<IAuthenticationService, AuthenticationService>();
+        services.AddSingleton<ICacheService, MemoryCacheService>();
+        services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<ISecureStorageService, SecureStorageService>();
+        services.AddSingleton<ISettingsService, SettingsService>();
+
+        // Services Métier
+        services.AddSingleton<ILocationService, LocationService>();
         services.AddSingleton<IMediaService, MediaService>();
+        services.AddSingleton<ISpotService, SpotService>();
         services.AddSingleton<IOrganizationService, OrganizationService>();
     }
 
@@ -84,6 +121,9 @@ public static class MauiProgram
         services.AddTransient<MagazineViewModel>();
         services.AddTransient<ProfileViewModel>();
         services.AddTransient<StructuresViewModel>();
+
+        // Settings ViewModels
+        services.AddTransient<SettingsViewModel>();
     }
 
     private static void ConfigurePages(IServiceCollection services)
@@ -103,5 +143,29 @@ public static class MauiProgram
         services.AddTransient<MagazinePage>();
         services.AddTransient<ProfilePage>();
         services.AddTransient<StructuresPage>();
+
+        // Settings Pages
+        services.AddTransient<SettingsPage>();
+    }
+
+    private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+    {
+        return HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+            .WaitAndRetryAsync(3, retryAttempt =>
+                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+    }
+}
+
+public static class ApiEndpoints
+{
+    public static string BaseUrl
+    {
+#if DEBUG
+        get => "https://api-dev.subexplore.com/";
+#else
+        get => "https://api.subexplore.com/";
+#endif
     }
 }

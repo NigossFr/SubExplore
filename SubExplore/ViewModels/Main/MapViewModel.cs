@@ -1,26 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SubExplore.Models;
-using SubExplore.Services.Navigation;
-using SubExplore.Services.Spots;
-using SubExplore.Services.Location;
+using System.Collections.ObjectModel;
+using Microsoft.Maui.Devices.Sensors;
+using System.Diagnostics;
+using IntelliJ.Lang.Annotations;
+using static Android.Icu.Text.CaseMap;
+using SubExplore.Services.Interfaces;
 using SubExplore.ViewModels.Base;
+using SubExplore.Models;
 
 namespace SubExplore.ViewModels.Main;
 
 public partial class MapViewModel : ViewModelBase
 {
+    private const float DEFAULT_ZOOM = 12f;
+    private const float DETAIL_ZOOM = 14f;
+    private const double SEARCH_RADIUS_KM = 5.0;
+
     private readonly ISpotService _spotService;
     private readonly ILocationService _locationService;
-    private double _currentLatitude;
-    private double _currentLongitude;
-    private float _zoomLevel = 12f;
+    private readonly IConnectivityService _connectivityService;
+
+    private Location _currentLocation;
+    private float _zoomLevel = DEFAULT_ZOOM;
+    private CancellationTokenSource _loadingCancellation;
 
     [ObservableProperty]
     private ObservableCollection<SpotMarker> _spots;
@@ -29,80 +32,132 @@ public partial class MapViewModel : ViewModelBase
     private bool _isLocationAvailable;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanApplyFilter))]
     private SpotFilter _activeFilter;
 
     [ObservableProperty]
     private bool _isFilterPanelVisible;
 
+    [ObservableProperty]
+    private bool _isOfflineMode;
+
+    public bool CanApplyFilter => ActiveFilter != null && !IsBusy;
+
     public MapViewModel(
         INavigationService navigationService,
         ISpotService spotService,
-        ILocationService locationService)
+        ILocationService locationService,
+        IConnectivityService connectivityService)
         : base(navigationService)
     {
-        _spotService = spotService;
-        _locationService = locationService;
+        _spotService = spotService ?? throw new ArgumentNullException(nameof(spotService));
+        _locationService = locationService ?? throw new ArgumentNullException(nameof(locationService));
+        _connectivityService = connectivityService ?? throw new ArgumentNullException(nameof(connectivityService));
+
+        Title = "Carte";
         Spots = new ObservableCollection<SpotMarker>();
         ActiveFilter = new SpotFilter();
 
-        Title = "Carte";
+        InitializeConnectivityMonitoring();
+    }
+
+    private void InitializeConnectivityMonitoring()
+    {
+        _connectivityService.ConnectivityChanged += OnConnectivityChanged;
+        IsOfflineMode = !_connectivityService.IsConnected;
+    }
+
+    private async void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+    {
+        IsOfflineMode = !e.IsConnected;
+        if (e.IsConnected && Spots?.Count == 0)
+        {
+            await LoadSpotsAsync();
+        }
     }
 
     public override async Task InitializeAsync(IDictionary<string, object> parameters)
     {
-        await base.InitializeAsync(parameters);
-        await LoadCurrentLocationAsync();
-        await LoadSpotsAsync();
+        _loadingCancellation?.Cancel();
+        _loadingCancellation = new CancellationTokenSource();
+
+        try
+        {
+            await Task.WhenAll(
+                LoadCurrentLocationAsync(),
+                LoadSpotsAsync()
+            ).WaitAsync(_loadingCancellation.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            // Opération annulée, rien à faire
+        }
     }
 
     private async Task LoadCurrentLocationAsync()
     {
         try
         {
-            var location = await _locationService.GetCurrentLocationAsync();
-            if (location != null)
-            {
-                _currentLatitude = location.Latitude;
-                _currentLongitude = location.Longitude;
-                IsLocationAvailable = true;
-            }
+            _currentLocation = await _locationService.GetCurrentLocationAsync();
+            IsLocationAvailable = _currentLocation != null;
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Erreur", "Impossible d'obtenir votre position. Vérifiez les autorisations de localisation.", "OK");
             IsLocationAvailable = false;
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine($"Location error: {ex}");
-#endif
+            await HandleLocationError(ex);
         }
     }
 
-    private async Task LoadSpotsAsync()
+    private async Task HandleLocationError(Exception ex)
     {
-        await SafeExecuteAsync(async () =>
+        var message = ex switch
         {
-            var spots = await _spotService.GetSpotsAsync(ActiveFilter);
+            PermissionException => "Permission de localisation refusée",
+            LocationServiceDisabledException => "Service de localisation désactivé",
+            _ => "Erreur de localisation"
+        };
 
-            Spots.Clear();
-            foreach (var spot in spots)
-            {
-                Spots.Add(new SpotMarker
-                {
-                    Id = spot.Id,
-                    Latitude = spot.Latitude,
-                    Longitude = spot.Longitude,
-                    Title = spot.Name,
-                    Type = spot.Type,
-                    DifficultyLevel = spot.DifficultyLevel,
-                    IconPath = GetMarkerIcon(spot.Type)
-                });
-            }
-
-            IsEmpty = !Spots.Any();
-        }, "Erreur lors du chargement des spots");
+        await DisplayAlert("Erreur", message, "OK");
+        Debug.WriteLine($"Location error: {ex}");
     }
 
-    private string GetMarkerIcon(SpotType type) => type switch
+    [RelayCommand]
+    private async Task LoadSpotsAsync()
+    {
+        if (IsBusy) return;
+
+        await SafeExecuteAsync(async () =>
+        {
+            var spots = IsOfflineMode
+                ? await _spotService.GetCachedSpotsAsync(ActiveFilter)
+                : await _spotService.GetSpotsAsync(ActiveFilter);
+
+            UpdateSpotCollection(spots);
+        });
+    }
+
+    private void UpdateSpotCollection(IEnumerable<SpotDto> spots)
+    {
+        Spots.Clear();
+        foreach (var spot in spots)
+        {
+            Spots.Add(CreateSpotMarker(spot));
+        }
+        IsEmpty = !Spots.Any();
+    }
+
+    private static SpotMarker CreateSpotMarker(SpotDto spot) => new()
+    {
+        Id = spot.Id,
+        Latitude = spot.Latitude,
+        Longitude = spot.Longitude,
+        Title = spot.Name,
+        Type = spot.Type,
+        DifficultyLevel = spot.DifficultyLevel,
+        IconPath = GetMarkerIcon(spot.Type)
+    };
+
+    private static string GetMarkerIcon(SpotType type) => type switch
     {
         SpotType.Diving => "marker_diving.png",
         SpotType.Snorkeling => "marker_snorkeling.png",
@@ -111,34 +166,26 @@ public partial class MapViewModel : ViewModelBase
     };
 
     [RelayCommand]
-    private async Task RefreshSpotsAsync()
+    private Task SpotSelectedAsync(SpotMarker spot)
     {
-        IsRefreshing = true;
-        await LoadSpotsAsync();
-        IsRefreshing = false;
+        if (spot == null) return Task.CompletedTask;
+
+        return NavigationService.NavigateToAsync("spot-details", new Dictionary<string, object>
+       {
+           { "spotId", spot.Id }
+       });
     }
 
     [RelayCommand]
-    private async Task SpotSelectedAsync(SpotMarker spot)
+    private Task AddSpotAsync()
     {
-        if (spot == null) return;
+        if (!IsLocationAvailable) return Task.CompletedTask;
 
-        var parameters = new Dictionary<string, object>
-        {
-            { "spotId", spot.Id }
-        };
-
-        await NavigationService.NavigateToAsync("spot-details", parameters);
-    }
-
-    [RelayCommand]
-    private async Task AddSpotAsync()
-    {
-        await NavigationService.NavigateToAsync("add-spot", new Dictionary<string, object>
-        {
-            { "latitude", _currentLatitude },
-            { "longitude", _currentLongitude }
-        });
+        return NavigationService.NavigateToAsync("add-spot", new Dictionary<string, object>
+       {
+           { "latitude", _currentLocation.Latitude },
+           { "longitude", _currentLocation.Longitude }
+       });
     }
 
     [RelayCommand]
@@ -148,7 +195,7 @@ public partial class MapViewModel : ViewModelBase
         return Task.CompletedTask;
     }
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanApplyFilter))]
     private async Task ApplyFilterAsync()
     {
         IsFilterPanelVisible = false;
@@ -170,23 +217,17 @@ public partial class MapViewModel : ViewModelBase
             await LoadCurrentLocationAsync();
         }
 
-        if (IsLocationAvailable)
+        if (_currentLocation != null)
         {
-            // La vue devra réagir à ces changements
-            _currentLatitude = await _locationService.GetLatitudeAsync();
-            _currentLongitude = await _locationService.GetLongitudeAsync();
-            _zoomLevel = 14f;
+            await _locationService.MoveToLocationAsync(_currentLocation, DETAIL_ZOOM);
         }
     }
 
-    public class SpotMarker
+    public override void Dispose()
     {
-        public int Id { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public string Title { get; set; }
-        public SpotType Type { get; set; }
-        public DifficultyLevel DifficultyLevel { get; set; }
-        public string IconPath { get; set; }
+        _loadingCancellation?.Cancel();
+        _loadingCancellation?.Dispose();
+        _connectivityService.ConnectivityChanged -= OnConnectivityChanged;
+        base.Dispose();
     }
 }

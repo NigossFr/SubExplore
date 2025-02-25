@@ -11,14 +11,10 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.PackageName", "com.companyname.subexplore")]
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.PublisherName", "User Name")]
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.Name", "SubExplore")]
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.Version", "1.0.0.1")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("SubExplore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+1a5e2bb9fc941d0be691088e24a235dfc0b83882")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c21f391511f66b5b9f217ca2b82215b7e2e17ff")]
 [assembly: System.Reflection.AssemblyProductAttribute("SubExplore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SubExplore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SubExplore.Services.Interfaces
 {
@@ -14,20 +16,27 @@ namespace SubExplore.Services.Interfaces
     public interface IAuthenticationService
     {
         /// <summary>
+        /// Événement déclenché lors des changements d'état d'authentification
+        /// </summary>
+        event EventHandler<AuthenticationEventArgs> AuthenticationStateChanged;
+
+        /// <summary>
         /// Authentifie un utilisateur avec email et mot de passe
         /// </summary>
         /// <param name="email">Email de l'utilisateur</param>
         /// <param name="password">Mot de passe</param>
+        /// <param name="cancellationToken">Token d'annulation</param>
         /// <returns>Token d'authentification et token de rafraîchissement</returns>
-        Task<AuthenticationResult> LoginAsync(string email, string password);
+        Task<AuthenticationResult> LoginAsync(string email, string password, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Authentifie un utilisateur via un fournisseur OAuth
         /// </summary>
         /// <param name="provider">Fournisseur OAuth (Google, Facebook)</param>
         /// <param name="token">Token OAuth</param>
+        /// <param name="cancellationToken">Token d'annulation</param>
         /// <returns>Token d'authentification et token de rafraîchissement</returns>
-        Task<AuthenticationResult> LoginWithOAuthAsync(string provider, string token);
+        Task<AuthenticationResult> LoginWithOAuthAsync(string provider, string token, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Renouvelle les tokens d'authentification
@@ -39,8 +48,19 @@ namespace SubExplore.Services.Interfaces
         /// <summary>
         /// Déconnecte l'utilisateur
         /// </summary>
-        /// <param name="userId">ID de l'utilisateur</param>
-        Task LogoutAsync(int userId);
+        Task LogoutAsync();
+
+        /// <summary>
+        /// Obtient l'utilisateur actuellement connecté
+        /// </summary>
+        Task<UserBasicInfo> GetCurrentUserAsync();
+
+        /// <summary>
+        /// Vérifie si un email existe dans la base de données
+        /// </summary>
+        /// <param name="email">Email à vérifier</param>
+        /// <returns>true si l'email existe</returns>
+        Task<bool> CheckEmailExistsAsync(string email);
 
         /// <summary>
         /// Révoque un token de rafraîchissement
@@ -97,19 +117,16 @@ namespace SubExplore.Services.Interfaces
         Task<ClaimsPrincipal> GetClaimsFromTokenAsync(string token);
     }
 
-    /// <summary>
-    /// Résultat d'une authentification réussie
-    /// </summary>
+    public class AuthenticationEventArgs : EventArgs
+    {
+        public bool IsAuthenticated { get; set; }
+        public string Username { get; set; }
+        public UserBasicInfo User { get; set; }
+    }
+
     public class AuthenticationResult
     {
-        /// <summary>
-        /// Token d'accès JWT
-        /// </summary>
         public string AccessToken { get; set; }
-
-        /// <summary>
-        /// Token de rafraîchissement
-        /// </summary>
         public string RefreshToken { get; set; }
 
         /// <summary>
@@ -144,5 +161,16 @@ namespace SubExplore.Services.Interfaces
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool EmailConfirmed { get; set; }
+        public string AvatarUrl { get; set; }
+    }
+
+    public class AuthenticationException : Exception
+    {
+        public string Code { get; }
+
+        public AuthenticationException(string message, string code = null) : base(message)
+        {
+            Code = code;
+        }
     }
 }

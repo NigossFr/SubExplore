@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SubExplore.Views.Spot.AddSpotPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
+            <!-- En-tête -->
+            <Label Text="Nouveau spot" 
+                   FontSize="24" 
+                   FontAttributes="Bold"/>
+            <!-- Position -->
+            <Frame Margin="0,20,0,0">
+                <VerticalStackLayout>
+                    <Label Text="Position" 
+                           FontAttributes="Bold"/>
+                    <Entry Text="{Binding Spot.Latitude}"
+                           Keyboard="Numeric"
+                           Placeholder="Latitude"/>
+                    <Entry Text="{Binding Spot.Longitude}"
+                           Keyboard="Numeric"
+                           Placeholder="Longitude"/>
+                    <Label Text="Position valide"
+                           TextColor="Green"
+                           IsVisible="{Binding IsLocationValid}"/>
+                </VerticalStackLayout>
+            </Frame>
+            <!-- Informations de base -->
+            <Frame Margin="0,20,0,0">
+                <VerticalStackLayout>
+                    <Label Text="Informations" 
+                           FontAttributes="Bold"/>
+                    <Entry Text="{Binding Spot.Name}"
+                           Placeholder="Nom du spot"/>
+                    <Editor Text="{Binding Spot.Description}"
+                            Placeholder="Description"
+                            HeightRequest="100"/>
+                </VerticalStackLayout>
+            </Frame>
+            <!-- Caractéristiques -->
+            <Frame Margin="0,20,0,0">
+                <VerticalStackLayout>
+                    <Label Text="Caractéristiques" 
+                           FontAttributes="Bold"/>
+                    <Picker ItemsSource="{Binding SpotTypes}"
+                            SelectedItem="{Binding Spot.Type}"
+                            Title="Type d'activité"/>
+                    <Picker ItemsSource="{Binding DifficultyLevels}"
+                            SelectedItem="{Binding Spot.DifficultyLevel}"
+                            Title="Niveau de difficulté"/>
+                    <Entry Text="{Binding Spot.MaxDepth}"
+                           Keyboard="Numeric"
+                           Placeholder="Profondeur maximale (m)"/>
+                </VerticalStackLayout>
+            </Frame>
+            <!-- Photos -->
+            <Frame Margin="0,20,0,0">
+                <VerticalStackLayout>
+                    <Label Text="Photos" 
+                           FontAttributes="Bold"/>
+                    <Button Text="Ajouter des photos"
+                            Command="{Binding AddPhotosCommand}"/>
+                    <CollectionView ItemsSource="{Binding Spot.Photos}"
+                                  HeightRequest="100">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding Path}"/>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+            <!-- Bouton de soumission -->
+            <Button Text="Créer le spot"
+                    Command="{Binding SubmitCommand}"
+                    Margin="0,20,0,0"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

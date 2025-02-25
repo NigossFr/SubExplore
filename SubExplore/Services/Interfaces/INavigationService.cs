@@ -11,7 +11,19 @@ namespace SubExplore.Services.Interfaces
     /// </summary>
     public interface INavigationService
     {
+        /// <summary>
+        /// Événement déclenché en cas d'erreur de navigation
+        /// </summary>
+        event EventHandler<NavigationErrorEventArgs> NavigationFailed;
+
         #region Navigation de Base
+
+        /// <summary>
+        /// Navigue vers une page en utilisant son nom de route
+        /// </summary>
+        /// <param name="route">Nom de la route</param>
+        /// <param name="parameters">Paramètres de navigation (optionnel)</param>
+        Task NavigateToAsync(string route, IDictionary<string, object> parameters = null);
 
         /// <summary>
         /// Navigue vers une page
@@ -19,13 +31,6 @@ namespace SubExplore.Services.Interfaces
         /// <typeparam name="TViewModel">Type du ViewModel de destination</typeparam>
         /// <param name="parameters">Paramètres de navigation (optionnel)</param>
         Task NavigateToAsync<TViewModel>(INavigationParameters parameters = null) where TViewModel : BaseViewModel;
-
-        /// <summary>
-        /// Navigue vers une page avec un URI
-        /// </summary>
-        /// <param name="uri">URI de navigation</param>
-        /// <param name="parameters">Paramètres de navigation (optionnel)</param>
-        Task NavigateToUriAsync(string uri, INavigationParameters parameters = null);
 
         /// <summary>
         /// Retourne à la page précédente
@@ -40,7 +45,7 @@ namespace SubExplore.Services.Interfaces
 
         #endregion
 
-        #region Gestion de la Navigation Modale
+        #region Navigation Modale
 
         /// <summary>
         /// Affiche une page en modal
@@ -57,7 +62,7 @@ namespace SubExplore.Services.Interfaces
 
         #endregion
 
-        #region Navigation Spécifique à l'Application
+        #region Navigation Spécifique
 
         /// <summary>
         /// Navigue vers la page de détails d'un spot
@@ -87,19 +92,12 @@ namespace SubExplore.Services.Interfaces
 
         #endregion
 
-        #region Gestion de l'État
+        #region État et Configuration
 
         /// <summary>
-        /// Enregistre l'état de navigation actuel
+        /// Vérifie si la navigation arrière est possible
         /// </summary>
-        /// <returns>Clé de l'état sauvegardé</returns>
-        Task<string> SaveNavigationStateAsync();
-
-        /// <summary>
-        /// Restaure un état de navigation
-        /// </summary>
-        /// <param name="stateKey">Clé de l'état à restaurer</param>
-        Task RestoreNavigationStateAsync(string stateKey);
+        bool CanGoBack { get; }
 
         /// <summary>
         /// Obtient l'historique de navigation
@@ -107,19 +105,29 @@ namespace SubExplore.Services.Interfaces
         IReadOnlyList<NavigationHistoryEntry> NavigationHistory { get; }
 
         /// <summary>
-        /// Vérifie si la navigation arrière est possible
+        /// Configure le timeout de navigation
         /// </summary>
-        bool CanGoBack { get; }
-
-        #endregion
-
-        #region Configuration et Middleware
+        void ConfigureTimeout(TimeSpan timeout);
 
         /// <summary>
-        /// Ajoute un middleware de navigation
+        /// Configure la gestion des erreurs de navigation
         /// </summary>
-        /// <param name="middleware">Middleware à ajouter</param>
-        void AddNavigationMiddleware(INavigationMiddleware middleware);
+        void ConfigureErrorHandling(Action<NavigationErrorEventArgs> errorHandler);
+
+        /// <summary>
+        /// Gère les deep links
+        /// </summary>
+        Task HandleDeepLinkAsync(string uri);
+
+        /// <summary>
+        /// Enregistre l'état de navigation actuel
+        /// </summary>
+        Task<string> SaveNavigationStateAsync();
+
+        /// <summary>
+        /// Restaure un état de navigation
+        /// </summary>
+        Task RestoreNavigationStateAsync(string stateKey);
 
         /// <summary>
         /// Configure les routes de l'application
@@ -136,20 +144,12 @@ namespace SubExplore.Services.Interfaces
         #endregion
     }
 
-    /// <summary>
-    /// Paramètres de navigation
-    /// </summary>
-    public interface INavigationParameters : IDictionary<string, object>
+    public class NavigationErrorEventArgs : EventArgs
     {
-        /// <summary>
-        /// Récupère une valeur typée
-        /// </summary>
-        T GetValue<T>(string key);
-
-        /// <summary>
-        /// Ajoute ou met à jour une valeur
-        /// </summary>
-        void Add<T>(string key, T value);
+        public Exception Exception { get; set; }
+        public string TargetRoute { get; set; }
+        public IDictionary<string, object> Parameters { get; set; }
+        public bool Handled { get; set; }
     }
 
     /// <summary>
@@ -158,6 +158,7 @@ namespace SubExplore.Services.Interfaces
     public class NavigationHistoryEntry
     {
         public Type ViewModelType { get; set; }
+        public string Route { get; set; }
         public string PageTitle { get; set; }
         public DateTime Timestamp { get; set; }
         public INavigationParameters Parameters { get; set; }
@@ -187,11 +188,24 @@ namespace SubExplore.Services.Interfaces
         public string TransitionType { get; set; } = "slide";
     }
 
-    /// <summary>
-    /// Interface pour les middleware de navigation
-    /// </summary>
+    public interface INavigationParameters : IDictionary<string, object>
+    {
+        T GetValue<T>(string key);
+        void Add<T>(string key, T value);
+    }
+
     public interface INavigationMiddleware
     {
         Task OnNavigatingAsync(NavigationContext context, NavigationDelegate next);
     }
+
+    public class NavigationContext
+    {
+        public string SourceRoute { get; set; }
+        public string TargetRoute { get; set; }
+        public INavigationParameters Parameters { get; set; }
+        public bool IsCancelled { get; set; }
+    }
+
+    public delegate Task NavigationDelegate();
 }

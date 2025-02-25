@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:SubExplore.ViewModels"
+             x:Class="SubExplore.Views.Auth.RegisterPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource Background}">
+
+    <ContentPage.Resources>
+        <Style x:Key="EntryStyle" TargetType="Entry">
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="BackgroundColor" Value="White"/>
+            <Setter Property="TextColor" Value="{StaticResource Primary}"/>
+            <Setter Property="PlaceholderColor" Value="{StaticResource Gray400}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Padding" Value="15,0"/>
+        </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="HeightRequest" Value="50"/>
+            <Setter Property="CornerRadius" Value="25"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="Margin" Value="0,10"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,*"
+              Padding="20"
+              RowSpacing="20">
+
+            <!-- En-tête -->
+            <VerticalStackLayout Grid.Row="0" 
+                                Spacing="10" 
+                                Margin="0,40,0,20">
+                <Image Source="logo.png"
+                       HeightRequest="80"
+                       HorizontalOptions="Center"/>
+                <Label Text="Créer un compte"
+                       TextColor="{StaticResource Primary}"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+                <Label Text="Rejoignez la communauté SubExplore"
+                       TextColor="{StaticResource Gray600}"
+                       FontSize="16"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <!-- Formulaire d'inscription -->
+            <Frame Grid.Row="1"
+                   BackgroundColor="White"
+                   Margin="0,0,0,20"
+                   Padding="20"
+                   CornerRadius="15"
+                   HasShadow="True">
+
+                <VerticalStackLayout Spacing="15">
+                    <!-- Message d'erreur -->
+                    <Label Text="{Binding ErrorMessage}"
+                           IsVisible="{Binding HasError}"
+                           TextColor="{StaticResource Error}"
+                           FontSize="14"/>
+
+                    <!-- Nom et Prénom -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Entry Grid.Column="0"
+                               Style="{StaticResource EntryStyle}"
+                               Text="{Binding RegistrationModel.FirstName}"
+                               Placeholder="Prénom"
+                               ReturnType="Next"/>
+                        <Entry Grid.Column="1"
+                               Style="{StaticResource EntryStyle}"
+                               Text="{Binding RegistrationModel.LastName}"
+                               Placeholder="Nom"
+                               ReturnType="Next"/>
+                    </Grid>
+
+                    <!-- Pseudo -->
+                    <Entry Style="{StaticResource EntryStyle}"
+                           Text="{Binding RegistrationModel.Username}"
+                           Placeholder="Pseudo"
+                           ReturnType="Next"/>
+
+                    <!-- Email -->
+                    <Entry Style="{StaticResource EntryStyle}"
+                           Text="{Binding RegistrationModel.Email}"
+                           Placeholder="Email"
+                           Keyboard="Email"
+                           ReturnType="Next"/>
+
+                    <!-- Mot de passe -->
+                    <Entry Style="{StaticResource EntryStyle}"
+                           Text="{Binding RegistrationModel.Password}"
+                           Placeholder="Mot de passe"
+                           IsPassword="True"
+                           ReturnType="Next"/>
+
+                    <!-- Confirmation mot de passe -->
+                    <Entry Style="{StaticResource EntryStyle}"
+                           Text="{Binding RegistrationModel.ConfirmPassword}"
+                           Placeholder="Confirmer le mot de passe"
+                           IsPassword="True"
+                           ReturnType="Done"/>
+
+                    <!-- Conditions d'utilisation -->
+                    <HorizontalStackLayout Spacing="10">
+                        <CheckBox IsChecked="{Binding RegistrationModel.AcceptTerms}"
+                                 Color="{StaticResource Primary}"/>
+                        <Label Text="J'accepte les "
+                               VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ShowTermsAndConditionsCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label Text="conditions d'utilisation"
+                               TextColor="{StaticResource Primary}"
+                               TextDecorations="Underline"
+                               VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ShowTermsAndConditionsCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+
+                    <!-- Bouton d'inscription -->
+                    <Button Text="{Binding RegisterButtonText}"
+                            Style="{StaticResource ButtonStyle}"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="White"
+                            Command="{Binding RegisterCommand}"
+                            IsEnabled="{Binding IsNotLoading}"/>
+
+                    <!-- Lien vers la connexion -->
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Déjà inscrit ?"
+                               HorizontalOptions="Center"
+                               TextColor="{StaticResource Gray600}"/>
+                        <Button Text="Se connecter"
+                                Style="{StaticResource ButtonStyle}"
+                                BackgroundColor="{StaticResource Secondary}"
+                                TextColor="White"
+                                Command="{Binding NavigateToLoginCommand}"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+    </ScrollView>
+</ContentPage>

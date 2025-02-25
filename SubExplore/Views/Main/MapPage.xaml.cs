@@ -1,39 +1,48 @@
-using SubExplore.ViewModels;
 using Microsoft.Maui.Maps;
 using Microsoft.Maui.ApplicationModel;
 using SubExplore.ViewModels.Main;
+using Microsoft.Maui.Controls.Maps;
 
 namespace SubExplore.Views.Main;
 
-public partial class MapPage : ContentPage
+public partial class MapPage : ContentPage, IDisposable
 {
     private readonly MapViewModel _viewModel;
-    private IDispatcherTimer _debounceTimer;
+    private readonly IDispatcherTimer _debounceTimer;
+    private const int DEBOUNCE_INTERVAL_MS = 300;
+    private const double PANEL_CLOSE_THRESHOLD = 100.0;
 
     public MapPage(MapViewModel viewModel)
     {
         InitializeComponent();
         _viewModel = viewModel;
-        BindingContext = _viewModel;
+        BindingContext = viewModel;
 
-        // Initialiser le timer pour le debounce de la recherche
+        InitializeDebounceTimer();
+        InitializeMapEvents();
+    }
+
+    private void InitializeDebounceTimer()
+    {
         _debounceTimer = Application.Current?.Dispatcher?.CreateTimer();
         if (_debounceTimer != null)
         {
-            _debounceTimer.Interval = TimeSpan.FromMilliseconds(300);
+            _debounceTimer.Interval = TimeSpan.FromMilliseconds(DEBOUNCE_INTERVAL_MS);
             _debounceTimer.Tick += OnSearchDebounceTimeout;
         }
-
-        // S'abonner aux événements de la carte
-        map.MapClicked += OnMapClicked;
     }
+
+    private void InitializeMapEvents() => map.MapClicked += OnMapClicked;
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
         await _viewModel.OnAppearing();
+        await CheckAndRequestLocationPermission();
+    }
 
-        // Demander la permission de géolocalisation si nécessaire
+    private async Task CheckAndRequestLocationPermission()
+    {
         var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
         if (status != PermissionStatus.Granted)
         {
@@ -42,6 +51,10 @@ public partial class MapPage : ContentPage
             {
                 await _viewModel.CenterOnUser();
             }
+        }
+        else
+        {
+            await _viewModel.CenterOnUser();
         }
     }
 
@@ -53,22 +66,17 @@ public partial class MapPage : ContentPage
 
     private void OnMapClicked(object sender, MapClickedEventArgs e)
     {
-        // Fermer le panneau des filtres si ouvert
         if (_viewModel.IsFiltersPanelVisible)
         {
             _viewModel.IsFiltersPanelVisible = false;
         }
-
-        // Transmettre l'événement au ViewModel
         _viewModel.HandleMapClick(e.Location);
     }
 
     private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
     {
-        if (_debounceTimer == null) return;
-
-        _debounceTimer.Stop();
-        _debounceTimer.Start();
+        _debounceTimer?.Stop();
+        _debounceTimer?.Start();
     }
 
     private void OnSearchDebounceTimeout(object sender, EventArgs e)
@@ -77,37 +85,41 @@ public partial class MapPage : ContentPage
         _viewModel.PerformSearch();
     }
 
-    // Gestion du comportement du panneau des filtres
-    private double previousPanelTranslation;
+    private double _previousPanelTranslation;
 
     private void OnPanUpdated(object sender, PanUpdatedEventArgs e)
     {
         switch (e.StatusType)
         {
             case GestureStatus.Started:
-                previousPanelTranslation = filtersPanel.TranslationY;
+                _previousPanelTranslation = filtersPanel.TranslationY;
                 break;
-
             case GestureStatus.Running:
-                var translation = previousPanelTranslation + e.TotalY;
-                if (translation >= 0) // Empêcher de tirer vers le bas
-                {
-                    filtersPanel.TranslationY = translation;
-                }
+                var newTranslation = Math.Max(0, _previousPanelTranslation + e.TotalY);
+                filtersPanel.TranslationY = newTranslation;
                 break;
-
             case GestureStatus.Completed:
-                // Si le panneau a été tiré de plus de 100 unités, le fermer
-                if (filtersPanel.TranslationY > 100)
-                {
-                    _viewModel.IsFiltersPanelVisible = false;
-                }
-                else
-                {
-                    // Sinon, le remettre en position initiale
-                    filtersPanel.TranslationY = 0;
-                }
+                HandlePanelSlideCompletion();
                 break;
         }
+    }
+
+    private void HandlePanelSlideCompletion()
+    {
+        if (filtersPanel.TranslationY > PANEL_CLOSE_THRESHOLD)
+        {
+            _viewModel.IsFiltersPanelVisible = false;
+        }
+        else
+        {
+            filtersPanel.TranslationY = 0;
+        }
+    }
+
+    public void Dispose()
+    {
+        _debounceTimer?.Stop();
+        map.MapClicked -= OnMapClicked;
+        GC.SuppressFinalize(this);
     }
 }

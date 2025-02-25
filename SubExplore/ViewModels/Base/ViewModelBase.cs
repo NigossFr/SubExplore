@@ -5,26 +5,50 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
-using SubExplore.Services.Navigation;
+using SubExplore.Services.Interfaces;
 
 namespace SubExplore.ViewModels.Base;
 
-public partial class ViewModelBase : ObservableObject, IDisposable
+public partial class ViewModelBase : ObservableObject, IDisposable, IQueryAttributable
 {
     protected readonly INavigationService NavigationService;
-    private bool _isBusy;
-    private string _title;
-    private bool _isRefreshing;
-    private bool _isEmpty;
-    private bool _isError;
-    private string _errorMessage;
 
     [ObservableProperty]
     private bool _isLoading;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
+    private bool _isBusy;
+
+    [ObservableProperty]
+    private string _title;
+
+    [ObservableProperty]
+    private bool _isRefreshing;
+
+    [ObservableProperty]
+    private bool _isEmpty;
+
+    [ObservableProperty]
+    private bool _isError;
+
+    [ObservableProperty]
+    private string _errorMessage;
+
+    [ObservableProperty]
+    private bool _canNavigateBack;
+
+    public bool IsNotBusy => !IsBusy;
+
     public ViewModelBase(INavigationService navigationService)
     {
         NavigationService = navigationService;
+        UpdateNavigationState();
+    }
+
+    public virtual void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        Initialize(query);
     }
 
     public virtual void Initialize(IDictionary<string, object> parameters) { }
@@ -34,46 +58,9 @@ public partial class ViewModelBase : ObservableObject, IDisposable
         return Task.CompletedTask;
     }
 
-    public bool IsBusy
+    protected virtual void UpdateNavigationState()
     {
-        get => _isBusy;
-        set
-        {
-            if (SetProperty(ref _isBusy, value))
-                OnPropertyChanged(nameof(IsNotBusy));
-        }
-    }
-
-    public bool IsNotBusy => !IsBusy;
-
-    public string Title
-    {
-        get => _title;
-        set => SetProperty(ref _title, value);
-    }
-
-    public bool IsRefreshing
-    {
-        get => _isRefreshing;
-        set => SetProperty(ref _isRefreshing, value);
-    }
-
-    public bool IsEmpty
-    {
-        get => _isEmpty;
-        set => SetProperty(ref _isEmpty, value);
-    }
-
-    public bool IsError
-    {
-        get => _isError;
-        set => SetProperty(ref _isError, value);
-    }
-
-    public string ErrorMessage
-    {
-        get => _errorMessage;
-        set => SetProperty(ref _errorMessage, value);
+        CanNavigateBack = NavigationService.CanGoBack;
     }
 
     protected virtual void SetBusy(bool value)
@@ -94,7 +81,30 @@ public partial class ViewModelBase : ObservableObject, IDisposable
         ErrorMessage = string.Empty;
     }
 
-    protected virtual async Task SafeExecuteAsync(Func<Task> action, string errorMessage = "Une erreur est survenue")
+    protected virtual void HandleError(Exception ex, string customMessage = null)
+    {
+        var message = customMessage ?? "Une erreur est survenue";
+
+        if (ex is AuthenticationException authEx)
+        {
+            message = $"Erreur d'authentification : {authEx.Message}";
+        }
+        else if (ex is NavigationException navEx)
+        {
+            message = $"Erreur de navigation : {navEx.Message}";
+        }
+        else if (ex is HttpRequestException httpEx)
+        {
+            message = "Erreur de connexion au serveur";
+        }
+
+        ShowError(message);
+#if DEBUG
+        System.Diagnostics.Debug.WriteLine($"Error: {ex}");
+#endif
+    }
+
+    protected virtual async Task SafeExecuteAsync(Func<Task> action, string errorMessage = null)
     {
         try
         {
@@ -104,10 +114,7 @@ public partial class ViewModelBase : ObservableObject, IDisposable
         }
         catch (Exception ex)
         {
-            ShowError($"{errorMessage}: {ex.Message}");
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine($"Error: {ex}");
-#endif
+            HandleError(ex, errorMessage);
         }
         finally
         {
@@ -115,7 +122,7 @@ public partial class ViewModelBase : ObservableObject, IDisposable
         }
     }
 
-    protected virtual void SafeExecute(Action action, string errorMessage = "Une erreur est survenue")
+    protected virtual void SafeExecute(Action action, string errorMessage = null)
     {
         try
         {
@@ -125,10 +132,7 @@ public partial class ViewModelBase : ObservableObject, IDisposable
         }
         catch (Exception ex)
         {
-            ShowError($"{errorMessage}: {ex.Message}");
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine($"Error: {ex}");
-#endif
+            HandleError(ex, errorMessage);
         }
         finally
         {
@@ -146,8 +150,30 @@ public partial class ViewModelBase : ObservableObject, IDisposable
         return Shell.Current.DisplayAlert(title, message, accept, cancel);
     }
 
+    protected async Task NavigateBackAsync()
+    {
+        if (NavigationService.CanGoBack)
+            await NavigationService.GoBackAsync();
+    }
+
+    protected async Task NavigateToAsync(string route, IDictionary<string, object> parameters = null)
+    {
+        await NavigationService.NavigateToAsync(route, parameters);
+    }
+
+    protected async Task ShowModalAsync<TViewModel>(IDictionary<string, object> parameters = null)
+        where TViewModel : ViewModelBase
+    {
+        await NavigationService.ShowModalAsync<TViewModel>(new NavigationParameters(parameters));
+    }
+
+    protected async Task CloseModalAsync(object result = null)
+    {
+        await NavigationService.CloseModalAsync(result);
+    }
+
     public virtual void Dispose()
     {
-        // Cleanup code here
+        // Code de nettoyage ici
     }
 }

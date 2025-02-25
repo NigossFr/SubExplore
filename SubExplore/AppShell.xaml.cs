@@ -1,62 +1,73 @@
-﻿namespace SubExplore
+﻿using SubExplore.Services.Interfaces;
+
+namespace SubExplore;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    private readonly IAuthenticationService _authService;
+
+    public AppShell(IAuthenticationService authService)
     {
-        private readonly AppShellViewModel _viewModel;
+        InitializeComponent();
+        _authService = authService;
 
-        public AppShell(AppShellViewModel viewModel)
-        {
-            InitializeComponent();
-            _viewModel = viewModel;
-            BindingContext = _viewModel;
+        RegisterRoutes();
+    }
 
-            RegisterRoutes();
-        }
+    private void RegisterRoutes()
+    {
+        // Routes d'authentification
+        Routing.RegisterRoute("login", typeof(LoginPage));
+        Routing.RegisterRoute("register", typeof(RegisterPage));
+        Routing.RegisterRoute("forgot-password", typeof(ForgotPasswordPage));
+        Routing.RegisterRoute("reset-password-confirmation", typeof(ResetPasswordConfirmationPage));
 
-        private void RegisterRoutes()
-        {
-            // Routes d'authentification
-            Routing.RegisterRoute("login", typeof(Views.Auth.LoginPage));
-            Routing.RegisterRoute("register", typeof(Views.Auth.RegisterPage));
-            Routing.RegisterRoute("forgot-password", typeof(Views.Auth.ForgotPasswordPage));
+        // Routes principales
+        Routing.RegisterRoute("spot-details", typeof(SpotDetailsPage));
+        Routing.RegisterRoute("add-spot", typeof(AddSpotPage));
+        Routing.RegisterRoute("structure-details", typeof(StructureDetailsPage));
+        Routing.RegisterRoute("story-details", typeof(StoryDetailsPage));
 
-            // Routes principales
-            Routing.RegisterRoute("spot-details", typeof(Views.Main.SpotDetailsPage));
-            Routing.RegisterRoute("add-spot", typeof(Views.Main.AddSpotPage));
-            Routing.RegisterRoute("structure-details", typeof(Views.Main.StructureDetailsPage));
-            Routing.RegisterRoute("story-details", typeof(Views.Main.StoryDetailsPage));
+        // Routes de paramètres
+        Routing.RegisterRoute("settings", typeof(SettingsPage));
+        Routing.RegisterRoute("profile-edit", typeof(ProfileEditPage));
+    }
 
-            // Routes de paramètres
-            Routing.RegisterRoute("settings", typeof(Views.Settings.SettingsPage));
-            Routing.RegisterRoute("profile-edit", typeof(Views.Profile.ProfileEditPage));
-        }
+    protected override async void OnNavigating(ShellNavigatingEventArgs args)
+    {
+        base.OnNavigating(args);
 
-        protected override void OnNavigating(ShellNavigatingEventArgs args)
-        {
-            base.OnNavigating(args);
+        var currentUser = await _authService.GetCurrentUserAsync();
+        var route = args.Target?.Location?.OriginalString;
 
-            // Vérifier si la route nécessite une authentification
-            if (RequiresAuthentication(args.Target.Location.OriginalString))
-            {
-                if (!_viewModel.IsAuthenticated)
-                {
-                    args.Cancel();
-                    Shell.Current.GoToAsync("///login");
-                }
-            }
-        }
-
-        private bool RequiresAuthentication(string route)
-        {
-            var protectedRoutes = new[]
-            {
+        // Liste des routes nécessitant une authentification
+        var protectedRoutes = new[] {
             "profile",
             "profile-edit",
             "add-spot",
             "settings"
         };
 
-            return protectedRoutes.Any(r => route.Contains(r, StringComparison.OrdinalIgnoreCase));
+        if (protectedRoutes.Any(r => route?.Contains(r, StringComparison.OrdinalIgnoreCase) == true))
+        {
+            if (currentUser == null)
+            {
+                args.Cancel();
+                await GoToAsync("///login");
+            }
         }
+    }
+
+    protected override bool OnBackButtonPressed()
+    {
+        var currentRoute = Current?.CurrentState?.Location?.OriginalString;
+
+        // Empêcher le retour sur certaines pages
+        if (currentRoute?.Contains("login") == true && !Current.Navigation.NavigationStack.Any())
+        {
+            return true;
+        }
+
+        return base.OnBackButtonPressed();
     }
 }
