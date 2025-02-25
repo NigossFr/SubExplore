@@ -2,18 +2,25 @@
 using SubExplore.Services.Interfaces;
 using SubExplore.Services.Implementations;
 using SubExplore.ViewModels;
-using SubExplore.Views;
+using SubExplore.ViewModels.Auth;
+using SubExplore.ViewModels.Main;
+using SubExplore.ViewModels.Spot;
 using SubExplore.Views.Auth;
 using SubExplore.Views.Main;
+using SubExplore.Views.Spot;
 using Microsoft.Extensions.Caching.Memory;
 using CommunityToolkit.Maui;
 using Polly;
 using Polly.Extensions.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Components.WebView.Maui;
-using Microsoft.JSInterop;
+using SubExplore.Constants;
+using CoreGraphics;
 
 namespace SubExplore;
 
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
@@ -95,13 +102,17 @@ public static class MauiProgram
         services.AddSingleton<ICacheService, MemoryCacheService>();
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<ISecureStorageService, SecureStorageService>();
-        services.AddSingleton<ISettingsService, SettingsService>();
+
+        // Ajouter ISettingsService quand l'implémentation sera disponible
+        // services.AddSingleton<ISettingsService, SettingsService>();
 
         // Services Métier
         services.AddSingleton<ILocationService, LocationService>();
-        services.AddSingleton<IMediaService, MediaService>();
         services.AddSingleton<ISpotService, SpotService>();
-        services.AddSingleton<IOrganizationService, OrganizationService>();
+
+        // Ajouter ces services quand les implémentations seront disponibles
+        // services.AddSingleton<IMediaService, MediaService>();
+        // services.AddSingleton<IOrganizationService, OrganizationService>();
     }
 
     private static void ConfigureViewModels(IServiceCollection services)
@@ -116,14 +127,14 @@ public static class MauiProgram
 
         // Main ViewModels
         services.AddTransient<MapViewModel>();
-        services.AddTransient<SpotDetailsViewModel>();
         services.AddTransient<AddSpotViewModel>();
-        services.AddTransient<MagazineViewModel>();
-        services.AddTransient<ProfileViewModel>();
-        services.AddTransient<StructuresViewModel>();
 
-        // Settings ViewModels
-        services.AddTransient<SettingsViewModel>();
+        // Ces ViewModels seront ajoutés quand ils seront disponibles
+        // services.AddTransient<SpotDetailsViewModel>();
+        // services.AddTransient<MagazineViewModel>();
+        // services.AddTransient<ProfileViewModel>();
+        // services.AddTransient<StructuresViewModel>();
+        // services.AddTransient<SettingsViewModel>();
     }
 
     private static void ConfigurePages(IServiceCollection services)
@@ -136,16 +147,22 @@ public static class MauiProgram
         services.AddTransient<RegisterPage>();
         services.AddTransient<ForgotPasswordPage>();
 
+        // Cette page doit être implémentée
+        // services.AddTransient<ResetPasswordConfirmationPage>();
+
         // Main Pages
         services.AddTransient<MapPage>();
-        services.AddTransient<SpotDetailsPage>();
         services.AddTransient<AddSpotPage>();
-        services.AddTransient<MagazinePage>();
-        services.AddTransient<ProfilePage>();
-        services.AddTransient<StructuresPage>();
 
-        // Settings Pages
-        services.AddTransient<SettingsPage>();
+        // Ces pages seront ajoutées quand elles seront disponibles
+        // services.AddTransient<SpotDetailsPage>();
+        // services.AddTransient<MagazinePage>();
+        // services.AddTransient<ProfilePage>();
+        // services.AddTransient<StructuresPage>();
+        // services.AddTransient<SettingsPage>();
+        // services.AddTransient<ProfileEditPage>();
+        // services.AddTransient<StructureDetailsPage>();
+        // services.AddTransient<StoryDetailsPage>();
     }
 
     private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
@@ -155,17 +172,5 @@ public static class MauiProgram
             .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
             .WaitAndRetryAsync(3, retryAttempt =>
                 TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-    }
-}
-
-public static class ApiEndpoints
-{
-    public static string BaseUrl
-    {
-#if DEBUG
-        get => "https://api-dev.subexplore.com/";
-#else
-        get => "https://api.subexplore.com/";
-#endif
     }
 }
