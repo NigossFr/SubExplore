@@ -1,4 +1,4 @@
-using SubExplore.ViewModels;
+using SubExplore.ViewModels.Auth;
 
 namespace SubExplore.Views.Auth;
 
@@ -16,12 +16,10 @@ public partial class LoginPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        // Initialiser le ViewModel quand la page apparaît
         await _viewModel.InitializeAsync(null);
-    }
 
-    protected override bool OnBackButtonPressed()
-    {
-        // Désactiver le bouton retour sur la page de login
-        return true;
+        // Vider les messages d'erreur
+        _viewModel.ClearError();
     }
 }

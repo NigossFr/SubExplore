@@ -5,11 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SubExplore.Extensions;
 using SubExplore.Services.Interfaces;
-using SubExplore.ViewModels.Base;
 using SubExplore.ViewModels.Auth;
+using SubExplore.ViewModels.Base;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace SubExplore.ViewModels
+namespace SubExplore.ViewModels.Auth
 {
     public partial class LoginViewModel : ViewModelBase
     {
@@ -20,68 +23,117 @@ namespace SubExplore.ViewModels
         private LoginModel _loginModel;
 
         [ObservableProperty]
-        private bool _isLoading;
+        private bool _isPasswordVisible;
 
         [ObservableProperty]
-        private string _errorMessage;
+        private string _loginButtonText = "Se connecter";
+
+        [ObservableProperty]
+        private bool _isSocialLoginEnabled;
+
+        [ObservableProperty]
+        private string _passwordVisibilityIcon = "eye.png";
+
+        public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
+        public bool IsNotLoading => !IsBusy;
 
         public LoginViewModel(
+            INavigationService navigationService,
             IAuthenticationService authenticationService,
-            ISecureStorageService secureStorageService,
-            INavigationService navigationService)
+            ISecureStorageService secureStorageService)
             : base(navigationService)
         {
             _authenticationService = authenticationService;
             _secureStorageService = secureStorageService;
             _loginModel = new LoginModel();
+            Title = "Connexion";
+
+            // Vérifier si l'authentification sociale est disponible
+            CheckSocialLoginAvailability();
         }
 
-        public override async Task InitializeAsync(IDictionary<string, object> parameters)
+        private async void CheckSocialLoginAvailability()
         {
-            // Vérifier s'il y a des identifiants sauvegardés
-            var savedEmail = await _secureStorageService.GetSecureStorageAsync<string>("saved_email");
-            if (!string.IsNullOrEmpty(savedEmail))
+            // Vérifiez si les fournisseurs d'authentification sociale sont disponibles sur l'appareil
+            try
             {
-                LoginModel.Email = savedEmail;
-                LoginModel.RememberMe = true;
+                // Cette vérification dépendra de l'implémentation de votre service d'authentification
+                IsSocialLoginEnabled = await _authenticationService.AreSocialProvidersAvailableAsync();
             }
+            catch
+            {
+                IsSocialLoginEnabled = false;
+            }
+        }
+
+        [RelayCommand]
+        private void TogglePassword()
+        {
+            IsPasswordVisible = !IsPasswordVisible;
+            PasswordVisibilityIcon = IsPasswordVisible ? "eye_off.png" : "eye.png";
         }
 
         [RelayCommand]
         private async Task LoginAsync()
         {
-            try
+            if (IsBusy) return;
+
+            // Validation des entrées
+            if (!ValidateInputs()) return;
+
+            loginButtonText = "Connexion en cours...";
+            await SafeExecuteAsync(async () =>
             {
-                if (string.IsNullOrEmpty(LoginModel.Email) || string.IsNullOrEmpty(LoginModel.Password))
+                // Appel au service d'authentification
+                var result = await _authenticationService.LoginAsync(LoginModel.Email, LoginModel.Password);
+
+                if (result == null)
                 {
-                    ErrorMessage = "Veuillez remplir tous les champs";
+                    ErrorMessage = "Email ou mot de passe incorrect";
                     return;
                 }
 
-                IsLoading = true;
-                ErrorMessage = string.Empty;
-
-                var result = await _authenticationService.LoginAsync(LoginModel.Email, LoginModel.Password);
-
+                // Enregistrer les identifiants si "Se souvenir de moi" est coché
                 if (LoginModel.RememberMe)
                 {
-                    await _secureStorageService.SetSecureStorageAsync("saved_email", LoginModel.Email);
+                    await _secureStorageService.SetAsync("saved_email", LoginModel.Email);
+                }
+                else
+                {
+                    // Supprimer les identifiants enregistrés
+                    await _secureStorageService.RemoveAsync("saved_email");
                 }
 
-                // Rediriger vers la page principale
+                // Redirection vers la page principale
                 await NavigationService.NavigateToAsync("///map");
-            }
-            catch (Exception ex)
+            });
+
+            LoginButtonText = "Se connecter";
+        }
+
+        private bool ValidateInputs()
+        {
+            ClearError();
+
+            if (string.IsNullOrWhiteSpace(LoginModel.Email))
             {
-                ErrorMessage = "Erreur de connexion. Veuillez vérifier vos identifiants.";
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine($"Login error: {ex}");
-#endif
+                ErrorMessage = "Veuillez entrer votre adresse email";
+                return false;
             }
-            finally
+
+            if (!LoginModel.Email.IsValidEmail())
             {
-                IsLoading = false;
+                ErrorMessage = "Format d'email invalide";
+                return false;
             }
+
+            if (string.IsNullOrWhiteSpace(LoginModel.Password))
+            {
+                ErrorMessage = "Veuillez entrer votre mot de passe";
+                return false;
+            }
+
+            return true;
         }
 
         [RelayCommand]
@@ -99,29 +151,33 @@ namespace SubExplore.ViewModels
         [RelayCommand]
         private async Task LoginWithProviderAsync(string provider)
         {
-            try
-            {
-                IsLoading = true;
-                ErrorMessage = string.Empty;
+            if (IsBusy) return;
 
-                // TODO: Implémenter la logique de connexion OAuth
-                var token = await GetProviderTokenAsync(provider);
-                if (string.IsNullOrEmpty(token))
+            await SafeExecuteAsync(async () =>
+            {
+                var result = await _authenticationService.LoginWithOAuthAsync(provider, null);
+
+                if (result == null)
                 {
-                    ErrorMessage = "Échec de l'authentification avec le fournisseur";
+                    ErrorMessage = $"La connexion avec {provider} a échoué";
                     return;
                 }
 
-                var result = await _authenticationService.LoginWithOAuthAsync(provider, token);
+                // Redirection vers la page principale
                 await NavigationService.NavigateToAsync("///map");
-            }
-            catch (Exception ex)
+            });
+        }
+
+        public override async Task InitializeAsync(IDictionary<string, object> parameters)
+        {
+            // Récupérer l'email enregistré si disponible
+            var savedEmail = await _secureStorageService.GetAsync("saved_email");
+
+            if (!string.IsNullOrEmpty(savedEmail))
             {
-                ErrorMessage = "Erreur lors de la connexion avec le fournisseur";
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine($"OAuth login error: {ex}");
-#endif
+                LoginModel.Email = savedEmail;
+                LoginModel.RememberMe = true;
             }
-            finally
-            {
-                IsLoading = false;
+        }
+    }
+}

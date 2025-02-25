@@ -115,6 +115,29 @@ namespace SubExplore.Services.Interfaces
         /// <param name="token">Token JWT</param>
         /// <returns>Collection de claims</returns>
         Task<ClaimsPrincipal> GetClaimsFromTokenAsync(string token);
+
+        /// <summary>
+        /// Vérifie si un email existe dans la base de données
+        /// </summary>
+        /// <param name="email">Email à vérifier</param>
+        Task<bool> IsEmailAvailableAsync(string email);
+
+        /// <summary>
+        /// Vérifie si un nom d'utilisateur existe dans la base de données
+        /// </summary>
+        /// <param name="username">Nom d'utilisateur à vérifier</param>
+        Task<bool> IsUsernameAvailableAsync(string username);
+
+        /// <summary>
+        /// Vérifie si les fournisseurs d'authentification sociale sont disponibles
+        /// </summary>
+        Task<bool> AreSocialProvidersAvailableAsync();
+
+        /// <summary>
+        /// Enregistre un nouvel utilisateur
+        /// </summary>
+        /// <param name="userCreation">Données d'inscription</param>
+        Task<bool> RegisterAsync(RegistrationRequest userCreation);
     }
 
     public class AuthenticationEventArgs : EventArgs
@@ -172,5 +195,15 @@ namespace SubExplore.Services.Interfaces
         {
             Code = code;
         }
+    }
+
+    // Définition de RegistrationRequest
+    public class RegistrationRequest
+    {
+        public string Email { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

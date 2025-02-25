@@ -1,151 +1,381 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:SubExplore.ViewModels"
-             x:Class="SubExplore.Views.Auth.RegisterPage"
-             Shell.NavBarIsVisible="False"
-             BackgroundColor="{StaticResource Background}">
+<ContentPage
+    x:Class="SubExplore.Views.Auth.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:SubExplore.Converters"
+    xmlns:viewmodels="clr-namespace:SubExplore.ViewModels.Auth"
+    x:DataType="viewmodels:RegisterViewModel"
+    BackgroundColor="{StaticResource Background}"
+    Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
-        <Style x:Key="EntryStyle" TargetType="Entry">
-            <Setter Property="HeightRequest" Value="50"/>
-            <Setter Property="BackgroundColor" Value="White"/>
-            <Setter Property="TextColor" Value="{StaticResource Primary}"/>
-            <Setter Property="PlaceholderColor" Value="{StaticResource Gray400}"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="0,5"/>
-            <Setter Property="Padding" Value="15,0"/>
-        </Style>
+        <ResourceDictionary>
+            <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:LoadingToActivityIndicatorConverter x:Key="LoadingToActivityIndicatorConverter" />
+            <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
 
-        <Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="HeightRequest" Value="50"/>
-            <Setter Property="CornerRadius" Value="25"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontAttributes" Value="Bold"/>
-            <Setter Property="Margin" Value="0,10"/>
-        </Style>
+            <Style x:Key="EntryStyle" TargetType="Entry">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="TextColor" Value="{StaticResource Primary}" />
+                <Setter Property="PlaceholderColor" Value="{StaticResource Gray400}" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
+
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="CornerRadius" Value="25" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,10" />
+            </Style>
+
+            <Style x:Key="ValidationMessageStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="#F44336" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Margin" Value="5,2,0,0" />
+            </Style>
+
+            <Style x:Key="ValidationIconStyle" TargetType="Image">
+                <Setter Property="HeightRequest" Value="20" />
+                <Setter Property="WidthRequest" Value="20" />
+                <Setter Property="Margin" Value="0,0,10,0" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
+
+            <Style x:Key="FormSectionTitleStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource Primary}" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,15,0,5" />
+            </Style>
+        </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ScrollView>
-        <Grid RowDefinitions="Auto,*"
-              Padding="20"
-              RowSpacing="20">
-
-            <!-- En-tête -->
-            <VerticalStackLayout Grid.Row="0" 
-                                Spacing="10" 
-                                Margin="0,40,0,20">
-                <Image Source="logo.png"
-                       HeightRequest="80"
-                       HorizontalOptions="Center"/>
-                <Label Text="Créer un compte"
-                       TextColor="{StaticResource Primary}"
-                       FontSize="28"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center"/>
-                <Label Text="Rejoignez la communauté SubExplore"
-                       TextColor="{StaticResource Gray600}"
-                       FontSize="16"
-                       HorizontalOptions="Center"/>
-            </VerticalStackLayout>
-
-            <!-- Formulaire d'inscription -->
-            <Frame Grid.Row="1"
-                   BackgroundColor="White"
-                   Margin="0,0,0,20"
-                   Padding="20"
-                   CornerRadius="15"
-                   HasShadow="True">
-
-                <VerticalStackLayout Spacing="15">
-                    <!-- Message d'erreur -->
-                    <Label Text="{Binding ErrorMessage}"
-                           IsVisible="{Binding HasError}"
-                           TextColor="{StaticResource Error}"
-                           FontSize="14"/>
-
-                    <!-- Nom et Prénom -->
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                        <Entry Grid.Column="0"
-                               Style="{StaticResource EntryStyle}"
-                               Text="{Binding RegistrationModel.FirstName}"
-                               Placeholder="Prénom"
-                               ReturnType="Next"/>
-                        <Entry Grid.Column="1"
-                               Style="{StaticResource EntryStyle}"
-                               Text="{Binding RegistrationModel.LastName}"
-                               Placeholder="Nom"
-                               ReturnType="Next"/>
-                    </Grid>
-
-                    <!-- Pseudo -->
-                    <Entry Style="{StaticResource EntryStyle}"
-                           Text="{Binding RegistrationModel.Username}"
-                           Placeholder="Pseudo"
-                           ReturnType="Next"/>
-
-                    <!-- Email -->
-                    <Entry Style="{StaticResource EntryStyle}"
-                           Text="{Binding RegistrationModel.Email}"
-                           Placeholder="Email"
-                           Keyboard="Email"
-                           ReturnType="Next"/>
-
-                    <!-- Mot de passe -->
-                    <Entry Style="{StaticResource EntryStyle}"
-                           Text="{Binding RegistrationModel.Password}"
-                           Placeholder="Mot de passe"
-                           IsPassword="True"
-                           ReturnType="Next"/>
-
-                    <!-- Confirmation mot de passe -->
-                    <Entry Style="{StaticResource EntryStyle}"
-                           Text="{Binding RegistrationModel.ConfirmPassword}"
-                           Placeholder="Confirmer le mot de passe"
-                           IsPassword="True"
-                           ReturnType="Done"/>
-
-                    <!-- Conditions d'utilisation -->
-                    <HorizontalStackLayout Spacing="10">
-                        <CheckBox IsChecked="{Binding RegistrationModel.AcceptTerms}"
-                                 Color="{StaticResource Primary}"/>
-                        <Label Text="J'accepte les "
-                               VerticalTextAlignment="Center">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding ShowTermsAndConditionsCommand}"/>
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label Text="conditions d'utilisation"
-                               TextColor="{StaticResource Primary}"
-                               TextDecorations="Underline"
-                               VerticalTextAlignment="Center">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding ShowTermsAndConditionsCommand}"/>
-                            </Label.GestureRecognizers>
-                        </Label>
-                    </HorizontalStackLayout>
-
-                    <!-- Bouton d'inscription -->
-                    <Button Text="{Binding RegisterButtonText}"
-                            Style="{StaticResource ButtonStyle}"
-                            BackgroundColor="{StaticResource Primary}"
-                            TextColor="White"
-                            Command="{Binding RegisterCommand}"
-                            IsEnabled="{Binding IsNotLoading}"/>
-
-                    <!-- Lien vers la connexion -->
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="Déjà inscrit ?"
-                               HorizontalOptions="Center"
-                               TextColor="{StaticResource Gray600}"/>
-                        <Button Text="Se connecter"
-                                Style="{StaticResource ButtonStyle}"
-                                BackgroundColor="{StaticResource Secondary}"
-                                TextColor="White"
-                                Command="{Binding NavigateToLoginCommand}"/>
-                    </VerticalStackLayout>
-                </VerticalStackLayout>
-            </Frame>
+    <Grid>
+        <!--  Header with back button  -->
+        <Grid
+            BackgroundColor="{StaticResource Primary}"
+            HeightRequest="60"
+            VerticalOptions="Start">
+            <Grid Padding="10,0" ColumnDefinitions="Auto,*">
+                <ImageButton
+                    Grid.Column="0"
+                    BackgroundColor="Transparent"
+                    Command="{Binding NavigateToLoginCommand}"
+                    HeightRequest="30"
+                    Source="arrow_back.png"
+                    VerticalOptions="Center"
+                    WidthRequest="30" />
+                <Label
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    Text="Créer un compte"
+                    TextColor="White"
+                    VerticalOptions="Center" />
+            </Grid>
         </Grid>
-    </ScrollView>
+
+        <ScrollView Margin="0,60,0,0">
+            <Grid
+                Padding="20"
+                RowDefinitions="Auto,*"
+                RowSpacing="15">
+                <!--  Title & Description  -->
+                <VerticalStackLayout Grid.Row="0" Spacing="5">
+                    <Label
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Rejoignez la communauté SubExplore !"
+                        TextColor="{StaticResource TextSecondary}" />
+                </VerticalStackLayout>
+
+                <!--  Registration Form  -->
+                <Frame
+                    Grid.Row="1"
+                    Padding="20"
+                    BackgroundColor="White"
+                    CornerRadius="15"
+                    HasShadow="True">
+                    <ScrollView>
+                        <VerticalStackLayout Spacing="15">
+                            <!--  Error message  -->
+                            <Frame
+                                Padding="10"
+                                BackgroundColor="#FFEBEE"
+                                BorderColor="#F44336"
+                                CornerRadius="5"
+                                HasShadow="False"
+                                IsVisible="{Binding HasError}">
+                                <Label
+                                    FontSize="14"
+                                    Text="{Binding ErrorMessage}"
+                                    TextColor="#F44336" />
+                            </Frame>
+
+                            <!--  Personal Information  -->
+                            <Label Style="{StaticResource FormSectionTitleStyle}" Text="Informations Personnelles" />
+
+                            <!--  First Name  -->
+                            <VerticalStackLayout Spacing="3">
+                                <Label
+                                    FontSize="14"
+                                    Text="Prénom *"
+                                    TextColor="{StaticResource TextSecondary}" />
+                                <Border
+                                    Stroke="{StaticResource Accent}"
+                                    StrokeShape="RoundRectangle 8,8,8,8"
+                                    StrokeThickness="1">
+                                    <Entry
+                                        Placeholder="Jean"
+                                        ReturnType="Next"
+                                        Style="{StaticResource EntryStyle}"
+                                        Text="{Binding RegistrationModel.FirstName}" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!--  Last Name  -->
+                            <VerticalStackLayout Spacing="3">
+                                <Label
+                                    FontSize="14"
+                                    Text="Nom *"
+                                    TextColor="{StaticResource TextSecondary}" />
+                                <Border
+                                    Stroke="{StaticResource Accent}"
+                                    StrokeShape="RoundRectangle 8,8,8,8"
+                                    StrokeThickness="1">
+                                    <Entry
+                                        Placeholder="Dupont"
+                                        ReturnType="Next"
+                                        Style="{StaticResource EntryStyle}"
+                                        Text="{Binding RegistrationModel.LastName}" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!--  Account Information  -->
+                            <Label Style="{StaticResource FormSectionTitleStyle}" Text="Informations du Compte" />
+
+                            <!--  Email  -->
+                            <VerticalStackLayout Spacing="3">
+                                <Label
+                                    FontSize="14"
+                                    Text="Email *"
+                                    TextColor="{StaticResource TextSecondary}" />
+                                <Border
+                                    Stroke="{StaticResource Accent}"
+                                    StrokeShape="RoundRectangle 8,8,8,8"
+                                    StrokeThickness="1">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Entry
+                                            Grid.Column="0"
+                                            Keyboard="Email"
+                                            Placeholder="votre@email.com"
+                                            ReturnType="Next"
+                                            Style="{StaticResource EntryStyle}"
+                                            Text="{Binding RegistrationModel.Email}">
+                                            <Entry.Behaviors>
+                                                <EventToCommandBehavior Command="{Binding ValidateEmailCommand}" EventName="Completed" />
+                                                <EventToCommandBehavior Command="{Binding ValidateEmailCommand}" EventName="Unfocused" />
+                                            </Entry.Behaviors>
+                                        </Entry>
+                                        <Image
+                                            Grid.Column="1"
+                                            IsVisible="{Binding IsEmailValid}"
+                                            Source="check_circle.png"
+                                            Style="{StaticResource ValidationIconStyle}" />
+                                    </Grid>
+                                </Border>
+                                <Label
+                                    IsVisible="{Binding HasEmailError}"
+                                    Style="{StaticResource ValidationMessageStyle}"
+                                    Text="{Binding EmailValidationMessage}" />
+                            </VerticalStackLayout>
+
+                            <!--  Username  -->
+                            <VerticalStackLayout Spacing="3">
+                                <Label
+                                    FontSize="14"
+                                    Text="Nom d'utilisateur *"
+                                    TextColor="{StaticResource TextSecondary}" />
+                                <Border
+                                    Stroke="{StaticResource Accent}"
+                                    StrokeShape="RoundRectangle 8,8,8,8"
+                                    StrokeThickness="1">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Entry
+                                            Grid.Column="0"
+                                            Placeholder="pseudo123"
+                                            ReturnType="Next"
+                                            Style="{StaticResource EntryStyle}"
+                                            Text="{Binding RegistrationModel.Username}">
+                                            <Entry.Behaviors>
+                                                <EventToCommandBehavior Command="{Binding ValidateUsernameCommand}" EventName="Completed" />
+                                                <EventToCommandBehavior Command="{Binding ValidateUsernameCommand}" EventName="Unfocused" />
+                                            </Entry.Behaviors>
+                                        </Entry>
+                                        <Image
+                                            Grid.Column="1"
+                                            IsVisible="{Binding IsUsernameValid}"
+                                            Source="check_circle.png"
+                                            Style="{StaticResource ValidationIconStyle}" />
+                                    </Grid>
+                                </Border>
+                                <Label
+                                    IsVisible="{Binding HasUsernameError}"
+                                    Style="{StaticResource ValidationMessageStyle}"
+                                    Text="{Binding UsernameValidationMessage}" />
+                            </VerticalStackLayout>
+
+                            <!--  Password  -->
+                            <VerticalStackLayout Spacing="3">
+                                <Label
+                                    FontSize="14"
+                                    Text="Mot de passe *"
+                                    TextColor="{StaticResource TextSecondary}" />
+                                <Border
+                                    Stroke="{StaticResource Accent}"
+                                    StrokeShape="RoundRectangle 8,8,8,8"
+                                    StrokeThickness="1">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Entry
+                                            Grid.Column="0"
+                                            IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InvertedBoolConverter}}"
+                                            Placeholder="Mot de passe"
+                                            ReturnType="Next"
+                                            Style="{StaticResource EntryStyle}"
+                                            Text="{Binding RegistrationModel.Password}">
+                                            <Entry.Behaviors>
+                                                <EventToCommandBehavior Command="{Binding ValidatePasswordCommand}" EventName="TextChanged" />
+                                            </Entry.Behaviors>
+                                        </Entry>
+                                        <ImageButton
+                                            Grid.Column="1"
+                                            Margin="0,0,10,0"
+                                            BackgroundColor="Transparent"
+                                            Command="{Binding TogglePasswordCommand}"
+                                            HeightRequest="24"
+                                            Source="{Binding PasswordVisibilityIcon}"
+                                            WidthRequest="24" />
+                                    </Grid>
+                                </Border>
+                                <!--  Password Strength Indicator  -->
+                                <Grid IsVisible="{Binding PasswordStrength, Converter={StaticResource StringToBoolConverter}}">
+                                    <Label
+                                        Margin="5,2,0,0"
+                                        FontSize="12"
+                                        Text="{Binding PasswordStrength, StringFormat='Force du mot de passe: {0}'}"
+                                        TextColor="{StaticResource TextSecondary}" />
+                                </Grid>
+                                <Label
+                                    IsVisible="{Binding HasPasswordError}"
+                                    Style="{StaticResource ValidationMessageStyle}"
+                                    Text="{Binding PasswordValidationMessage}" />
+                            </VerticalStackLayout>
+
+                            <!--  Confirm Password  -->
+                            <VerticalStackLayout Spacing="3">
+                                <Label
+                                    FontSize="14"
+                                    Text="Confirmer le mot de passe *"
+                                    TextColor="{StaticResource TextSecondary}" />
+                                <Border
+                                    Stroke="{StaticResource Accent}"
+                                    StrokeShape="RoundRectangle 8,8,8,8"
+                                    StrokeThickness="1">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Entry
+                                            Grid.Column="0"
+                                            IsPassword="{Binding IsConfirmPasswordVisible, Converter={StaticResource InvertedBoolConverter}}"
+                                            Placeholder="Confirmer le mot de passe"
+                                            ReturnType="Done"
+                                            Style="{StaticResource EntryStyle}"
+                                            Text="{Binding RegistrationModel.ConfirmPassword}">
+                                            <Entry.Behaviors>
+                                                <EventToCommandBehavior Command="{Binding ValidatePasswordsMatchCommand}" EventName="TextChanged" />
+                                            </Entry.Behaviors>
+                                        </Entry>
+                                        <ImageButton
+                                            Grid.Column="1"
+                                            Margin="0,0,10,0"
+                                            BackgroundColor="Transparent"
+                                            Command="{Binding ToggleConfirmPasswordCommand}"
+                                            HeightRequest="24"
+                                            Source="{Binding ConfirmPasswordVisibilityIcon}"
+                                            WidthRequest="24" />
+                                    </Grid>
+                                </Border>
+                                <Label
+                                    IsVisible="{Binding HasPasswordMatchError}"
+                                    Style="{StaticResource ValidationMessageStyle}"
+                                    Text="{Binding PasswordMatchValidationMessage}" />
+                            </VerticalStackLayout>
+
+                            <!--  Terms and Conditions  -->
+                            <Grid Margin="0,10" ColumnDefinitions="Auto,*">
+                                <CheckBox
+                                    Grid.Column="0"
+                                    IsChecked="{Binding RegistrationModel.AcceptTerms}"
+                                    Color="{StaticResource Primary}" />
+                                <Label Grid.Column="1" VerticalOptions="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="J'accepte les " TextColor="{StaticResource TextSecondary}" />
+                                            <Span
+                                                Text="conditions d'utilisation"
+                                                TextColor="{StaticResource Primary}"
+                                                TextDecorations="Underline">
+                                                <Span.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding ShowTermsAndConditionsCommand}" />
+                                                </Span.GestureRecognizers>
+                                            </Span>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </Grid>
+
+                            <!--  Register Button  -->
+                            <Grid>
+                                <Button
+                                    BackgroundColor="{StaticResource Primary}"
+                                    Command="{Binding RegisterCommand}"
+                                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                                    Style="{StaticResource ButtonStyle}"
+                                    Text="{Binding RegisterButtonText}"
+                                    TextColor="White" />
+                                <ActivityIndicator
+                                    HorizontalOptions="Center"
+                                    IsRunning="{Binding IsBusy}"
+                                    IsVisible="{Binding IsBusy}"
+                                    VerticalOptions="Center"
+                                    Color="White" />
+                            </Grid>
+
+                            <!--  Login Link  -->
+                            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                                <Label
+                                    Text="Déjà inscrit ?"
+                                    TextColor="{StaticResource TextSecondary}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    Text="Se connecter"
+                                    TextColor="{StaticResource Primary}"
+                                    TextDecorations="Underline"
+                                    VerticalOptions="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </Frame>
+            </Grid>
+        </ScrollView>
+    </Grid>
 </ContentPage>

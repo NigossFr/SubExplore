@@ -5,142 +5,140 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SubExplore.Extensions;
 using SubExplore.Services.Interfaces;
 using SubExplore.ViewModels.Base;
-using SubExplore.ViewModels.Auth;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace SubExplore.ViewModels;
-
-public partial class ForgotPasswordViewModel : ViewModelBase
+namespace SubExplore.ViewModels.Auth
 {
-    private readonly IAuthenticationService _authenticationService;
-
-    [ObservableProperty]
-    private ForgotPasswordModel _forgotPasswordModel;
-
-    [ObservableProperty]
-    private bool _isLoading;
-
-    [ObservableProperty]
-    private string _errorMessage;
-
-    [ObservableProperty]
-    private string _successMessage;
-
-    [ObservableProperty]
-    private bool _isResetEmailSent;
-
-    public ForgotPasswordViewModel(
-        IAuthenticationService authenticationService,
-        INavigationService navigationService)
-        : base(navigationService)
+    public partial class ForgotPasswordViewModel : ViewModelBase
     {
-        _authenticationService = authenticationService;
-        _forgotPasswordModel = new ForgotPasswordModel();
-    }
+        private readonly IAuthenticationService _authenticationService;
 
-    [RelayCommand]
-    private async Task RequestPasswordResetAsync()
-    {
-        try
+        [ObservableProperty]
+        private ForgotPasswordModel _forgotPasswordModel;
+
+        [ObservableProperty]
+        private string _submitButtonText = "Envoyer le lien de réinitialisation";
+
+        [ObservableProperty]
+        private bool _isEmailSent;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsEmailValid))]
+        [NotifyPropertyChangedFor(nameof(HasEmailError))]
+        private string _emailValidationMessage;
+
+        [ObservableProperty]
+        private string _successMessage;
+
+        public bool HasSuccessMessage => !string.IsNullOrEmpty(SuccessMessage);
+        public bool IsEmailValid => string.IsNullOrEmpty(EmailValidationMessage);
+        public bool HasEmailError => !string.IsNullOrEmpty(EmailValidationMessage);
+
+        public ForgotPasswordViewModel(
+            INavigationService navigationService,
+            IAuthenticationService authenticationService)
+            : base(navigationService)
         {
+            _authenticationService = authenticationService;
+            _forgotPasswordModel = new ForgotPasswordModel();
+            Title = "Mot de passe oublié";
+        }
+
+        [RelayCommand]
+        private async Task SendResetLinkAsync()
+        {
+            if (IsBusy) return;
+
+            // Validation de l'email
+            if (!ValidateEmail()) return;
+
+            SubmitButtonText = "Envoi en cours...";
+            await SafeExecuteAsync(async () =>
+            {
+                // Appel au service d'authentification
+                var result = await _authenticationService.GeneratePasswordResetTokenAsync(ForgotPasswordModel.Email);
+
+                if (result)
+                {
+                    IsEmailSent = true;
+                    SuccessMessage = $"Un lien de réinitialisation a été envoyé à {ForgotPasswordModel.Email}. Vérifiez votre boîte de réception (et vos spams).";
+                    ClearError();
+                }
+                else
+                {
+                    ErrorMessage = "Impossible d'envoyer l'email de réinitialisation. Vérifiez votre adresse email.";
+                }
+            });
+
+            SubmitButtonText = "Envoyer le lien de réinitialisation";
+        }
+
+        private bool ValidateEmail()
+        {
+            EmailValidationMessage = string.Empty;
+            ClearError();
+
             if (string.IsNullOrWhiteSpace(ForgotPasswordModel.Email))
             {
-                ErrorMessage = "Veuillez saisir votre adresse email";
-                return;
+                EmailValidationMessage = "L'email est requis";
+                return false;
             }
 
-            IsLoading = true;
-            ErrorMessage = string.Empty;
+            if (!ForgotPasswordModel.Email.IsValidEmail())
+            {
+                EmailValidationMessage = "Format d'email invalide";
+                return false;
+            }
+
+            return true;
+        }
+
+        [RelayCommand]
+        private async Task NavigateToLoginAsync()
+        {
+            await NavigationService.NavigateToAsync("login");
+        }
+
+        [RelayCommand]
+        private async Task CheckEmailExistsAsync()
+        {
+            if (string.IsNullOrWhiteSpace(ForgotPasswordModel.Email) || !ForgotPasswordModel.Email.IsValidEmail())
+                return;
+
+            try
+            {
+                var exists = await _authenticationService.CheckEmailExistsAsync(ForgotPasswordModel.Email);
+                if (!exists)
+                {
+                    EmailValidationMessage = "Aucun compte n'est associé à cette adresse email";
+                }
+                else
+                {
+                    EmailValidationMessage = string.Empty;
+                }
+            }
+            catch
+            {
+                // Ignorer les erreurs de vérification
+            }
+        }
+
+        public override Task InitializeAsync(IDictionary<string, object> parameters)
+        {
+            // Réinitialiser le modèle
+            ForgotPasswordModel = new ForgotPasswordModel();
+
+            // Réinitialiser les états
+            IsEmailSent = false;
             SuccessMessage = string.Empty;
+            EmailValidationMessage = string.Empty;
+            ClearError();
 
-            // Vérifier si l'email existe
-            var emailExists = await _authenticationService.CheckEmailExistsAsync(ForgotPasswordModel.Email);
-            if (!emailExists)
-            {
-                ErrorMessage = "Aucun compte n'est associé à cette adresse email";
-                return;
-            }
-
-            // Générer et envoyer le token de réinitialisation
-            var resetToken = await _authenticationService.GeneratePasswordResetTokenAsync(ForgotPasswordModel.Email);
-            if (!string.IsNullOrEmpty(resetToken))
-            {
-                IsResetEmailSent = true;
-                SuccessMessage = "Un email de réinitialisation a été envoyé à votre adresse";
-
-                // Rediriger vers la page de confirmation après un délai
-                await Task.Delay(2000);
-                await NavigationService.NavigateToAsync("reset-password-confirmation");
-            }
-            else
-            {
-                ErrorMessage = "Impossible d'envoyer l'email de réinitialisation";
-            }
+            return base.InitializeAsync(parameters);
         }
-        catch (Exception ex)
-        {
-            ErrorMessage = "Une erreur est survenue lors de la demande de réinitialisation";
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine($"Password reset request error: {ex}");
-#endif
-        }
-        finally
-        {
-            IsLoading = false;
-        }
-    }
-
-    [RelayCommand]
-    private async Task ResetPasswordAsync(ResetPasswordModel model)
-    {
-        try
-        {
-            if (string.IsNullOrWhiteSpace(model.NewPassword) ||
-                string.IsNullOrWhiteSpace(model.ConfirmPassword))
-            {
-                ErrorMessage = "Veuillez remplir tous les champs";
-                return;
-            }
-
-            if (model.NewPassword != model.ConfirmPassword)
-            {
-                ErrorMessage = "Les mots de passe ne correspondent pas";
-                return;
-            }
-
-            IsLoading = true;
-            ErrorMessage = string.Empty;
-            SuccessMessage = string.Empty;
-
-            var success = await _authenticationService.ResetPasswordAsync(model.Token, model.NewPassword);
-            if (success)
-            {
-                SuccessMessage = "Votre mot de passe a été réinitialisé avec succès";
-                await Task.Delay(1500);
-                await NavigationService.NavigateToAsync("login");
-            }
-            else
-            {
-                ErrorMessage = "La réinitialisation du mot de passe a échoué";
-            }
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = "Une erreur est survenue lors de la réinitialisation du mot de passe";
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine($"Password reset error: {ex}");
-#endif
-        }
-        finally
-        {
-            IsLoading = false;
-        }
-    }
-
-    [RelayCommand]
-    private async Task NavigateToLoginAsync()
-    {
-        await NavigationService.NavigateToAsync("login");
     }
 }

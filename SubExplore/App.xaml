@@ -1,108 +1,138 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="SubExplore.AppShell"
+<Application
+    x:Class="SubExplore.App"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:SubExplore.Views"
-    xmlns:viewmodels="clr-namespace:SubExplore.ViewModels"
-    x:DataType="viewmodels:AppShellViewModel"
-    Shell.NavBarIsVisible="False">
+    xmlns:converters="clr-namespace:SubExplore.Converters"
+    xmlns:local="clr-namespace:SubExplore">
 
-    <Shell.BindingContext>
-        <viewmodels:AppShellViewModel />
-    </Shell.BindingContext>
-
-    <!-- Style du Shell -->
-    <Shell.Resources>
+    <Application.Resources>
         <ResourceDictionary>
+            <!--  Convertisseurs  -->
+            <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:LoadingToActivityIndicatorConverter x:Key="LoadingToActivityIndicatorConverter" />
+            <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
+            <converters:EnumToStringConverter x:Key="EnumToStringConverter" />
+            <converters:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+
+            <!--  Couleurs  -->
             <Color x:Key="Primary">#006994</Color>
-            <Style x:Key="BaseStyle" TargetType="Element">
-                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
-                <Setter Property="Shell.ForegroundColor" Value="White" />
-                <Setter Property="Shell.TitleColor" Value="White" />
-                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
-                <Setter Property="Shell.TabBarForegroundColor" Value="White" />
-                <Setter Property="Shell.TabBarTitleColor" Value="White" />
-                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF" />
+            <!--  Bleu océan profond  -->
+            <Color x:Key="Secondary">#00B4D8</Color>
+            <!--  Bleu lagon  -->
+            <Color x:Key="Accent">#48CAE4</Color>
+            <!--  Bleu clair  -->
+            <Color x:Key="Warning">#FF9F1C</Color>
+            <!--  Orange corail  -->
+            <Color x:Key="Success">#2EC4B6</Color>
+            <!--  Turquoise  -->
+            <Color x:Key="Error">#DC2626</Color>
+            <!--  Rouge erreur  -->
+            <Color x:Key="Background">#F8FDFF</Color>
+            <!--  Blanc azuré  -->
+            <Color x:Key="TextPrimary">#1A1A1A</Color>
+            <!--  Texte principal  -->
+            <Color x:Key="TextSecondary">#666666</Color>
+            <!--  Texte secondaire  -->
+            <Color x:Key="TextOnPrimary">#FFFFFF</Color>
+            <!--  Texte sur fond principal  -->
+
+            <!--  Couleurs supplémentaires  -->
+            <Color x:Key="Gray100">#F3F4F6</Color>
+            <Color x:Key="Gray200">#E5E7EB</Color>
+            <Color x:Key="Gray300">#D1D5DB</Color>
+            <Color x:Key="Gray400">#9CA3AF</Color>
+            <Color x:Key="Gray600">#4B5563</Color>
+            <Color x:Key="Gray800">#1F2937</Color>
+
+            <!--  Styles généraux  -->
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+                <Setter Property="FontFamily" Value="OpenSansRegular" />
+            </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="{StaticResource TextOnPrimary}" />
+                <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="FontFamily" Value="OpenSansRegular" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Padding" Value="14,10" />
+                <Setter Property="MinimumHeightRequest" Value="44" />
+            </Style>
+
+            <Style x:Key="Headline" TargetType="Label">
+                <Setter Property="FontSize" Value="28" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource Primary}" />
+            </Style>
+
+            <Style x:Key="SubHeadline" TargetType="Label">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+            </Style>
+
+            <Style x:Key="CardTitle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource Primary}" />
+            </Style>
+
+            <Style x:Key="PageTitle" TargetType="Label">
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource Primary}" />
+                <Setter Property="Margin" Value="0,0,0,15" />
+            </Style>
+
+            <Style x:Key="Card" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="HasShadow" Value="True" />
+                <Setter Property="Padding" Value="15" />
+                <Setter Property="Margin" Value="0,0,0,15" />
+            </Style>
+
+            <Style x:Key="EntryField" TargetType="Border">
+                <Setter Property="Stroke" Value="{StaticResource Accent}" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 8,8,8,8" />
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="Padding" Value="5,0" />
+            </Style>
+
+            <Style x:Key="ValidationError" TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource Error}" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Margin" Value="5,2,0,0" />
+            </Style>
+
+            <Style x:Key="ErrorCard" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="#FFEBEE" />
+                <Setter Property="BorderColor" Value="{StaticResource Error}" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="HasShadow" Value="False" />
+                <Setter Property="Margin" Value="0,0,0,15" />
+            </Style>
+
+            <Style x:Key="SuccessCard" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="#E8F5E9" />
+                <Setter Property="BorderColor" Value="{StaticResource Success}" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="HasShadow" Value="False" />
+                <Setter Property="Margin" Value="0,0,0,15" />
+            </Style>
+
+            <Style x:Key="WarningCard" TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="#FFF3E0" />
+                <Setter Property="BorderColor" Value="{StaticResource Warning}" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="HasShadow" Value="False" />
+                <Setter Property="Margin" Value="0,0,0,15" />
             </Style>
         </ResourceDictionary>
-    </Shell.Resources>
-
-    <!-- Routes de l'application -->
-    <TabBar>
-        <!-- Page Carte -->
-        <Tab Title="Carte" Icon="map.png">
-            <ShellContent
-                Title="Carte"
-                ContentTemplate="{DataTemplate views:MapPage}"
-                Route="map" />
-        </Tab>
-
-        <!-- Page Spots -->
-        <Tab Title="Spots" Icon="spot.png">
-            <ShellContent
-                Title="Spots"
-                ContentTemplate="{DataTemplate views:SpotsPage}"
-                Route="spots" />
-        </Tab>
-
-        <!-- Page Structures -->
-        <Tab Title="Structures" Icon="structures.png">
-            <ShellContent
-                Title="Structures"
-                ContentTemplate="{DataTemplate views:StructuresPage}"
-                Route="structures" />
-        </Tab>
-
-        <!-- Page Magazine -->
-        <Tab Title="Magazine" Icon="magazine.png">
-            <ShellContent
-                Title="Magazine"
-                ContentTemplate="{DataTemplate views:MagazinePage}"
-                Route="magazine" />
-        </Tab>
-
-        <!-- Page Profil -->
-        <Tab Title="Profil" Icon="profile.png">
-            <ShellContent
-                Title="Profil"
-                ContentTemplate="{DataTemplate views:ProfilePage}"
-                Route="profile" />
-        </Tab>
-    </TabBar>
-
-    <!-- Menu contextuel -->
-    <Shell.FlyoutHeader>
-        <Grid BackgroundColor="{StaticResource Primary}" Padding="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="100" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Image Source="logo.png" HeightRequest="80" />
-            <Label 
-                Grid.Row="1"
-                Text="{Binding Username}" 
-                TextColor="White"
-                IsVisible="{Binding IsUserLoggedIn}"
-                HorizontalOptions="Center" />
-        </Grid>
-    </Shell.FlyoutHeader>
-
-    <!-- Menu items -->
-    <FlyoutItem Title="Paramètres" Icon="settings.png" Command="{Binding NavigateToSettingsCommand}">
-        <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" Route="settings" />
-    </FlyoutItem>
-
-    <MenuItem 
-        Text="Changer de thème"
-        Command="{Binding ToggleThemeCommand}"
-        IconImageSource="theme.png" />
-
-    <MenuItem 
-        Text="Se déconnecter"
-        Command="{Binding LogoutCommand}"
-        IsVisible="{Binding IsUserLoggedIn}"
-        IconImageSource="logout.png" />
-
-</Shell>
+    </Application.Resources>
+</Application>

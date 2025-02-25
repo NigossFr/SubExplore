@@ -1,4 +1,4 @@
-using SubExplore.ViewModels;
+using SubExplore.ViewModels.Auth;
 
 namespace SubExplore.Views.Auth;
 
@@ -13,10 +13,10 @@ public partial class ForgotPasswordPage : ContentPage
         BindingContext = _viewModel;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        _viewModel.ErrorMessage = string.Empty;
-        _viewModel.SuccessMessage = string.Empty;
+        // Initialiser le ViewModel quand la page apparaît
+        await _viewModel.InitializeAsync(null);
     }
 }
