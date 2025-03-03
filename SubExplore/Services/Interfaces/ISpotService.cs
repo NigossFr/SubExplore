@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using SubExplore.Models.DTOs;
 
 namespace SubExplore.Services.Interfaces
 {
@@ -21,14 +17,14 @@ namespace SubExplore.Services.Interfaces
         /// </summary>
         /// <param name="id">Identifiant du spot</param>
         /// <returns>Le spot ou null</returns>
-        Task<SpotDto> GetByIdAsync(int id);
+        Task<Models.DTOs.SpotDto> GetByIdAsync(int id);
 
         /// <summary>
         /// Recherche des spots par critères
         /// </summary>
         /// <param name="searchParams">Critères de recherche</param>
         /// <returns>Liste des spots correspondants</returns>
-        Task<IEnumerable<SpotDto>> SearchAsync(SpotSearchParameters searchParams);
+        Task<IEnumerable<Models.DTOs.SpotDto>> SearchAsync(Models.DTOs.SpotSearchParameters searchParams);
 
         /// <summary>
         /// Récupère les spots à proximité d'un point
@@ -38,11 +34,25 @@ namespace SubExplore.Services.Interfaces
         /// <param name="radiusInKm">Rayon de recherche en kilomètres</param>
         /// <param name="maxResults">Nombre maximum de résultats</param>
         /// <returns>Liste des spots à proximité</returns>
-        Task<IEnumerable<SpotDto>> GetNearbyAsync(
+        Task<IEnumerable<Models.DTOs.SpotDto>> GetNearbyAsync(
             double latitude,
             double longitude,
             double radiusInKm,
             int maxResults = 50);
+
+        /// <summary>
+        /// Récupère les spots filtrés depuis le cache local (mode hors-ligne)
+        /// </summary>
+        /// <param name="filter">Critères de filtrage</param>
+        /// <returns>Liste des spots correspondants</returns>
+        Task<IEnumerable<Models.DTOs.SpotDto>> GetCachedSpotsAsync(Models.DTOs.SpotFilter filter);
+
+        /// <summary>
+        /// Récupère les spots filtrés (version simplifiée)
+        /// </summary>
+        /// <param name="filter">Critères de filtrage</param>
+        /// <returns>Liste des spots correspondants</returns>
+        Task<IEnumerable<Models.DTOs.SpotDto>> GetSpotsAsync(Models.DTOs.SpotFilter filter);
 
         /// <summary>
         /// Crée un nouveau spot
@@ -50,7 +60,7 @@ namespace SubExplore.Services.Interfaces
         /// <param name="spotCreation">Données du spot</param>
         /// <param name="userId">ID de l'utilisateur créateur</param>
         /// <returns>Le spot créé</returns>
-        Task<SpotDto> CreateAsync(SpotCreationDto spotCreation, int userId);
+        Task<Models.DTOs.SpotDto> CreateAsync(Models.DTOs.SpotCreationDto spotCreation, int userId);
 
         /// <summary>
         /// Met à jour un spot existant
@@ -59,7 +69,7 @@ namespace SubExplore.Services.Interfaces
         /// <param name="spotUpdate">Nouvelles données</param>
         /// <param name="userId">ID de l'utilisateur effectuant la modification</param>
         /// <returns>Le spot mis à jour</returns>
-        Task<SpotDto> UpdateAsync(int id, SpotUpdateDto spotUpdate, int userId);
+        Task<Models.DTOs.SpotDto> UpdateAsync(int id, Models.DTOs.SpotUpdateDto spotUpdate, int userId);
 
         /// <summary>
         /// Supprime un spot
@@ -79,14 +89,14 @@ namespace SubExplore.Services.Interfaces
         /// <param name="mediaUpload">Fichier média</param>
         /// <param name="userId">ID de l'utilisateur</param>
         /// <returns>Le média créé</returns>
-        Task<SpotMediaDto> AddMediaAsync(int spotId, SpotMediaUploadDto mediaUpload, int userId);
+        Task<Models.DTOs.SpotMediaDto> AddMediaAsync(int spotId, Models.DTOs.SpotMediaUploadDto mediaUpload, int userId);
 
         /// <summary>
         /// Récupère les médias d'un spot
         /// </summary>
         /// <param name="spotId">ID du spot</param>
         /// <returns>Liste des médias</returns>
-        Task<IEnumerable<SpotMediaDto>> GetMediaAsync(int spotId);
+        Task<IEnumerable<Models.DTOs.SpotMediaDto>> GetMediaAsync(int spotId);
 
         /// <summary>
         /// Supprime un média
@@ -113,7 +123,7 @@ namespace SubExplore.Services.Interfaces
         /// <param name="moderatorId">ID du modérateur</param>
         /// <param name="validationDetails">Détails de la validation</param>
         /// <returns>true si la validation est réussie</returns>
-        Task<bool> ValidateSpotAsync(int spotId, int moderatorId, SpotValidationDto validationDetails);
+        Task<bool> ValidateSpotAsync(int spotId, int moderatorId, Models.DTOs.SpotValidationDto validationDetails);
 
         /// <summary>
         /// Rejette un spot par un modérateur
@@ -122,7 +132,7 @@ namespace SubExplore.Services.Interfaces
         /// <param name="moderatorId">ID du modérateur</param>
         /// <param name="rejectionDetails">Détails du rejet</param>
         /// <returns>true si le rejet est réussi</returns>
-        Task<bool> RejectSpotAsync(int spotId, int moderatorId, SpotRejectionDto rejectionDetails);
+        Task<bool> RejectSpotAsync(int spotId, int moderatorId, Models.DTOs.SpotRejectionDto rejectionDetails);
 
         /// <summary>
         /// Signale un problème sur un spot
@@ -131,7 +141,7 @@ namespace SubExplore.Services.Interfaces
         /// <param name="reportDetails">Détails du signalement</param>
         /// <param name="userId">ID de l'utilisateur signalant</param>
         /// <returns>ID du rapport créé</returns>
-        Task<int> ReportSpotAsync(int spotId, SpotReportDto reportDetails, int userId);
+        Task<int> ReportSpotAsync(int spotId, Models.DTOs.SpotReportDto reportDetails, int userId);
 
         #endregion
 
@@ -143,21 +153,21 @@ namespace SubExplore.Services.Interfaces
         /// <param name="spotId">ID du spot</param>
         /// <param name="rating">Évaluation</param>
         /// <param name="userId">ID de l'utilisateur</param>
-        Task<bool> RateSpotAsync(int spotId, SpotRatingDto rating, int userId);
+        Task<bool> RateSpotAsync(int spotId, Models.DTOs.SpotRatingDto rating, int userId);
 
         /// <summary>
         /// Récupère la note moyenne d'un spot
         /// </summary>
         /// <param name="spotId">ID du spot</param>
         /// <returns>Note moyenne et nombre d'évaluations</returns>
-        Task<SpotRatingStatsDto> GetRatingStatsAsync(int spotId);
+        Task<Models.DTOs.SpotRatingStatsDto> GetRatingStatsAsync(int spotId);
 
         /// <summary>
         /// Récupère les statistiques de visite d'un spot
         /// </summary>
         /// <param name="spotId">ID du spot</param>
         /// <returns>Statistiques de visite</returns>
-        Task<SpotVisitStatsDto> GetVisitStatsAsync(int spotId);
+        Task<Models.DTOs.SpotVisitStatsDto> GetVisitStatsAsync(int spotId);
 
         /// <summary>
         /// Enregistre une visite sur un spot
@@ -176,14 +186,14 @@ namespace SubExplore.Services.Interfaces
         /// <param name="spotId">ID du spot</param>
         /// <param name="conditions">Nouvelles conditions</param>
         /// <param name="userId">ID de l'utilisateur</param>
-        Task UpdateCurrentConditionsAsync(int spotId, SpotConditionsDto conditions, int userId);
+        Task UpdateCurrentConditionsAsync(int spotId, Models.DTOs.SpotConditionsDto conditions, int userId);
 
         /// <summary>
         /// Récupère les conditions actuelles d'un spot
         /// </summary>
         /// <param name="spotId">ID du spot</param>
         /// <returns>Conditions actuelles</returns>
-        Task<SpotConditionsDto> GetCurrentConditionsAsync(int spotId);
+        Task<Models.DTOs.SpotConditionsDto> GetCurrentConditionsAsync(int spotId);
 
         /// <summary>
         /// Met à jour le statut de sécurité d'un spot
@@ -191,28 +201,8 @@ namespace SubExplore.Services.Interfaces
         /// <param name="spotId">ID du spot</param>
         /// <param name="securityUpdate">Mise à jour de sécurité</param>
         /// <param name="moderatorId">ID du modérateur</param>
-        Task UpdateSecurityStatusAsync(int spotId, SpotSecurityUpdateDto securityUpdate, int moderatorId);
+        Task UpdateSecurityStatusAsync(int spotId, Models.DTOs.SpotSecurityUpdateDto securityUpdate, int moderatorId);
 
         #endregion
-    }
-
-    /// <summary>
-    /// Paramètres de recherche pour les spots
-    /// </summary>
-    public class SpotSearchParameters
-    {
-        public string? SearchTerm { get; set; }
-        public IEnumerable<int>? ActivityTypes { get; set; }
-        public int? MinDepth { get; set; }
-        public int? MaxDepth { get; set; }
-        public string? DifficultyLevel { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
-        public double? RadiusInKm { get; set; }
-        public bool? ValidatedOnly { get; set; }
-        public string? SortBy { get; set; }
-        public bool SortDescending { get; set; }
-        public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 20;
     }
 }

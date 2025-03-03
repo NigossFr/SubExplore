@@ -8,7 +8,8 @@ namespace SubExplore.Views.Main;
 public partial class MapPage : ContentPage, IDisposable
 {
     private readonly MapViewModel _viewModel;
-    private readonly IDispatcherTimer _debounceTimer;
+    // Changez la déclaration pour ne pas utiliser readonly
+    private IDispatcherTimer? _debounceTimer;
     private const int DEBOUNCE_INTERVAL_MS = 300;
     private const double PANEL_CLOSE_THRESHOLD = 100.0;
 
@@ -37,7 +38,7 @@ public partial class MapPage : ContentPage, IDisposable
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.OnAppearing();
+        _viewModel.OnAppearing();
         await CheckAndRequestLocationPermission();
     }
 
@@ -64,22 +65,22 @@ public partial class MapPage : ContentPage, IDisposable
         _viewModel.OnDisappearing();
     }
 
-    private void OnMapClicked(object sender, MapClickedEventArgs e)
+    private void OnMapClicked(object? sender, MapClickedEventArgs e)
     {
-        if (_viewModel.IsFiltersPanelVisible)
+        if (_viewModel.IsFilterPanelVisible)
         {
-            _viewModel.IsFiltersPanelVisible = false;
+            _viewModel.IsFilterPanelVisible = false;
         }
         _viewModel.HandleMapClick(e.Location);
     }
 
-    private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+    private void OnSearchTextChanged(object? sender, TextChangedEventArgs e)
     {
         _debounceTimer?.Stop();
         _debounceTimer?.Start();
     }
 
-    private void OnSearchDebounceTimeout(object sender, EventArgs e)
+    private void OnSearchDebounceTimeout(object? sender, EventArgs e)
     {
         _debounceTimer?.Stop();
         _viewModel.PerformSearch();
@@ -87,7 +88,7 @@ public partial class MapPage : ContentPage, IDisposable
 
     private double _previousPanelTranslation;
 
-    private void OnPanUpdated(object sender, PanUpdatedEventArgs e)
+    private void OnPanUpdated(object? sender, PanUpdatedEventArgs e)
     {
         switch (e.StatusType)
         {
@@ -108,7 +109,7 @@ public partial class MapPage : ContentPage, IDisposable
     {
         if (filtersPanel.TranslationY > PANEL_CLOSE_THRESHOLD)
         {
-            _viewModel.IsFiltersPanelVisible = false;
+            _viewModel.IsFilterPanelVisible = false;
         }
         else
         {

@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SubExplore.Services.Authentication;
-using SubExplore.Services.Navigation;
-using SubExplore.Services.Settings;
+using SubExplore.Services.Interfaces;
+using SubExplore.Services.Implementations;
 
 namespace SubExplore.ViewModels;
 

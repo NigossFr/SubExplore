@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SubExplore.Views.Settings.SettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Paramètres">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Label
+                FontAttributes="Bold"
+                FontSize="24"
+                Text="Paramètres"
+                TextColor="#006994" />
+
+            <Frame
+                Margin="0,10,0,0"
+                Padding="15"
+                BorderColor="#E0E0E0"
+                CornerRadius="10"
+                HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        Text="Thème"
+                        TextColor="#006994" />
+
+                    <StackLayout Orientation="Horizontal">
+                        <Switch
+                            IsToggled="{Binding IsDarkTheme}"
+                            OnColor="#006994"
+                            ThumbColor="White" />
+
+                        <Label
+                            Margin="10,0,0,0"
+                            Text="Mode sombre"
+                            VerticalOptions="Center" />
+                    </StackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Button
+                Margin="0,20,0,0"
+                BackgroundColor="#006994"
+                Command="{Binding GoBackCommand}"
+                CornerRadius="25"
+                Text="Retour"
+                TextColor="White" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

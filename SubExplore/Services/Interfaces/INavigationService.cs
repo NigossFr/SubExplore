@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using SubExplore.ViewModels.Base;
+using SubExplore.Models;
 
 namespace SubExplore.Services.Interfaces
 {
@@ -23,20 +23,20 @@ namespace SubExplore.Services.Interfaces
         /// </summary>
         /// <param name="route">Nom de la route</param>
         /// <param name="parameters">Paramètres de navigation (optionnel)</param>
-        Task NavigateToAsync(string route, IDictionary<string, object> parameters = null);
+        Task NavigateToAsync(string route, IDictionary<string, object>? parameters = null);
 
         /// <summary>
         /// Navigue vers une page
         /// </summary>
         /// <typeparam name="TViewModel">Type du ViewModel de destination</typeparam>
         /// <param name="parameters">Paramètres de navigation (optionnel)</param>
-        Task NavigateToAsync<TViewModel>(INavigationParameters parameters = null) where TViewModel : BaseViewModel;
+        Task NavigateToAsync<TViewModel>(INavigationParameters? parameters = null) where TViewModel : ViewModelBase;
 
         /// <summary>
         /// Retourne à la page précédente
         /// </summary>
         /// <param name="parameters">Paramètres à passer à la page précédente</param>
-        Task GoBackAsync(INavigationParameters parameters = null);
+        Task GoBackAsync(INavigationParameters? parameters = null);
 
         /// <summary>
         /// Retourne à la racine de la navigation
@@ -52,13 +52,13 @@ namespace SubExplore.Services.Interfaces
         /// </summary>
         /// <typeparam name="TViewModel">Type du ViewModel de la modal</typeparam>
         /// <param name="parameters">Paramètres de navigation (optionnel)</param>
-        Task ShowModalAsync<TViewModel>(INavigationParameters parameters = null) where TViewModel : BaseViewModel;
+        Task ShowModalAsync<TViewModel>(INavigationParameters? parameters = null) where TViewModel : ViewModelBase;
 
         /// <summary>
         /// Ferme la modal courante
         /// </summary>
         /// <param name="result">Résultat à retourner (optionnel)</param>
-        Task CloseModalAsync(object result = null);
+        Task CloseModalAsync(object? result = null);
 
         #endregion
 
@@ -69,20 +69,20 @@ namespace SubExplore.Services.Interfaces
         /// </summary>
         /// <param name="spotId">ID du spot</param>
         /// <param name="highlightFeature">Feature à mettre en avant (optionnel)</param>
-        Task NavigateToSpotDetailsAsync(int spotId, string highlightFeature = null);
+        Task NavigateToSpotDetailsAsync(int spotId, string? highlightFeature = null);
 
         /// <summary>
         /// Navigue vers la page de création de spot
         /// </summary>
         /// <param name="initialCoordinates">Coordonnées initiales (optionnel)</param>
-        Task NavigateToSpotCreationAsync(GeoCoordinates initialCoordinates = null);
+        Task NavigateToSpotCreationAsync(GeoCoordinates? initialCoordinates = null);
 
         /// <summary>
         /// Navigue vers le profil d'un utilisateur
         /// </summary>
         /// <param name="userId">ID de l'utilisateur</param>
         /// <param name="section">Section à afficher (optionnel)</param>
-        Task NavigateToUserProfileAsync(int userId, string section = null);
+        Task NavigateToUserProfileAsync(int userId, string? section = null);
 
         /// <summary>
         /// Navigue vers une structure
@@ -146,9 +146,9 @@ namespace SubExplore.Services.Interfaces
 
     public class NavigationErrorEventArgs : EventArgs
     {
-        public Exception Exception { get; set; }
-        public string TargetRoute { get; set; }
-        public IDictionary<string, object> Parameters { get; set; }
+        public Exception Exception { get; set; } = null!;
+        public string TargetRoute { get; set; } = string.Empty;
+        public IDictionary<string, object>? Parameters { get; set; }
         public bool Handled { get; set; }
     }
 
@@ -157,11 +157,11 @@ namespace SubExplore.Services.Interfaces
     /// </summary>
     public class NavigationHistoryEntry
     {
-        public Type ViewModelType { get; set; }
-        public string Route { get; set; }
-        public string PageTitle { get; set; }
+        public Type? ViewModelType { get; set; }
+        public string Route { get; set; } = string.Empty;
+        public string PageTitle { get; set; } = string.Empty;
         public DateTime Timestamp { get; set; }
-        public INavigationParameters Parameters { get; set; }
+        public INavigationParameters? Parameters { get; set; }
     }
 
     /// <summary>
@@ -174,8 +174,8 @@ namespace SubExplore.Services.Interfaces
         public bool SaveNavigationHistory { get; set; } = true;
         public int MaxHistoryEntries { get; set; } = 50;
         public TimeSpan NavigationTimeout { get; set; } = TimeSpan.FromSeconds(5);
-        public IDictionary<string, string> DeepLinkMappings { get; set; }
-        public NavigationAnimationOptions AnimationOptions { get; set; }
+        public IDictionary<string, string>? DeepLinkMappings { get; set; }
+        public NavigationAnimationOptions? AnimationOptions { get; set; }
     }
 
     /// <summary>
@@ -190,7 +190,7 @@ namespace SubExplore.Services.Interfaces
 
     public interface INavigationParameters : IDictionary<string, object>
     {
-        T GetValue<T>(string key);
+        T? GetValue<T>(string key);
         void Add<T>(string key, T value);
     }
 
@@ -201,9 +201,9 @@ namespace SubExplore.Services.Interfaces
 
     public class NavigationContext
     {
-        public string SourceRoute { get; set; }
-        public string TargetRoute { get; set; }
-        public INavigationParameters Parameters { get; set; }
+        public string SourceRoute { get; set; } = string.Empty;
+        public string TargetRoute { get; set; } = string.Empty;
+        public INavigationParameters? Parameters { get; set; }
         public bool IsCancelled { get; set; }
     }
 

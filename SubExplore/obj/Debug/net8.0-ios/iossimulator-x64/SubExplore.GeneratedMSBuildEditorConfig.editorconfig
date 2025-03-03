@@ -3,11 +3,6 @@ build_property.EnableAotAnalyzer =
 build_property.EnableSingleFileAnalyzer = 
 build_property.EnableTrimAnalyzer = false
 build_property.IncludeAllContentForSelfExtract = 
-build_property.MvvmToolkitEnableINotifyPropertyChangingSupport = true
-build_property._MvvmToolkitIsUsingWindowsRuntimePack = false
-build_property.CsWinRTComponent = 
-build_property.CsWinRTAotOptimizerEnabled = 
-build_property.CsWinRTAotWarningLevel = 
 build_property.TargetFramework = net8.0-ios
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = 
@@ -71,11 +66,47 @@ build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Auth.Regi
 build_metadata.AdditionalFiles.TargetPath = Views\Auth\RegisterPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\Auth\RegisterPage.xaml
 
+[D:/Développement/SubExplore/SubExplore/Views/Auth/ResetPasswordConfirmationPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Auth.ResetPasswordConfirmationPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Auth\ResetPasswordConfirmationPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Auth\ResetPasswordConfirmationPage.xaml
+
 [D:/Développement/SubExplore/SubExplore/Views/Main/MapPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.MapPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\Main\MapPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\Main\MapPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Main/SpotDetailsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.SpotDetailsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Main\SpotDetailsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Main\SpotDetailsPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Main/StoryDetailsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.StoryDetailsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Main\StoryDetailsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Main\StoryDetailsPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Main/StructureDetailsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.StructureDetailsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Main\StructureDetailsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Main\StructureDetailsPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Profile/ProfileEditPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Profile.ProfileEditPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\ProfileEditPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\ProfileEditPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Settings/SettingsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Settings.SettingsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Settings\SettingsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Settings\SettingsPage.xaml
 
 [D:/Développement/SubExplore/SubExplore/Views/Spot/AddSpotPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

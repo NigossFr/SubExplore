@@ -19,7 +19,7 @@ public partial class LoginPage : ContentPage
         // Initialiser le ViewModel quand la page apparaît
         await _viewModel.InitializeAsync(null);
 
-        // Vider les messages d'erreur
-        _viewModel.ClearError();
+        // Vider les messages d'erreur en utilisant la méthode publique
+        _viewModel.ClearLoginError();
     }
 }

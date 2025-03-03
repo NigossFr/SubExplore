@@ -9,7 +9,11 @@ using System.Collections.ObjectModel;
 using SubExplore.Services.Interfaces;
 using SubExplore.ViewModels.Base;
 using SubExplore.Models;
+using SubExplore.Models.DTOs;
+using SubExplore.Models.Enums;
 using System.Diagnostics;
+using MediaFile = SubExplore.Models.Media.IMediaFile;
+using GeoCoordinates = SubExplore.Models.GeoCoordinates;
 
 namespace SubExplore.ViewModels.Spot;
 
@@ -76,10 +80,42 @@ public partial class AddSpotViewModel : ViewModelBase
 
         await SafeExecuteAsync(async () =>
         {
-            var spotDto = await _spotService.CreateAsync(_spot.ToDto(), 0);
+            // Conversion en SpotCreationDto
+            var spotCreationDto = new SpotCreationDto
+            {
+                Name = _spot.Name,
+                Description = _spot.Description,
+                Latitude = _spot.Latitude,
+                Longitude = _spot.Longitude,
+                Type = _spot.Type,
+                DifficultyLevel = _spot.DifficultyLevel,
+                RequiredEquipment = _spot.RequiredEquipment ?? "",
+                SafetyNotes = _spot.SafetyNotes ?? "",
+                BestConditions = _spot.BestConditions ?? "",
+                MaxDepth = _spot.MaxDepth,
+                CurrentStrength = _spot.CurrentStrength,
+                HasMooring = _spot.HasMooring,
+                BottomType = _spot.BottomType
+            };
+
+            // Upload des photos si présentes
+            var mediaUploads = new List<MediaUploadResult>();
+            foreach (var photo in _photos)
+            {
+                var uploadResult = await _mediaService.UploadAsync(
+                    photo,
+                    MediaServiceType.Spot,
+                    0 // Remplacer par l'ID utilisateur réel
+                );
+                mediaUploads.Add(uploadResult);
+            }
+
+            // Création du spot
+            var createdSpot = await _spotService.CreateAsync(spotCreationDto, 0);
+
             HasUnsavedChanges = false;
             await NavigationService.NavigateToAsync("spot-details",
-                new Dictionary<string, object> { { "spotId", spotDto.Id } });
+                new Dictionary<string, object> { { "spotId", createdSpot.Id } });
         });
     }
 
@@ -97,7 +133,17 @@ public partial class AddSpotViewModel : ViewModelBase
             var photo = await MediaPicker.PickPhotoAsync();
             if (photo != null)
             {
-                await ProcessPhotoAsync(photo);
+                // Conversion du résultat MediaPicker en IMediaFile
+                var mediaFile = new SubExplore.Models.DTOs.FormFileAdapter(
+                    await photo.OpenReadAsync(),
+                    photo.FileName,
+                    photo.ContentType,
+                    new System.IO.FileInfo(photo.FullPath).Length,
+                    photo.FullPath,
+                    _photos.Count == 0 // La première photo est considérée comme principale
+                );
+
+                _photos.Add(mediaFile);
                 HasUnsavedChanges = true;
             }
         }
@@ -108,21 +154,10 @@ public partial class AddSpotViewModel : ViewModelBase
         }
     }
 
-    private async Task ProcessPhotoAsync(FileResult photo)
-    {
-        var mediaFile = await _mediaService.ProcessPhotoAsync(photo);
-        if (mediaFile != null)
-        {
-            _photos.Add(mediaFile);
-            _spot.Photos.Add(mediaFile);
-        }
-    }
-
     [RelayCommand]
     private void RemovePhoto(MediaFile photo)
     {
         _photos.Remove(photo);
-        _spot.Photos.Remove(photo);
         HasUnsavedChanges = true;
     }
 

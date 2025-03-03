@@ -1,4 +1,6 @@
 ﻿using SubExplore.Services.Interfaces;
+using SubExplore.Views.Profile;
+using SubExplore.Views.Settings;
 
 namespace SubExplore;
 

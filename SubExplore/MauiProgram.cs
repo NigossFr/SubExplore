@@ -5,22 +5,28 @@ using SubExplore.ViewModels;
 using SubExplore.ViewModels.Auth;
 using SubExplore.ViewModels.Main;
 using SubExplore.ViewModels.Spot;
+using SubExplore.ViewModels.Profile;
+using SubExplore.ViewModels.Settings;
 using SubExplore.Views.Auth;
 using SubExplore.Views.Main;
 using SubExplore.Views.Spot;
+using SubExplore.Views.Profile;
+using SubExplore.Views.Settings;
 using Microsoft.Extensions.Caching.Memory;
-using CommunityToolkit.Maui;
-using Polly;
-using Polly.Extensions.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Components.WebView.Maui;
-using SubExplore.Constants;
-using CoreGraphics;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Hosting;
+using Microsoft.Maui.Controls.Maps;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui;
+using Microsoft.Maui.Devices.Sensors;
+using Microsoft.Maui.ApplicationModel;
+using SubExplore.Models;
+using CommunityToolkit.Maui;
 
 namespace SubExplore;
 
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
@@ -36,13 +42,14 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        // Ajout du support WebView/React
-        builder.Services.AddMauiBlazorWebView();
-#if DEBUG
-        builder.Services.AddBlazorWebViewDeveloperTools();
-#endif
+        // Configuration des services
+        RegisterServices(builder.Services);
 
-        ConfigureServices(builder.Services);
+        // Configuration des ViewModels
+        RegisterViewModels(builder.Services);
+
+        // Configuration des pages
+        RegisterPages(builder.Services);
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -51,93 +58,64 @@ public static class MauiProgram
         return builder.Build();
     }
 
-    private static void ConfigureServices(IServiceCollection services)
+    private static void RegisterServices(IServiceCollection services)
     {
         // Services essentiels
-        ConfigureEssentialServices(services);
-
-        // Configuration HTTP
-        ConfigureHttpClients(services);
-
-        // Services de l'application
-        ConfigureApplicationServices(services);
-
-        // ViewModels
-        ConfigureViewModels(services);
-
-        // Pages
-        ConfigurePages(services);
-    }
-
-    private static void ConfigureEssentialServices(IServiceCollection services)
-    {
-        services.AddMemoryCache();
         services.AddSingleton<IConnectivity>(Connectivity.Current);
         services.AddSingleton<IGeolocation>(Geolocation.Default);
-        services.AddSingleton<IMap>(Map.Default);
         services.AddSingleton<ISecureStorage>(SecureStorage.Default);
-    }
+        services.AddMemoryCache();
 
-    private static void ConfigureHttpClients(IServiceCollection services)
-    {
-        // Handler pour l'authentification
-        services.AddTransient<AuthenticationDelegatingHandler>();
-
-        // Client HTTP principal
-        services.AddHttpClient("SubExploreAPI", client =>
-        {
-            client.BaseAddress = new Uri(ApiEndpoints.BaseUrl);
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-            client.Timeout = TimeSpan.FromSeconds(30);
-        })
-        .AddHttpMessageHandler<AuthenticationDelegatingHandler>()
-        .SetHandlerLifetime(TimeSpan.FromMinutes(5))
-        .AddPolicyHandler(GetRetryPolicy());
-    }
-
-    private static void ConfigureApplicationServices(IServiceCollection services)
-    {
         // Services Core
-        services.AddSingleton<IAuthenticationService, AuthenticationService>();
+        services.AddSingleton<ISecureStorageService, SecureStorageService>();
         services.AddSingleton<ICacheService, MemoryCacheService>();
         services.AddSingleton<INavigationService, NavigationService>();
-        services.AddSingleton<ISecureStorageService, SecureStorageService>();
+        services.AddSingleton<IAuthenticationService, AuthenticationService>();
+        services.AddSingleton<ISettingsService, SettingsService>();
+        services.AddSingleton<IConnectivityService, ConnectivityService>();
 
-        // Ajouter ISettingsService quand l'implémentation sera disponible
-        // services.AddSingleton<ISettingsService, SettingsService>();
-
-        // Services Métier
+        // Services de base pour les données
         services.AddSingleton<ILocationService, LocationService>();
         services.AddSingleton<ISpotService, SpotService>();
-
-        // Ajouter ces services quand les implémentations seront disponibles
         // services.AddSingleton<IMediaService, MediaService>();
-        // services.AddSingleton<IOrganizationService, OrganizationService>();
+
+        // Client HTTP
+        services.AddHttpClient("SubExploreAPI", client =>
+        {
+            client.BaseAddress = new Uri("https://api.subexplore.com/");
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            client.Timeout = TimeSpan.FromSeconds(30);
+        });
     }
 
-    private static void ConfigureViewModels(IServiceCollection services)
+    private static void RegisterViewModels(IServiceCollection services)
     {
-        // Shell
+        // Shell ViewModel
         services.AddSingleton<AppShellViewModel>();
 
         // Auth ViewModels
         services.AddTransient<LoginViewModel>();
         services.AddTransient<RegisterViewModel>();
         services.AddTransient<ForgotPasswordViewModel>();
+        services.AddTransient<ResetPasswordConfirmationViewModel>();
 
         // Main ViewModels
         services.AddTransient<MapViewModel>();
+        services.AddTransient<SpotDetailsViewModel>();
+        services.AddTransient<StructureDetailsViewModel>();
+        services.AddTransient<StoryDetailsViewModel>();
+
+        // Spot ViewModels
         services.AddTransient<AddSpotViewModel>();
 
-        // Ces ViewModels seront ajoutés quand ils seront disponibles
-        // services.AddTransient<SpotDetailsViewModel>();
-        // services.AddTransient<MagazineViewModel>();
-        // services.AddTransient<ProfileViewModel>();
-        // services.AddTransient<StructuresViewModel>();
-        // services.AddTransient<SettingsViewModel>();
+        // Profile ViewModels
+        services.AddTransient<ProfileEditViewModel>();
+
+        // Settings ViewModels
+        services.AddTransient<SettingsViewModel>();
     }
 
-    private static void ConfigurePages(IServiceCollection services)
+    private static void RegisterPages(IServiceCollection services)
     {
         // Shell
         services.AddTransient<AppShell>();
@@ -146,31 +124,21 @@ public static class MauiProgram
         services.AddTransient<LoginPage>();
         services.AddTransient<RegisterPage>();
         services.AddTransient<ForgotPasswordPage>();
-
-        // Cette page doit être implémentée
-        // services.AddTransient<ResetPasswordConfirmationPage>();
+        services.AddTransient<ResetPasswordConfirmationPage>();
 
         // Main Pages
         services.AddTransient<MapPage>();
+        services.AddTransient<SpotDetailsPage>();
+        services.AddTransient<StructureDetailsPage>();
+        services.AddTransient<StoryDetailsPage>();
+
+        // Spot Pages
         services.AddTransient<AddSpotPage>();
 
-        // Ces pages seront ajoutées quand elles seront disponibles
-        // services.AddTransient<SpotDetailsPage>();
-        // services.AddTransient<MagazinePage>();
-        // services.AddTransient<ProfilePage>();
-        // services.AddTransient<StructuresPage>();
-        // services.AddTransient<SettingsPage>();
-        // services.AddTransient<ProfileEditPage>();
-        // services.AddTransient<StructureDetailsPage>();
-        // services.AddTransient<StoryDetailsPage>();
-    }
+        // Profile Pages
+        services.AddTransient<ProfileEditPage>();
 
-    private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
-    {
-        return HttpPolicyExtensions
-            .HandleTransientHttpError()
-            .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
-            .WaitAndRetryAsync(3, retryAttempt =>
-                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+        // Settings Pages
+        services.AddTransient<SettingsPage>();
     }
 }

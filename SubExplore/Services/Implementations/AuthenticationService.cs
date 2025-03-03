@@ -9,6 +9,10 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using SubExplore.Services.Interfaces;
 using SubExplore.Models;
+using System.Threading;
+// Utilisez un alias pour résoudre l'ambiguïté avec AuthenticationException
+using AuthException = System.Security.Authentication.AuthenticationException;
+using SubExplore.Models.Auth;
 
 namespace SubExplore.Services.Implementations
 {
@@ -22,6 +26,9 @@ namespace SubExplore.Services.Implementations
 
         public event EventHandler<AuthenticationEventArgs> AuthenticationStateChanged;
 
+
+
+
         public AuthenticationService(
             IHttpClientFactory httpClientFactory,
             ICacheService cacheService,
@@ -32,7 +39,21 @@ namespace SubExplore.Services.Implementations
             _secureStorage = secureStorage;
         }
 
-        public async Task<AuthenticationResult> LoginAsync(string email, string password)
+        // Implémentation correcte de RegisterAsync qui correspond à l'interface
+        public async Task<bool> RegisterAsync(Models.Auth.RegistrationRequest userCreation)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/auth/register", userCreation);
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                throw new AuthException("Erreur lors de l'inscription");
+            }
+        }
+
+        public async Task<AuthenticationResult> LoginAsync(string email, string password, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -40,17 +61,17 @@ namespace SubExplore.Services.Implementations
                 {
                     email,
                     password
-                });
+                }, cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    var error = await response.Content.ReadAsStringAsync();
-                    throw new AuthenticationException($"Échec de l'authentification: {error}");
+                    var error = await response.Content.ReadAsStringAsync(cancellationToken);
+                    throw new AuthException($"Échec de l'authentification: {error}");
                 }
 
-                var result = await response.Content.ReadFromJsonAsync<AuthenticationResult>();
+                var result = await response.Content.ReadFromJsonAsync<AuthenticationResult>(cancellationToken: cancellationToken);
                 if (result == null)
-                    throw new AuthenticationException("Réponse d'authentification invalide");
+                    throw new AuthException("Réponse d'authentification invalide");
 
                 // Stocker les tokens
                 await StoreTokensAsync(result.AccessToken, result.RefreshToken);
@@ -66,24 +87,24 @@ namespace SubExplore.Services.Implementations
             }
             catch (HttpRequestException ex)
             {
-                throw new AuthenticationException("Erreur de connexion au service d'authentification", ex);
+                throw new AuthException("Erreur de connexion au service d'authentification", ex);
             }
         }
 
-        public async Task<AuthenticationResult> LoginWithOAuthAsync(string provider, string token)
+        public async Task<AuthenticationResult> LoginWithOAuthAsync(string provider, string token, CancellationToken cancellationToken = default)
         {
             try
             {
-                var response = await _httpClient.PostAsJsonAsync($"api/auth/{provider}", new { token });
+                var response = await _httpClient.PostAsJsonAsync($"api/auth/{provider}", new { token }, cancellationToken);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new AuthenticationException($"Échec de l'authentification {provider}");
+                    throw new AuthException($"Échec de l'authentification {provider}");
                 }
 
-                var result = await response.Content.ReadFromJsonAsync<AuthenticationResult>();
+                var result = await response.Content.ReadFromJsonAsync<AuthenticationResult>(cancellationToken: cancellationToken);
                 if (result == null)
-                    throw new AuthenticationException("Réponse d'authentification invalide");
+                    throw new AuthException("Réponse d'authentification invalide");
 
                 await StoreTokensAsync(result.AccessToken, result.RefreshToken);
 
@@ -97,7 +118,7 @@ namespace SubExplore.Services.Implementations
             }
             catch (HttpRequestException ex)
             {
-                throw new AuthenticationException($"Erreur d'authentification {provider}", ex);
+                throw new AuthException($"Erreur d'authentification {provider}", ex);
             }
         }
 
@@ -109,23 +130,23 @@ namespace SubExplore.Services.Implementations
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new AuthenticationException("Échec du rafraîchissement du token");
+                    throw new AuthException("Échec du rafraîchissement du token");
                 }
 
                 var result = await response.Content.ReadFromJsonAsync<AuthenticationResult>();
                 if (result == null)
-                    throw new AuthenticationException("Réponse de rafraîchissement invalide");
+                    throw new AuthException("Réponse de rafraîchissement invalide");
 
                 await StoreTokensAsync(result.AccessToken, result.RefreshToken);
                 return result;
             }
             catch (HttpRequestException ex)
             {
-                throw new AuthenticationException("Erreur lors du rafraîchissement du token", ex);
+                throw new AuthException("Erreur lors du rafraîchissement du token", ex);
             }
         }
 
-        public async Task LogoutAsync(int userId)
+        public async Task LogoutAsync()
         {
             try
             {
@@ -196,10 +217,10 @@ namespace SubExplore.Services.Implementations
         {
             var response = await _httpClient.PostAsJsonAsync("api/auth/reset-password", new { email });
             if (!response.IsSuccessStatusCode)
-                throw new AuthenticationException("Erreur lors de la génération du token de réinitialisation");
+                throw new AuthException("Erreur lors de la génération du token de réinitialisation");
 
             var result = await response.Content.ReadFromJsonAsync<PasswordResetResult>();
-            return result?.Token ?? throw new AuthenticationException("Token de réinitialisation invalide");
+            return result?.Token ?? throw new AuthException("Token de réinitialisation invalide");
         }
 
         public async Task<bool> ResetPasswordAsync(string token, string newPassword)
@@ -217,10 +238,10 @@ namespace SubExplore.Services.Implementations
         {
             var response = await _httpClient.PostAsJsonAsync("api/auth/validate-email", new { email });
             if (!response.IsSuccessStatusCode)
-                throw new AuthenticationException("Erreur lors de la génération du token de validation");
+                throw new AuthException("Erreur lors de la génération du token de validation");
 
             var result = await response.Content.ReadFromJsonAsync<EmailValidationResult>();
-            return result?.Token ?? throw new AuthenticationException("Token de validation invalide");
+            return result?.Token ?? throw new AuthException("Token de validation invalide");
         }
 
         public async Task<bool> ValidateEmailAsync(string token)
@@ -243,14 +264,120 @@ namespace SubExplore.Services.Implementations
                 var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
 
                 if (jsonToken == null)
-                    throw new AuthenticationException("Token invalide");
+                    throw new AuthException("Token invalide");
 
                 var claims = new ClaimsPrincipal(new ClaimsIdentity(jsonToken.Claims, "jwt"));
                 return claims;
             }
             catch (Exception ex)
             {
-                throw new AuthenticationException("Erreur lors de l'analyse du token", ex);
+                throw new AuthException("Erreur lors de l'analyse du token", ex);
+            }
+        }
+
+        public async Task<UserBasicInfo?> GetCurrentUserAsync()
+        {
+            try
+            {
+                var token = await _secureStorage.GetAsync(_tokenKey);
+                if (string.IsNullOrEmpty(token))
+                {
+                    return null;
+                }
+
+                // Vérifier si le token est valide
+                if (!await ValidateTokenAsync(token))
+                {
+                    var refreshToken = await _secureStorage.GetAsync(_refreshTokenKey);
+                    if (string.IsNullOrEmpty(refreshToken))
+                    {
+                        return null;
+                    }
+
+                    try
+                    {
+                        var result = await RefreshTokenAsync(refreshToken);
+                        token = result.AccessToken;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+
+                // Récupérer l'utilisateur courant
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                var response = await _httpClient.GetAsync("api/auth/me");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<UserBasicInfo>();
+                }
+
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> CheckEmailExistsAsync(string email)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/auth/check-email?email={Uri.EscapeDataString(email)}");
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> IsEmailAvailableAsync(string email)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/auth/email-available?email={Uri.EscapeDataString(email)}");
+                var result = await response.Content.ReadFromJsonAsync<bool>();
+                return result;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> IsUsernameAvailableAsync(string username)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/auth/username-available?username={Uri.EscapeDataString(username)}");
+                var result = await response.Content.ReadFromJsonAsync<bool>();
+                return result;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> AreSocialProvidersAvailableAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("api/auth/social-providers");
+                if (response.IsSuccessStatusCode)
+                {
+                    var providers = await response.Content.ReadFromJsonAsync<List<string>>();
+                    return providers != null && providers.Any();
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
             }
         }
 
@@ -260,7 +387,7 @@ namespace SubExplore.Services.Implementations
             await _secureStorage.SetAsync(_refreshTokenKey, refreshToken);
         }
 
-        private async Task<IEnumerable<Claim>> GetUserClaimsAsync(int userId)
+        private async Task<IEnumerable<Claim>?> GetUserClaimsAsync(int userId)
         {
             var response = await _httpClient.GetAsync($"api/users/{userId}/claims");
             if (!response.IsSuccessStatusCode)
@@ -276,25 +403,19 @@ namespace SubExplore.Services.Implementations
         }
     }
 
-    public class AuthenticationException : Exception
+    public class ClaimDto
     {
-        public AuthenticationException(string message) : base(message) { }
-        public AuthenticationException(string message, Exception innerException) : base(message, innerException) { }
+        public string Type { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
     }
 
     public class PasswordResetResult
     {
-        public string Token { get; set; }
+        public string Token { get; set; } = string.Empty;
     }
 
     public class EmailValidationResult
     {
-        public string Token { get; set; }
-    }
-
-    public class ClaimDto
-    {
-        public string Type { get; set; }
-        public string Value { get; set; }
+        public string Token { get; set; } = string.Empty;
     }
 }

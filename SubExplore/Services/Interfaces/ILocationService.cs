@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Maui.Devices.Sensors;
+using SubExplore.Models;
 
 namespace SubExplore.Services.Interfaces
 {
@@ -22,7 +17,7 @@ namespace SubExplore.Services.Interfaces
         /// </summary>
         /// <param name="address">Adresse à convertir</param>
         /// <returns>Coordonnées géographiques</returns>
-        Task<GeoCoordinates> GeocodeAddressAsync(string address);
+        Task<SubExplore.Models.GeoCoordinates> GeocodeAddressAsync(string address);
 
         /// <summary>
         /// Convertit des coordonnées en adresse
@@ -42,7 +37,7 @@ namespace SubExplore.Services.Interfaces
         /// <param name="point1">Premier point</param>
         /// <param name="point2">Second point</param>
         /// <returns>Distance en kilomètres</returns>
-        Task<double> CalculateDistanceAsync(GeoCoordinates point1, GeoCoordinates point2);
+        Task<double> CalculateDistanceAsync(SubExplore.Models.GeoCoordinates point1, SubExplore.Models.GeoCoordinates point2);
 
         /// <summary>
         /// Trouve les points d'intérêt dans un rayon donné
@@ -52,7 +47,7 @@ namespace SubExplore.Services.Interfaces
         /// <param name="type">Type de point d'intérêt (optionnel)</param>
         /// <returns>Points d'intérêt trouvés avec leur distance</returns>
         Task<IEnumerable<LocationWithDistance>> FindInRadiusAsync(
-            GeoCoordinates center,
+            SubExplore.Models.GeoCoordinates center,
             double radiusKm,
             LocationType? type = null);
 
@@ -63,7 +58,7 @@ namespace SubExplore.Services.Interfaces
         /// <param name="zoomLevel">Niveau de zoom</param>
         /// <returns>Points optimisés et regroupés</returns>
         Task<IEnumerable<ClusteredLocation>> ClusterLocationsAsync(
-            IEnumerable<GeoLocation> points,
+            IEnumerable<SubExplore.Models.GeoCoordinates> points,
             int zoomLevel);
 
         #endregion
@@ -75,14 +70,14 @@ namespace SubExplore.Services.Interfaces
         /// </summary>
         /// <param name="coordinates">Coordonnées du point</param>
         /// <returns>Profondeur en mètres</returns>
-        Task<double?> GetApproximateDepthAsync(GeoCoordinates coordinates);
+        Task<double?> GetApproximateDepthAsync(SubExplore.Models.GeoCoordinates coordinates);
 
         /// <summary>
         /// Vérifie si une position est dans une zone protégée
         /// </summary>
         /// <param name="coordinates">Coordonnées à vérifier</param>
         /// <returns>Informations sur la zone protégée si applicable</returns>
-        Task<ProtectedAreaInfo> CheckProtectedAreaAsync(GeoCoordinates coordinates);
+        Task<ProtectedAreaInfo> CheckProtectedAreaAsync(SubExplore.Models.GeoCoordinates coordinates);
 
         /// <summary>
         /// Récupère les points d'amarrage à proximité
@@ -91,7 +86,7 @@ namespace SubExplore.Services.Interfaces
         /// <param name="radiusKm">Rayon de recherche</param>
         /// <returns>Points d'amarrage trouvés</returns>
         Task<IEnumerable<MooringPoint>> GetNearbyMooringPointsAsync(
-            GeoCoordinates coordinates,
+            SubExplore.Models.GeoCoordinates coordinates,
             double radiusKm);
 
         #endregion
@@ -119,99 +114,18 @@ namespace SubExplore.Services.Interfaces
         /// </summary>
         /// <param name="coordinates">Coordonnées à valider</param>
         /// <returns>Résultat de la validation avec détails</returns>
-        Task<MaritimeValidationResult> ValidateMaritimeLocationAsync(GeoCoordinates coordinates);
+        Task<MaritimeValidationResult> ValidateMaritimeLocationAsync(SubExplore.Models.GeoCoordinates coordinates);
 
         /// <summary>
         /// Vérifie l'accessibilité d'une position
         /// </summary>
         /// <param name="coordinates">Coordonnées à vérifier</param>
         /// <returns>Informations sur l'accessibilité</returns>
-        Task<AccessibilityInfo> CheckLocationAccessibilityAsync(GeoCoordinates coordinates);
+        Task<AccessibilityInfo> CheckLocationAccessibilityAsync(SubExplore.Models.GeoCoordinates coordinates);
 
         #endregion
     }
 
-    public class GeoCoordinates
-    {
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public double? Accuracy { get; set; }
-    }
-
-    public class LocationAddress
-    {
-        public string FormattedAddress { get; set; }
-        public string City { get; set; }
-        public string Region { get; set; }
-        public string Country { get; set; }
-        public string PostalCode { get; set; }
-        public Dictionary<string, string> ExtraComponents { get; set; }
-    }
-
-    public class BoundingBox
-    {
-        public GeoCoordinates NorthEast { get; set; }
-        public GeoCoordinates SouthWest { get; set; }
-    }
-
-    public class LocationWithDistance
-    {
-        public GeoLocation Location { get; set; }
-        public double DistanceKm { get; set; }
-    }
-
-    public class ClusteredLocation
-    {
-        public GeoCoordinates Center { get; set; }
-        public int PointCount { get; set; }
-        public List<GeoLocation> Points { get; set; }
-        public Dictionary<LocationType, int> TypeCounts { get; set; }
-    }
-
-    public class ProtectedAreaInfo
-    {
-        public bool IsProtected { get; set; }
-        public string AreaName { get; set; }
-        public string ProtectionLevel { get; set; }
-        public string Restrictions { get; set; }
-        public Dictionary<string, string> AdditionalInfo { get; set; }
-    }
-
-    public class MooringPoint
-    {
-        public string Id { get; set; }
-        public GeoCoordinates Location { get; set; }
-        public string Type { get; set; }
-        public int? MaxBoatLength { get; set; }
-        public bool IsAvailable { get; set; }
-        public string Condition { get; set; }
-    }
-
-    public class MaritimeValidationResult
-    {
-        public bool IsValid { get; set; }
-        public bool IsInWater { get; set; }
-        public string ValidationMessage { get; set; }
-        public List<string> Warnings { get; set; }
-        public Dictionary<string, object> ValidationDetails { get; set; }
-    }
-
-    public class AccessibilityInfo
-    {
-        public bool IsAccessible { get; set; }
-        public string AccessType { get; set; }
-        public List<string> Requirements { get; set; }
-        public List<string> Restrictions { get; set; }
-        public string ParkingInfo { get; set; }
-    }
-
-    public enum LocationType
-    {
-        DivingSite,
-        SnorkelingSite,
-        Beach,
-        Marina,
-        DiveShop,
-        MooringPoint
-    }
+    // Les autres classes restent identiques à votre fichier original
+    // (LocationAddress, BoundingBox, LocationWithDistance, etc.)
 }

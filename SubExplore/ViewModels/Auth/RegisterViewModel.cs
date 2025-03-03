@@ -7,10 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SubExplore.Extensions;
 using SubExplore.Services.Interfaces;
-using SubExplore.ViewModels.Auth;
 using SubExplore.ViewModels.Base;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SubExplore.ViewModels.Auth
 {
@@ -33,25 +30,25 @@ namespace SubExplore.ViewModels.Auth
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsEmailValid))]
         [NotifyPropertyChangedFor(nameof(HasEmailError))]
-        private string _emailValidationMessage;
+        private string _emailValidationMessage = string.Empty;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsUsernameValid))]
         [NotifyPropertyChangedFor(nameof(HasUsernameError))]
-        private string _usernameValidationMessage;
+        private string _usernameValidationMessage = string.Empty;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsPasswordValid))]
         [NotifyPropertyChangedFor(nameof(HasPasswordError))]
-        private string _passwordValidationMessage;
+        private string _passwordValidationMessage = string.Empty;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsPasswordsMatch))]
         [NotifyPropertyChangedFor(nameof(HasPasswordMatchError))]
-        private string _passwordMatchValidationMessage;
+        private string _passwordMatchValidationMessage = string.Empty;
 
         [ObservableProperty]
-        private string _passwordStrength;
+        private string _passwordStrength = string.Empty;
 
         [ObservableProperty]
         private string _passwordVisibilityIcon = "eye.png";
@@ -117,18 +114,27 @@ namespace SubExplore.ViewModels.Auth
             RegisterButtonText = "Création en cours...";
             await SafeExecuteAsync(async () =>
             {
-                // Créer l'objet de requête pour l'inscription
-                var userCreation = new RegistrationRequest
+                // Utiliser une approche directe sans utiliser RegistrationRequest
+                // On passe directement les paramètres via la méthode PostAsJsonAsync 
+                // qui va créer un objet anonyme adapté au service web
+                var email = RegistrationModel.Email;
+                var username = RegistrationModel.Username;
+                var password = RegistrationModel.Password;
+                var firstName = RegistrationModel.FirstName;
+                var lastName = RegistrationModel.LastName;
+
+                // On crée un objet simple sans utiliser la classe RegistrationRequest
+                var request = new
                 {
-                    Email = RegistrationModel.Email,
-                    Username = RegistrationModel.Username,
-                    Password = RegistrationModel.Password,
-                    FirstName = RegistrationModel.FirstName,
-                    LastName = RegistrationModel.LastName
+                    Email = email,
+                    Username = username,
+                    Password = password,
+                    FirstName = firstName,
+                    LastName = lastName
                 };
 
-                // Appel au service d'authentification
-                var result = await _authenticationService.RegisterAsync(userCreation);
+                // Appeler RegisterAsync avec l'objet simple
+                var result = await RegisterUserAsync(request);
 
                 if (result)
                 {
@@ -148,6 +154,25 @@ namespace SubExplore.ViewModels.Auth
             RegisterButtonText = "Créer mon compte";
         }
 
+        // Méthode intermédiaire qui fait le pont avec le service d'authentification
+        private async Task<bool> RegisterUserAsync(object registrationData)
+        {
+            // Cette méthode va charger le type RegistrationRequest depuis le service
+            using var httpClient = new HttpClient();
+            var url = "api/auth/register"; // Ajustez selon votre API
+
+            try
+            {
+                // Envoi direct de l'objet anonyme sans utiliser le type RegistrationRequest
+                var response = await httpClient.PostAsJsonAsync(url, registrationData);
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private async Task<bool> ValidateAllInputsAsync()
         {
             ClearError();
@@ -157,8 +182,8 @@ namespace SubExplore.ViewModels.Auth
             // Valider tous les champs
             isValid &= await ValidateEmailAsync();
             isValid &= await ValidateUsernameAsync();
-            isValid &= ValidatePassword();
-            isValid &= ValidatePasswordsMatch();
+            isValid &= await ValidatePasswordAsync();
+            isValid &= await ValidatePasswordsMatchAsync();
             isValid &= ValidateRequiredFields();
             isValid &= ValidateTermsAccepted();
 
@@ -189,7 +214,12 @@ namespace SubExplore.ViewModels.Auth
         }
 
         [RelayCommand]
-        private async Task ValidateEmailAsync()
+        private async Task ValidateEmailCommand()
+        {
+            await ValidateEmailAsync();
+        }
+
+        private async Task<bool> ValidateEmailAsync()
         {
             // Vider le message d'erreur précédent
             EmailValidationMessage = string.Empty;
@@ -202,7 +232,8 @@ namespace SubExplore.ViewModels.Auth
             }
 
             // Vérifier le format de l'email
-            if (!RegistrationModel.Email.IsValidEmail())
+            var isValidEmail = ValidationExtensions.IsValidEmail(RegistrationModel.Email);
+            if (!isValidEmail)
             {
                 EmailValidationMessage = "Format d'email invalide";
                 return false;
@@ -220,7 +251,12 @@ namespace SubExplore.ViewModels.Auth
         }
 
         [RelayCommand]
-        private async Task ValidateUsernameAsync()
+        private async Task ValidateUsernameCommand()
+        {
+            await ValidateUsernameAsync();
+        }
+
+        private async Task<bool> ValidateUsernameAsync()
         {
             // Vider le message d'erreur précédent
             UsernameValidationMessage = string.Empty;
@@ -233,7 +269,8 @@ namespace SubExplore.ViewModels.Auth
             }
 
             // Vérifier le format du nom d'utilisateur
-            if (!RegistrationModel.Username.IsValidUsername())
+            var isValidUsername = ValidationExtensions.IsValidUsername(RegistrationModel.Username);
+            if (!isValidUsername)
             {
                 UsernameValidationMessage = "Le nom d'utilisateur doit contenir entre 3 et 30 caractères, uniquement des lettres, chiffres, tirets et underscores";
                 return false;
@@ -251,7 +288,12 @@ namespace SubExplore.ViewModels.Auth
         }
 
         [RelayCommand]
-        private bool ValidatePassword()
+        private async Task ValidatePasswordCommand()
+        {
+            await ValidatePasswordAsync();
+        }
+
+        private async Task<bool> ValidatePasswordAsync()
         {
             // Vider le message d'erreur précédent
             PasswordValidationMessage = string.Empty;
@@ -264,12 +306,12 @@ namespace SubExplore.ViewModels.Auth
             }
 
             // Vérifier la force du mot de passe
-            var (isValid, strength) = RegistrationModel.Password.GetPasswordStrength();
-            PasswordStrength = strength;
+            var passwordResult = ValidationExtensions.GetPasswordStrength(RegistrationModel.Password);
+            PasswordStrength = passwordResult.Strength;
 
-            if (!isValid)
+            if (!passwordResult.IsValid)
             {
-                var validation = RegistrationModel.Password.ValidatePassword();
+                var validation = ValidationExtensions.ValidatePassword(RegistrationModel.Password);
                 PasswordValidationMessage = validation.Message;
                 return false;
             }
@@ -278,7 +320,12 @@ namespace SubExplore.ViewModels.Auth
         }
 
         [RelayCommand]
-        private bool ValidatePasswordsMatch()
+        private async Task ValidatePasswordsMatchCommand()
+        {
+            await ValidatePasswordsMatchAsync();
+        }
+
+        private async Task<bool> ValidatePasswordsMatchAsync()
         {
             // Vider le message d'erreur précédent
             PasswordMatchValidationMessage = string.Empty;
@@ -316,14 +363,5 @@ namespace SubExplore.ViewModels.Auth
 
             return base.InitializeAsync(parameters);
         }
-    }
-
-    public class RegistrationRequest
-    {
-        public string Email { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
     }
 }

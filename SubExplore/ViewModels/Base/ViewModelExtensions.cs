@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using SubExplore.Models;
-using SubExplore.Services.Navigation;
+using SubExplore.Services.Interfaces;
+#if WINDOWS
 using Windows.Networking.Proximity;
+#endif
 
 namespace SubExplore.ViewModels.Base;
 
@@ -37,8 +39,13 @@ public static class ViewModelExtensions
     // Extension pour la gestion de la navigation
     public static async Task NavigateToAsync<T>(this ViewModelBase viewModel, INavigationService navigationService, params (string Key, object Value)[] parameters) where T : ViewModelBase
     {
-        var navigationParams = viewModel.BuildNavigationParameters(parameters);
-        await navigationService.NavigateToAsync<T>(navigationParams);
+        var dict = viewModel.BuildNavigationParameters(parameters);
+        // Si vous avez une classe NavigationParameters qui implémente INavigationParameters
+        var navParams = new NavigationParameters(dict);
+        await navigationService.NavigateToAsync<T>(navParams);
+
+        // OU si l'API accepte directement un dictionnaire
+        // await navigationService.NavigateToAsync<T>(dict);
     }
 
     // Conversion des coordonnées
@@ -113,14 +120,14 @@ public static class ViewModelExtensions
     }
 
     // Vérification des permissions
-    public static bool HasPermission(this UserRole role, Permission permission)
+    public static bool HasPermission(this AccountType accountType, Permission permission)
     {
-        return role switch
+        return accountType switch
         {
-            UserRole.Admin => true,
-            UserRole.Moderator => permission != Permission.ManageUsers && permission != Permission.ManageRoles,
-            UserRole.Professional => permission == Permission.CreateSpot || permission == Permission.EditOwnContent,
-            UserRole.Standard => permission == Permission.CreateSpot || permission == Permission.EditOwnContent,
+            AccountType.Administrator => true,
+            AccountType.Moderator => permission != Permission.ManageUsers && permission != Permission.ManageRoles,
+            AccountType.Professional => permission == Permission.CreateSpot || permission == Permission.EditOwnContent,
+            AccountType.Standard => permission == Permission.CreateSpot || permission == Permission.EditOwnContent,
             _ => false
         };
     }

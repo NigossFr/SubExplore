@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using SubExplore.Models.Auth;
 
 namespace SubExplore.Services.Interfaces
 {
@@ -53,7 +52,7 @@ namespace SubExplore.Services.Interfaces
         /// <summary>
         /// Obtient l'utilisateur actuellement connecté
         /// </summary>
-        Task<UserBasicInfo> GetCurrentUserAsync();
+        Task<UserBasicInfo?> GetCurrentUserAsync();
 
         /// <summary>
         /// Vérifie si un email existe dans la base de données
@@ -143,14 +142,14 @@ namespace SubExplore.Services.Interfaces
     public class AuthenticationEventArgs : EventArgs
     {
         public bool IsAuthenticated { get; set; }
-        public string Username { get; set; }
-        public UserBasicInfo User { get; set; }
+        public string? Username { get; set; }
+        public UserBasicInfo? User { get; set; }
     }
 
     public class AuthenticationResult
     {
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
+        public string AccessToken { get; set; } = string.Empty;
+        public string RefreshToken { get; set; } = string.Empty;
 
         /// <summary>
         /// Date d'expiration du token d'accès
@@ -165,12 +164,12 @@ namespace SubExplore.Services.Interfaces
         /// <summary>
         /// Informations basiques sur l'utilisateur
         /// </summary>
-        public UserBasicInfo User { get; set; }
+        public UserBasicInfo? User { get; set; }
 
         /// <summary>
         /// Rôles de l'utilisateur
         /// </summary>
-        public IEnumerable<string> Roles { get; set; }
+        public IEnumerable<string>? Roles { get; set; }
     }
 
     /// <summary>
@@ -179,31 +178,11 @@ namespace SubExplore.Services.Interfaces
     public class UserBasicInfo
     {
         public int Id { get; set; }
-        public string Email { get; set; }
-        public string Username { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
         public bool EmailConfirmed { get; set; }
-        public string AvatarUrl { get; set; }
-    }
-
-    public class AuthenticationException : Exception
-    {
-        public string Code { get; }
-
-        public AuthenticationException(string message, string code = null) : base(message)
-        {
-            Code = code;
-        }
-    }
-
-    // Définition de RegistrationRequest
-    public class RegistrationRequest
-    {
-        public string Email { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string? AvatarUrl { get; set; }
     }
 }

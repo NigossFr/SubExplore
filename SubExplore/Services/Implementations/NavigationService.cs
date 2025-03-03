@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SubExplore.Services.Interfaces;
 using SubExplore.ViewModels.Base;
+using SubExplore.Models;
 
 namespace SubExplore.Services.Implementations
 {
@@ -16,9 +15,9 @@ namespace SubExplore.Services.Implementations
         private readonly ILogger<NavigationService> _logger;
         private readonly List<NavigationHistoryEntry> _history;
         private NavigationOptions _options;
-        private Action<NavigationErrorEventArgs> _errorHandler;
+        private Action<NavigationErrorEventArgs>? _errorHandler;
 
-        public event EventHandler<NavigationErrorEventArgs> NavigationFailed;
+        public event EventHandler<NavigationErrorEventArgs>? NavigationFailed;
 
         public IReadOnlyList<NavigationHistoryEntry> NavigationHistory =>
             new ReadOnlyCollection<NavigationHistoryEntry>(_history);
@@ -32,7 +31,7 @@ namespace SubExplore.Services.Implementations
             _options = new NavigationOptions();
         }
 
-        public async Task NavigateToAsync(string route, IDictionary<string, object> parameters = null)
+        public async Task NavigateToAsync(string route, IDictionary<string, object>? parameters = null)
         {
             try
             {
@@ -52,8 +51,7 @@ namespace SubExplore.Services.Implementations
             }
         }
 
-        public async Task NavigateToAsync<TViewModel>(INavigationParameters parameters = null)
-            where TViewModel : ViewModelBase
+        public Task NavigateToAsync<TViewModel>(INavigationParameters? parameters = null) where TViewModel : ViewModelBase
         {
             var route = GetRouteForViewModel<TViewModel>();
             if (string.IsNullOrEmpty(route))
@@ -66,10 +64,10 @@ namespace SubExplore.Services.Implementations
                 kvp => kvp.Value
             );
 
-            await NavigateToAsync(route, paramDict);
+            return NavigateToAsync(route, paramDict);
         }
 
-        public async Task GoBackAsync(INavigationParameters parameters = null)
+        public async Task GoBackAsync(INavigationParameters? parameters = null)
         {
             try
             {
@@ -101,8 +99,7 @@ namespace SubExplore.Services.Implementations
             }
         }
 
-        public async Task ShowModalAsync<TViewModel>(INavigationParameters parameters = null)
-            where TViewModel : ViewModelBase
+        public Task ShowModalAsync<TViewModel>(INavigationParameters? parameters = null) where TViewModel : ViewModelBase
         {
             var route = GetRouteForViewModel<TViewModel>();
             if (string.IsNullOrEmpty(route))
@@ -110,10 +107,10 @@ namespace SubExplore.Services.Implementations
                 throw new NavigationException($"Aucune route trouvée pour {typeof(TViewModel).Name}");
             }
 
-            await NavigateToAsync($"//{route}", parameters?.ToDictionary(k => k.Key, v => v.Value));
+            return NavigateToAsync($"//{route}", parameters?.ToDictionary(k => k.Key, v => v.Value));
         }
 
-        public async Task CloseModalAsync(object result = null)
+        public async Task CloseModalAsync(object? result = null)
         {
             try
             {
@@ -125,7 +122,7 @@ namespace SubExplore.Services.Implementations
             }
         }
 
-        public async Task NavigateToSpotDetailsAsync(int spotId, string highlightFeature = null)
+        public async Task NavigateToSpotDetailsAsync(int spotId, string? highlightFeature = null)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -140,7 +137,7 @@ namespace SubExplore.Services.Implementations
             await NavigateToAsync("spot-details", parameters);
         }
 
-        public async Task NavigateToSpotCreationAsync(GeoCoordinates initialCoordinates = null)
+        public async Task NavigateToSpotCreationAsync(GeoCoordinates? initialCoordinates = null)
         {
             var parameters = initialCoordinates != null ? new Dictionary<string, object>
             {
@@ -151,7 +148,7 @@ namespace SubExplore.Services.Implementations
             await NavigateToAsync("add-spot", parameters);
         }
 
-        public async Task NavigateToUserProfileAsync(int userId, string section = null)
+        public async Task NavigateToUserProfileAsync(int userId, string? section = null)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -230,7 +227,7 @@ namespace SubExplore.Services.Implementations
             }
         }
 
-        protected virtual void HandleNavigationError(Exception exception, string targetRoute, IDictionary<string, object> parameters)
+        protected virtual void HandleNavigationError(Exception exception, string targetRoute, IDictionary<string, object>? parameters)
         {
             _logger.LogError(exception, "Navigation error to {Route}", targetRoute);
 
@@ -249,7 +246,7 @@ namespace SubExplore.Services.Implementations
             }
         }
 
-        private string BuildQueryString(IDictionary<string, object> parameters)
+        private string BuildQueryString(IDictionary<string, object>? parameters)
         {
             if (parameters == null || !parameters.Any())
                 return string.Empty;
@@ -260,7 +257,7 @@ namespace SubExplore.Services.Implementations
             return string.Join("&", queryParams);
         }
 
-        private void RecordNavigation(string route, INavigationParameters parameters)
+        private void RecordNavigation(string route, INavigationParameters? parameters)
         {
             var entry = new NavigationHistoryEntry
             {
@@ -297,12 +294,17 @@ namespace SubExplore.Services.Implementations
         public NavigationParameters(IDictionary<string, object> dictionary)
             : base(dictionary ?? new Dictionary<string, object>()) { }
 
-        public T GetValue<T>(string key)
+        public T? GetValue<T>(string key)
         {
             if (TryGetValue(key, out var value))
             {
                 try
                 {
+                    if (value is T typedValue)
+                    {
+                        return typedValue;
+                    }
+
                     return (T)Convert.ChangeType(value, typeof(T));
                 }
                 catch
@@ -315,13 +317,13 @@ namespace SubExplore.Services.Implementations
 
         public void Add<T>(string key, T value)
         {
-            base[key] = value;
+            base[key] = value!;
         }
     }
 
     public class NavigationState
     {
-        public List<NavigationHistoryEntry> History { get; set; }
+        public List<NavigationHistoryEntry> History { get; set; } = new List<NavigationHistoryEntry>();
         public DateTime Timestamp { get; set; }
     }
 

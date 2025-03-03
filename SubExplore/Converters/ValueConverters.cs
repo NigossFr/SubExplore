@@ -12,7 +12,7 @@ namespace SubExplore.Converters
     /// </summary>
     public class InvertedBoolConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is bool boolValue)
             {
@@ -21,7 +21,7 @@ namespace SubExplore.Converters
             return value;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is bool boolValue)
             {
@@ -36,7 +36,7 @@ namespace SubExplore.Converters
     /// </summary>
     public class BoolToVisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is bool boolValue)
             {
@@ -45,7 +45,7 @@ namespace SubExplore.Converters
             return false;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             return value is bool boolValue && boolValue;
         }
@@ -56,7 +56,7 @@ namespace SubExplore.Converters
     /// </summary>
     public class LoadingToActivityIndicatorConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is bool isLoading)
             {
@@ -65,7 +65,7 @@ namespace SubExplore.Converters
             return false;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             return value is bool isVisible && isVisible;
         }
@@ -76,12 +76,12 @@ namespace SubExplore.Converters
     /// </summary>
     public class StringToBoolConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             return !string.IsNullOrWhiteSpace(value as string);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             return null;
         }
@@ -92,7 +92,7 @@ namespace SubExplore.Converters
     /// </summary>
     public class EnumToStringConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value == null)
                 return string.Empty;
@@ -100,12 +100,12 @@ namespace SubExplore.Converters
             return value.ToString();
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value == null || string.IsNullOrEmpty(value.ToString()))
                 return null;
 
-            return Enum.Parse(targetType, value.ToString());
+            return Enum.Parse(targetType, value.ToString() ?? string.Empty);
         }
     }
 
@@ -114,7 +114,7 @@ namespace SubExplore.Converters
     /// </summary>
     public class EnumToBoolConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value == null || parameter == null)
                 return false;
@@ -122,10 +122,10 @@ namespace SubExplore.Converters
             var checkValue = value.ToString();
             var targetValue = parameter.ToString();
 
-            return checkValue.Equals(targetValue, StringComparison.InvariantCultureIgnoreCase);
+            return checkValue?.Equals(targetValue, StringComparison.InvariantCultureIgnoreCase) ?? false;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value == null || parameter == null)
                 return null;
@@ -133,7 +133,7 @@ namespace SubExplore.Converters
             var useValue = (bool)value;
             var targetValue = parameter.ToString();
 
-            if (useValue)
+            if (useValue && targetValue != null)
                 return Enum.Parse(targetType, targetValue);
 
             return null;

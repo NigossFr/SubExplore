@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
 using System.IO;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
+using SubExplore.Models;
+using SubExplore.Models.Media;
 
 namespace SubExplore.Services.Interfaces
 {
+    public enum MediaServiceType
+    {
+        Spot,
+        Story,
+        Profile,
+        Organization
+    }
+
     /// <summary>
     /// Interface du service de gestion des médias
     /// </summary>
@@ -25,7 +29,7 @@ namespace SubExplore.Services.Interfaces
         /// <param name="mediaType">Type de média (Spot, Story, Profile...)</param>
         /// <param name="ownerId">ID du propriétaire</param>
         /// <returns>Informations sur le média uploadé</returns>
-        Task<MediaUploadResult> UploadAsync(IFormFile file, MediaType mediaType, int ownerId);
+        Task<MediaUploadResult> UploadAsync(Models.Media.IMediaFile file, MediaServiceType mediaType, int ownerId);
 
         /// <summary>
         /// Upload multiple fichiers médias
@@ -34,7 +38,7 @@ namespace SubExplore.Services.Interfaces
         /// <param name="mediaType">Type de média</param>
         /// <param name="ownerId">ID du propriétaire</param>
         /// <returns>Liste des résultats d'upload</returns>
-        Task<IEnumerable<MediaUploadResult>> UploadMultipleAsync(IEnumerable<IFormFile> files, MediaType mediaType, int ownerId);
+        Task<IEnumerable<MediaUploadResult>> UploadMultipleAsync(IEnumerable<Models.Media.IMediaFile> files, MediaServiceType mediaType, int ownerId);
 
         /// <summary>
         /// Supprime un média
@@ -116,7 +120,7 @@ namespace SubExplore.Services.Interfaces
         /// </summary>
         /// <param name="file">Fichier à valider</param>
         /// <returns>Résultat de la validation</returns>
-        Task<MediaValidationResult> ValidateFileAsync(IFormFile file);
+        Task<MediaValidationResult> ValidateFileAsync(Models.Media.IMediaFile file);
 
         /// <summary>
         /// Vérifie les permissions d'accès à un média
@@ -172,7 +176,7 @@ namespace SubExplore.Services.Interfaces
         public int Width { get; set; }
         public int Height { get; set; }
         public DateTime UploadedAt { get; set; }
-        public MediaType MediaType { get; set; }
+        public MediaServiceType MediaType { get; set; } // Utiliser le nouveau type
         public int OwnerId { get; set; }
         public Dictionary<string, string> ExtraMetadata { get; set; }
     }
@@ -189,5 +193,13 @@ namespace SubExplore.Services.Interfaces
         public bool IsValid { get; set; }
         public List<string> ValidationErrors { get; set; }
         public Dictionary<string, string> ValidationDetails { get; set; }
+    }
+
+    // Classe DTO pour la mise à jour des métadonnées
+    public class MediaMetadataUpdateDto
+    {
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public Dictionary<string, string> CustomMetadata { get; set; }
     }
 }

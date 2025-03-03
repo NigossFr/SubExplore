@@ -9,8 +9,6 @@ using SubExplore.Extensions;
 using SubExplore.Services.Interfaces;
 using SubExplore.ViewModels.Auth;
 using SubExplore.ViewModels.Base;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SubExplore.ViewModels.Auth
 {
@@ -20,7 +18,7 @@ namespace SubExplore.ViewModels.Auth
         private readonly ISecureStorageService _secureStorageService;
 
         [ObservableProperty]
-        private LoginModel _loginModel;
+        private LoginModel _loginModel = new LoginModel();
 
         [ObservableProperty]
         private bool _isPasswordVisible;
@@ -45,7 +43,6 @@ namespace SubExplore.ViewModels.Auth
         {
             _authenticationService = authenticationService;
             _secureStorageService = secureStorageService;
-            _loginModel = new LoginModel();
             Title = "Connexion";
 
             // Vérifier si l'authentification sociale est disponible
@@ -81,7 +78,7 @@ namespace SubExplore.ViewModels.Auth
             // Validation des entrées
             if (!ValidateInputs()) return;
 
-            loginButtonText = "Connexion en cours...";
+            LoginButtonText = "Connexion en cours...";
             await SafeExecuteAsync(async () =>
             {
                 // Appel au service d'authentification
@@ -121,7 +118,7 @@ namespace SubExplore.ViewModels.Auth
                 return false;
             }
 
-            if (!LoginModel.Email.IsValidEmail())
+            if (!Extensions.ValidationExtensions.IsValidEmail(LoginModel.Email))
             {
                 ErrorMessage = "Format d'email invalide";
                 return false;
@@ -155,7 +152,8 @@ namespace SubExplore.ViewModels.Auth
 
             await SafeExecuteAsync(async () =>
             {
-                var result = await _authenticationService.LoginWithOAuthAsync(provider, null);
+                // Passage d'une chaîne vide au lieu de null pour éviter l'erreur CS8625
+                var result = await _authenticationService.LoginWithOAuthAsync(provider, string.Empty);
 
                 if (result == null)
                 {
@@ -179,5 +177,11 @@ namespace SubExplore.ViewModels.Auth
                 LoginModel.RememberMe = true;
             }
         }
+
+        public void ClearLoginError()
+        {
+            ClearError();
+        }
+
     }
 }

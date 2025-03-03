@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SubExplore.Views.Profile.ProfileEditPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Modifier le profil">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Label
+                FontAttributes="Bold"
+                FontSize="24"
+                Text="Modifier le profil"
+                TextColor="#006994" />
+
+            <Frame
+                Margin="0,10,0,0"
+                Padding="15"
+                BorderColor="#E0E0E0"
+                CornerRadius="10"
+                HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label HorizontalOptions="Center" Text="En cours de développement" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Button
+                Margin="0,20,0,0"
+                BackgroundColor="#006994"
+                Command="{Binding SaveCommand}"
+                CornerRadius="25"
+                Text="Enregistrer"
+                TextColor="White" />
+
+            <Button
+                BackgroundColor="Transparent"
+                BorderColor="#006994"
+                BorderWidth="1"
+                Command="{Binding CancelCommand}"
+                CornerRadius="25"
+                Text="Annuler"
+                TextColor="#006994" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

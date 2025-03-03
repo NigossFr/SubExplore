@@ -18,7 +18,7 @@ namespace SubExplore.Models
         public int SpotId { get; set; }
 
         [Required]
-        public MediaType MediaType { get; set; }
+        public Enums.MediaType MediaType { get; set; }
 
         [Required]
         [MaxLength(500)]

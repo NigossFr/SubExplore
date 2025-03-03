@@ -1,179 +1,179 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
 using SubExplore.Services.Interfaces;
+using SubExplore.Services.Implementations;
+using System.Security.Authentication;
 
-namespace SubExplore.ViewModels.Base;
-
-public partial class ViewModelBase : ObservableObject, IDisposable, IQueryAttributable
+namespace SubExplore.ViewModels.Base
 {
-    protected readonly INavigationService NavigationService;
-
-    [ObservableProperty]
-    private bool _isLoading;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-    private bool _isBusy;
-
-    [ObservableProperty]
-    private string _title;
-
-    [ObservableProperty]
-    private bool _isRefreshing;
-
-    [ObservableProperty]
-    private bool _isEmpty;
-
-    [ObservableProperty]
-    private bool _isError;
-
-    [ObservableProperty]
-    private string _errorMessage;
-
-    [ObservableProperty]
-    private bool _canNavigateBack;
-
-    public bool IsNotBusy => !IsBusy;
-
-    public ViewModelBase(INavigationService navigationService)
+    public partial class ViewModelBase : ObservableObject, IDisposable, IQueryAttributable
     {
-        NavigationService = navigationService;
-        UpdateNavigationState();
-    }
+        protected readonly INavigationService NavigationService;
 
-    public virtual void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        Initialize(query);
-    }
+        [ObservableProperty]
+        private bool _isLoading;
 
-    public virtual void Initialize(IDictionary<string, object> parameters) { }
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsNotBusy))]
+        private bool _isBusy;
 
-    public virtual Task InitializeAsync(IDictionary<string, object> parameters)
-    {
-        return Task.CompletedTask;
-    }
+        [ObservableProperty]
+        private string _title = string.Empty;
 
-    protected virtual void UpdateNavigationState()
-    {
-        CanNavigateBack = NavigationService.CanGoBack;
-    }
+        [ObservableProperty]
+        private bool _isRefreshing;
 
-    protected virtual void SetBusy(bool value)
-    {
-        IsBusy = value;
-        IsLoading = value;
-    }
+        [ObservableProperty]
+        private bool _isEmpty;
 
-    protected virtual void ShowError(string message)
-    {
-        IsError = true;
-        ErrorMessage = message;
-    }
+        [ObservableProperty]
+        private bool _isError;
 
-    protected virtual void ClearError()
-    {
-        IsError = false;
-        ErrorMessage = string.Empty;
-    }
+        [ObservableProperty]
+        private string _errorMessage = string.Empty;
 
-    protected virtual void HandleError(Exception ex, string customMessage = null)
-    {
-        var message = customMessage ?? "Une erreur est survenue";
+        [ObservableProperty]
+        private bool _canNavigateBack;
 
-        if (ex is AuthenticationException authEx)
+        public bool IsNotBusy => !IsBusy;
+
+        public ViewModelBase(INavigationService navigationService)
         {
-            message = $"Erreur d'authentification : {authEx.Message}";
-        }
-        else if (ex is NavigationException navEx)
-        {
-            message = $"Erreur de navigation : {navEx.Message}";
-        }
-        else if (ex is HttpRequestException httpEx)
-        {
-            message = "Erreur de connexion au serveur";
+            NavigationService = navigationService;
+            UpdateNavigationState();
         }
 
-        ShowError(message);
+        public virtual void ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            Initialize(query);
+        }
+
+        public virtual void Initialize(IDictionary<string, object> parameters) { }
+
+        public virtual Task InitializeAsync(IDictionary<string, object> parameters)
+        {
+            return Task.CompletedTask;
+        }
+
+        protected virtual void UpdateNavigationState()
+        {
+            CanNavigateBack = NavigationService.CanGoBack;
+        }
+
+        protected virtual void SetBusy(bool value)
+        {
+            IsBusy = value;
+            IsLoading = value;
+        }
+
+        protected virtual void ShowError(string message)
+        {
+            IsError = true;
+            ErrorMessage = message;
+        }
+
+        protected virtual void ClearError()
+        {
+            IsError = false;
+            ErrorMessage = string.Empty;
+        }
+
+        protected virtual void HandleError(Exception ex, string? customMessage = null)
+        {
+            var message = customMessage ?? "Une erreur est survenue";
+
+            // Utilisez System.Security.Authentication.AuthenticationException
+            if (ex is System.Security.Authentication.AuthenticationException authEx)
+            {
+                message = $"Erreur d'authentification : {authEx.Message}";
+            }
+            else if (ex is NavigationException navEx)
+            {
+                message = $"Erreur de navigation : {navEx.Message}";
+            }
+            else if (ex is HttpRequestException httpEx)
+            {
+                message = "Erreur de connexion au serveur";
+            }
+
+            ShowError(message);
 #if DEBUG
-        System.Diagnostics.Debug.WriteLine($"Error: {ex}");
+            System.Diagnostics.Debug.WriteLine($"Error: {ex}");
 #endif
-    }
-
-    protected virtual async Task SafeExecuteAsync(Func<Task> action, string errorMessage = null)
-    {
-        try
-        {
-            SetBusy(true);
-            ClearError();
-            await action();
         }
-        catch (Exception ex)
+
+        protected virtual async Task SafeExecuteAsync(Func<Task> action, string? errorMessage = null)
         {
-            HandleError(ex, errorMessage);
+            try
+            {
+                SetBusy(true);
+                ClearError();
+                await action();
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex, errorMessage);
+            }
+            finally
+            {
+                SetBusy(false);
+            }
         }
-        finally
+
+        protected virtual void SafeExecute(Action action, string? errorMessage = null)
         {
-            SetBusy(false);
+            try
+            {
+                SetBusy(true);
+                ClearError();
+                action();
+            }
+            catch (Exception ex)
+            {
+                HandleError(ex, errorMessage);
+            }
+            finally
+            {
+                SetBusy(false);
+            }
         }
-    }
 
-    protected virtual void SafeExecute(Action action, string errorMessage = null)
-    {
-        try
+        protected virtual Task DisplayAlert(string title, string message, string button = "OK")
         {
-            SetBusy(true);
-            ClearError();
-            action();
+            return Shell.Current.DisplayAlert(title, message, button);
         }
-        catch (Exception ex)
+
+        protected virtual Task<bool> DisplayConfirmation(string title, string message, string accept = "Oui", string cancel = "Non")
         {
-            HandleError(ex, errorMessage);
+            return Shell.Current.DisplayAlert(title, message, accept, cancel);
         }
-        finally
+
+        protected async Task NavigateBackAsync()
         {
-            SetBusy(false);
+            if (NavigationService.CanGoBack)
+                await NavigationService.GoBackAsync();
         }
-    }
 
-    protected virtual Task DisplayAlert(string title, string message, string button = "OK")
-    {
-        return Shell.Current.DisplayAlert(title, message, button);
-    }
+        protected async Task NavigateToAsync(string route, IDictionary<string, object>? parameters = null)
+        {
+            await NavigationService.NavigateToAsync(route, parameters);
+        }
 
-    protected virtual Task<bool> DisplayConfirmation(string title, string message, string accept = "Oui", string cancel = "Non")
-    {
-        return Shell.Current.DisplayAlert(title, message, accept, cancel);
-    }
+        protected async Task ShowModalAsync<TViewModel>(IDictionary<string, object>? parameters = null)
+            where TViewModel : ViewModelBase
+        {
+            var navigationParams = parameters != null ? new NavigationParameters(parameters) : null;
+            await NavigationService.ShowModalAsync<TViewModel>(navigationParams);
+        }
 
-    protected async Task NavigateBackAsync()
-    {
-        if (NavigationService.CanGoBack)
-            await NavigationService.GoBackAsync();
-    }
+        protected async Task CloseModalAsync(object? result = null)
+        {
+            await NavigationService.CloseModalAsync(result);
+        }
 
-    protected async Task NavigateToAsync(string route, IDictionary<string, object> parameters = null)
-    {
-        await NavigationService.NavigateToAsync(route, parameters);
-    }
-
-    protected async Task ShowModalAsync<TViewModel>(IDictionary<string, object> parameters = null)
-        where TViewModel : ViewModelBase
-    {
-        await NavigationService.ShowModalAsync<TViewModel>(new NavigationParameters(parameters));
-    }
-
-    protected async Task CloseModalAsync(object result = null)
-    {
-        await NavigationService.CloseModalAsync(result);
-    }
-
-    public virtual void Dispose()
-    {
-        // Code de nettoyage ici
+        public virtual void Dispose()
+        {
+            // Code de nettoyage ici
+        }
     }
 }

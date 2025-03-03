@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SubExplore.Models;
 
 namespace SubExplore.Services.Interfaces
 {
@@ -66,6 +67,18 @@ namespace SubExplore.Services.Interfaces
         /// </summary>
         /// <param name="follow">true pour suivre le système</param>
         Task SetFollowSystemThemeAsync(bool follow);
+
+        /// <summary>
+        /// Obtient la préférence de thème (sombre ou clair)
+        /// </summary>
+        /// <returns>true pour le thème sombre, false pour le thème clair</returns>
+        Task<bool> GetThemePreferenceAsync();
+
+        /// <summary>
+        /// Définit la préférence de thème
+        /// </summary>
+        /// <param name="isDarkTheme">true pour le thème sombre, false pour le thème clair</param>
+        Task SetThemePreferenceAsync(bool isDarkTheme);
 
         #endregion
 
@@ -136,13 +149,13 @@ namespace SubExplore.Services.Interfaces
         /// <summary>
         /// Obtient la dernière position connue
         /// </summary>
-        Task<GeoCoordinates> GetLastKnownLocationAsync();
+        Task<SubExplore.Models.GeoCoordinates> GetLastKnownLocationAsync();
 
-        /// <summary>
+        // <summary>
         /// Enregistre la dernière position
         /// </summary>
         /// <param name="coordinates">Coordonnées à sauvegarder</param>
-        Task SaveLastKnownLocationAsync(GeoCoordinates coordinates);
+        Task SaveLastKnownLocationAsync(SubExplore.Models.GeoCoordinates coordinates);
 
         #endregion
 

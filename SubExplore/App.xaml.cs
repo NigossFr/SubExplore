@@ -1,6 +1,7 @@
 ﻿using SubExplore.ViewModels;
+#if WINDOWS
 using Windows.UI.ApplicationSettings;
-
+#endif
 namespace SubExplore;
 
 public partial class App : Application

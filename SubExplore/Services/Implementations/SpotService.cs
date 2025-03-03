@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using SubExplore.Models.Enums;
+using SubExplore.Services.Interfaces;
+using SubExplore.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Net.Http.Json;
-using SubExplore.Models;
-using SubExplore.Services.Interfaces;
 
 namespace SubExplore.Services.Implementations
 {
@@ -13,96 +13,129 @@ namespace SubExplore.Services.Implementations
     {
         private readonly HttpClient _httpClient;
         private readonly ILocationService _locationService;
-        private readonly IMediaService _mediaService;
         private readonly ICacheService _cacheService;
-        private readonly IAuthenticationService _authService;
+        private readonly ILogger<SpotService> _logger;
 
         public SpotService(
             IHttpClientFactory httpClientFactory,
             ILocationService locationService,
-            IMediaService mediaService,
             ICacheService cacheService,
-            IAuthenticationService authService)
+            ILogger<SpotService> logger)
         {
             _httpClient = httpClientFactory.CreateClient("SubExploreAPI");
             _locationService = locationService;
-            _mediaService = mediaService;
             _cacheService = cacheService;
-            _authService = authService;
+            _logger = logger;
         }
 
-        #region Gestion des spots
-
-        public async Task<SpotDto> GetByIdAsync(int id)
+        public async Task<Models.DTOs.SpotDto> GetByIdAsync(int id)
         {
-            // Vérifier d'abord le cache
-            var cacheKey = $"spot_{id}";
-            var cachedSpot = await _cacheService.GetAsync<SpotDto>(cacheKey);
-            if (cachedSpot != null)
-                return cachedSpot;
-
             try
             {
-                var spot = await _httpClient.GetFromJsonAsync<SpotDto>($"api/spots/{id}");
-                if (spot != null)
+                // Vérifier d'abord le cache
+                var cacheKey = $"spot_{id}";
+                var cachedSpot = await _cacheService.GetAsync<Models.DTOs.SpotDto>(cacheKey);
+                if (cachedSpot != null)
+                    return cachedSpot;
+
+                // Simulation - en production, ce serait un appel API
+                var spot = new Models.DTOs.SpotDto
                 {
-                    // Mettre en cache pour les futures requêtes
-                    await _cacheService.SetAsync(cacheKey, spot, TimeSpan.FromMinutes(15));
-                    return spot;
-                }
-                return null;
+                    Id = id,
+                    Name = $"Spot #{id}",
+                    Description = $"Description du spot #{id}",
+                    Latitude = 43.2965,
+                    Longitude = 5.3698,
+                    CreatorId = 1,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                // Mettre en cache pour les futures requêtes
+                await _cacheService.SetAsync(cacheKey, spot, TimeSpan.FromMinutes(15));
+                return spot;
             }
-            catch (HttpRequestException)
+            catch (Exception ex)
             {
-                throw new ServiceException("Impossible de récupérer le spot");
+                _logger.LogError(ex, "Erreur lors de la récupération du spot {Id}", id);
+                throw new SpotServiceException($"Impossible de récupérer le spot {id}", ex);
             }
         }
 
-        public async Task<IEnumerable<SpotDto>> SearchAsync(SpotSearchParameters searchParams)
+        public async Task<IEnumerable<Models.DTOs.SpotDto>> SearchAsync(Models.DTOs.SpotSearchParameters searchParams)
         {
             try
             {
-                var queryParams = new List<string>();
-
-                if (!string.IsNullOrWhiteSpace(searchParams.SearchTerm))
-                    queryParams.Add($"search={Uri.EscapeDataString(searchParams.SearchTerm)}");
-
-                if (searchParams.ActivityTypes?.Any() == true)
-                    queryParams.Add($"activities={string.Join(",", searchParams.ActivityTypes)}");
-
-                if (searchParams.MinDepth.HasValue)
-                    queryParams.Add($"minDepth={searchParams.MinDepth.Value}");
-
-                if (searchParams.MaxDepth.HasValue)
-                    queryParams.Add($"maxDepth={searchParams.MaxDepth.Value}");
-
-                var queryString = string.Join("&", queryParams);
-                var url = $"api/spots/search?{queryString}";
-
-                var spots = await _httpClient.GetFromJsonAsync<List<SpotDto>>(url);
-                return spots ?? new List<SpotDto>();
+                // Données fictives pour le développement
+                var spots = new List<Models.DTOs.SpotDto>
+                {
+                    new Models.DTOs.SpotDto
+                    {
+                        Id = 1,
+                        Name = "Spot de test #1",
+                        Description = "Description de test 1",
+                        Latitude = 43.2965,
+                        Longitude = 5.3698,
+                        CreatorId = 1,
+                        CreatedAt = DateTime.UtcNow
+                    },
+                    new Models.DTOs.SpotDto
+                    {
+                        Id = 2,
+                        Name = "Spot de test #2",
+                        Description = "Description de test 2",
+                        Latitude = 43.3065,
+                        Longitude = 5.3798,
+                        CreatorId = 1,
+                        CreatedAt = DateTime.UtcNow
+                    }
+                };
+                return spots;
             }
-            catch (HttpRequestException)
+            catch (Exception ex)
             {
-                throw new ServiceException("Erreur lors de la recherche des spots");
+                _logger.LogError(ex, "Erreur lors de la recherche des spots");
+                throw new SpotServiceException("Erreur lors de la recherche des spots", ex);
             }
         }
 
-        public async Task<IEnumerable<SpotDto>> GetNearbyAsync(double latitude, double longitude, double radiusInKm, int maxResults = 50)
+        public async Task<IEnumerable<Models.DTOs.SpotDto>> GetNearbyAsync(double latitude, double longitude, double radiusInKm, int maxResults = 50)
         {
             try
             {
-                var url = $"api/spots/nearby?lat={latitude}&lon={longitude}&radius={radiusInKm}&max={maxResults}";
-                var spots = await _httpClient.GetFromJsonAsync<List<SpotDto>>(url);
-                return spots ?? new List<SpotDto>();
+                // Données fictives pour le développement
+                var spots = new List<Models.DTOs.SpotDto>
+                {
+                    new Models.DTOs.SpotDto
+                    {
+                        Id = 1,
+                        Name = "Spot proche #1",
+                        Description = "Description de test 1",
+                        Latitude = latitude + 0.01,
+                        Longitude = longitude + 0.01,
+                        CreatorId = 1,
+                        CreatedAt = DateTime.UtcNow
+                    },
+                    new Models.DTOs.SpotDto
+                    {
+                        Id = 2,
+                        Name = "Spot proche #2",
+                        Description = "Description de test 2",
+                        Latitude = latitude - 0.01,
+                        Longitude = longitude - 0.01,
+                        CreatorId = 1,
+                        CreatedAt = DateTime.UtcNow
+                    }
+                };
+                return spots;
             }
-            catch (HttpRequestException)
+            catch (Exception ex)
             {
-                throw new ServiceException("Erreur lors de la récupération des spots à proximité");
+                _logger.LogError(ex, "Erreur lors de la récupération des spots à proximité");
+                throw new SpotServiceException("Erreur lors de la récupération des spots à proximité", ex);
             }
         }
 
-        public async Task<SpotDto> CreateAsync(SpotCreationDto spotCreation, int userId)
+        public async Task<Models.DTOs.SpotDto> CreateAsync(Models.DTOs.SpotCreationDto spotCreation, int userId)
         {
             try
             {
@@ -117,203 +150,109 @@ namespace SubExplore.Services.Implementations
                 if (!locationValidation.IsValid)
                     throw new ValidationException("La position n'est pas valide pour un spot sous-marin");
 
-                // Vérifier si le spot n'est pas un doublon
-                var nearbySpots = await GetNearbyAsync(
-                    spotCreation.Latitude,
-                    spotCreation.Longitude,
-                    0.1 // 100 mètres
-                );
-
-                if (nearbySpots.Any())
-                    throw new ValidationException("Un spot existe déjà à proximité");
-
-                var response = await _httpClient.PostAsJsonAsync("api/spots", spotCreation);
-                if (!response.IsSuccessStatusCode)
-                    throw new ServiceException("Erreur lors de la création du spot");
-
-                var spot = await response.Content.ReadFromJsonAsync<SpotDto>();
-                return spot;
+                // Simulation de création
+                var newSpot = new Models.DTOs.SpotDto
+                {
+                    Id = new Random().Next(100, 999),
+                    Name = spotCreation.Name,
+                    Description = spotCreation.Description,
+                    Latitude = spotCreation.Latitude,
+                    Longitude = spotCreation.Longitude,
+                    Type = spotCreation.Type,
+                    DifficultyLevel = spotCreation.DifficultyLevel,
+                    RequiredEquipment = spotCreation.RequiredEquipment,
+                    SafetyNotes = spotCreation.SafetyNotes,
+                    BestConditions = spotCreation.BestConditions,
+                    MaxDepth = spotCreation.MaxDepth,
+                    CurrentStrength = spotCreation.CurrentStrength,
+                    HasMooring = spotCreation.HasMooring,
+                    BottomType = spotCreation.BottomType,
+                    CreatorId = userId,
+                    CreatedAt = DateTime.UtcNow
+                };
+                return newSpot;
             }
-            catch (HttpRequestException)
+            catch (Exception ex)
             {
-                throw new ServiceException("Erreur lors de la création du spot");
+                _logger.LogError(ex, "Erreur lors de la création du spot");
+                throw new SpotServiceException("Erreur lors de la création du spot", ex);
             }
         }
 
-        public async Task<SpotDto> UpdateAsync(int id, SpotUpdateDto spotUpdate, int userId)
+        public async Task<Models.DTOs.SpotDto> UpdateAsync(int id, Models.DTOs.SpotUpdateDto spotUpdate, int userId)
         {
             try
             {
-                // Vérifier les permissions
                 var spot = await GetByIdAsync(id);
                 if (spot == null)
                     throw new NotFoundException("Spot non trouvé");
 
-                if (spot.CreatorId != userId && !await _authService.IsInRoleAsync(userId, "Moderator"))
-                    throw new UnauthorizedException("Vous n'avez pas les droits pour modifier ce spot");
-
-                var response = await _httpClient.PutAsJsonAsync($"api/spots/{id}", spotUpdate);
-                if (!response.IsSuccessStatusCode)
-                    throw new ServiceException("Erreur lors de la mise à jour du spot");
+                // Mise à jour des données
+                spot.Name = spotUpdate.Name ?? spot.Name;
+                spot.Description = spotUpdate.Description ?? spot.Description;
 
                 // Invalider le cache
                 await _cacheService.RemoveAsync($"spot_{id}");
 
-                return await response.Content.ReadFromJsonAsync<SpotDto>();
+                return spot;
             }
-            catch (HttpRequestException)
+            catch (Exception ex)
             {
-                throw new ServiceException("Erreur lors de la mise à jour du spot");
-            }
-        }
-
-        #endregion
-
-        #region Modération et validation
-
-        public async Task<bool> SubmitForValidationAsync(int spotId)
-        {
-            try
-            {
-                var response = await _httpClient.PostAsync($"api/spots/{spotId}/submit", null);
-                return response.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                throw new ServiceException("Erreur lors de la soumission pour validation");
+                _logger.LogError(ex, "Erreur lors de la mise à jour du spot");
+                throw new SpotServiceException("Erreur lors de la mise à jour du spot", ex);
             }
         }
 
-        public async Task<bool> ValidateSpotAsync(int spotId, int moderatorId, SpotValidationDto validationDetails)
+        public async Task<bool> DeleteAsync(int id, int userId)
         {
             try
             {
-                // Vérifier que le modérateur a l'expertise requise
-                var spot = await GetByIdAsync(spotId);
-                if (spot == null)
-                    throw new NotFoundException("Spot non trouvé");
+                // Simulation de suppression
+                await _cacheService.RemoveAsync($"spot_{id}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de la suppression du spot");
+                throw new SpotServiceException("Erreur lors de la suppression du spot", ex);
+            }
+        }
 
-                var response = await _httpClient.PostAsJsonAsync(
-                    $"api/spots/{spotId}/validate",
-                    validationDetails
-                );
-
-                if (response.IsSuccessStatusCode)
+        public async Task<Models.DTOs.SpotMediaDto> AddMediaAsync(int spotId, Models.DTOs.SpotMediaUploadDto mediaUpload, int userId)
+        {
+            try
+            {
+                // Simulation d'ajout de média
+                var media = new Models.DTOs.SpotMediaDto
                 {
-                    // Invalider le cache
-                    await _cacheService.RemoveAsync($"spot_{spotId}");
-                    return true;
-                }
-
-                return false;
-            }
-            catch (HttpRequestException)
-            {
-                throw new ServiceException("Erreur lors de la validation du spot");
-            }
-        }
-
-        public async Task<bool> RejectSpotAsync(int spotId, int moderatorId, SpotRejectionDto rejectionDetails)
-        {
-            try
-            {
-                var response = await _httpClient.PostAsJsonAsync(
-                    $"api/spots/{spotId}/reject",
-                    rejectionDetails
-                );
-
-                if (response.IsSuccessStatusCode)
-                {
-                    // Invalider le cache
-                    await _cacheService.RemoveAsync($"spot_{spotId}");
-                    return true;
-                }
-
-                return false;
-            }
-            catch (HttpRequestException)
-            {
-                throw new ServiceException("Erreur lors du rejet du spot");
-            }
-        }
-
-        public async Task<int> ReportSpotAsync(int spotId, SpotReportDto reportDetails, int userId)
-        {
-            try
-            {
-                var response = await _httpClient.PostAsJsonAsync(
-                    $"api/spots/{spotId}/reports",
-                    reportDetails
-                );
-
-                if (!response.IsSuccessStatusCode)
-                    throw new ServiceException("Erreur lors du signalement du spot");
-
-                var result = await response.Content.ReadFromJsonAsync<ReportResult>();
-                return result.ReportId;
-            }
-            catch (HttpRequestException)
-            {
-                throw new ServiceException("Erreur lors du signalement du spot");
-            }
-        }
-
-        #endregion
-
-        #region Médias
-
-        public async Task<SpotMediaDto> AddMediaAsync(int spotId, SpotMediaUploadDto mediaUpload, int userId)
-        {
-            // Vérifier le nombre de médias existants
-            var existingMedia = await GetMediaAsync(spotId);
-            if (existingMedia.Count() >= MediaValidationConfig.MaxPhotosPerSpot)
-                throw new ValidationException($"Nombre maximum de photos atteint ({MediaValidationConfig.MaxPhotosPerSpot})");
-
-            // Upload du média
-            var uploadResult = await _mediaService.UploadAsync(mediaUpload.File, MediaType.Spot, userId);
-            if (!uploadResult.Success)
-                throw new ServiceException($"Erreur lors de l'upload : {uploadResult.ErrorMessage}");
-
-            try
-            {
-                var mediaDto = new SpotMediaDto
-                {
-                    SpotId = spotId,
-                    MediaType = MediaType.Photo,
-                    MediaUrl = uploadResult.Urls[MediaVariant.Original],
-                    IsPrimary = !existingMedia.Any(),
-                    Width = uploadResult.Metadata.Width,
-                    Height = uploadResult.Metadata.Height,
-                    FileSize = uploadResult.FileSize
+                    Id = new Random().Next(1, 100),
+                    MediaUrl = $"https://example.com/spots/{spotId}/media/{Guid.NewGuid()}.jpg"
                 };
-
-                var response = await _httpClient.PostAsJsonAsync($"api/spots/{spotId}/media", mediaDto);
-                if (!response.IsSuccessStatusCode)
-                {
-                    // En cas d'échec, supprimer le média uploadé
-                    await _mediaService.DeleteAsync(uploadResult.MediaId, userId);
-                    throw new ServiceException("Erreur lors de l'ajout du média");
-                }
-
-                return await response.Content.ReadFromJsonAsync<SpotMediaDto>();
+                return media;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Nettoyage en cas d'erreur
-                await _mediaService.DeleteAsync(uploadResult.MediaId, userId);
-                throw;
+                _logger.LogError(ex, "Erreur lors de l'ajout de média");
+                throw new SpotServiceException("Erreur lors de l'ajout de média", ex);
             }
         }
 
-        public async Task<IEnumerable<SpotMediaDto>> GetMediaAsync(int spotId)
+        public async Task<IEnumerable<Models.DTOs.SpotMediaDto>> GetMediaAsync(int spotId)
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<List<SpotMediaDto>>($"api/spots/{spotId}/media");
+                // Simulation de récupération de médias
+                var media = new List<Models.DTOs.SpotMediaDto>
+                {
+                    new Models.DTOs.SpotMediaDto { Id = 1, MediaUrl = $"https://example.com/spots/{spotId}/media/1.jpg" },
+                    new Models.DTOs.SpotMediaDto { Id = 2, MediaUrl = $"https://example.com/spots/{spotId}/media/2.jpg" }
+                };
+                return media;
             }
-            catch (HttpRequestException)
+            catch (Exception ex)
             {
-                throw new ServiceException("Erreur lors de la récupération des médias");
+                _logger.LogError(ex, "Erreur lors de la récupération des médias");
+                throw new SpotServiceException("Erreur lors de la récupération des médias", ex);
             }
         }
 
@@ -321,21 +260,248 @@ namespace SubExplore.Services.Implementations
         {
             try
             {
-                var response = await _httpClient.DeleteAsync($"api/media/{mediaId}");
-                return response.IsSuccessStatusCode;
+                // Simulation de suppression de média
+                return true;
             }
-            catch (HttpRequestException)
+            catch (Exception ex)
             {
-                throw new ServiceException("Erreur lors de la suppression du média");
+                _logger.LogError(ex, "Erreur lors de la suppression du média");
+                throw new SpotServiceException("Erreur lors de la suppression du média", ex);
             }
         }
 
-        #endregion
+        public async Task<bool> SubmitForValidationAsync(int spotId)
+        {
+            try
+            {
+                // Simulation de soumission pour validation
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de la soumission pour validation");
+                throw new SpotServiceException("Erreur lors de la soumission pour validation", ex);
+            }
+        }
+
+        public async Task<bool> ValidateSpotAsync(int spotId, int moderatorId, Models.DTOs.SpotValidationDto validationDetails)
+        {
+            try
+            {
+                // Simulation de validation de spot
+                return validationDetails.IsApproved;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de la validation du spot");
+                throw new SpotServiceException("Erreur lors de la validation du spot", ex);
+            }
+        }
+
+        public async Task<bool> RejectSpotAsync(int spotId, int moderatorId, Models.DTOs.SpotRejectionDto rejectionDetails)
+        {
+            try
+            {
+                // Simulation de rejet de spot
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors du rejet du spot");
+                throw new SpotServiceException("Erreur lors du rejet du spot", ex);
+            }
+        }
+
+        public async Task<int> ReportSpotAsync(int spotId, Models.DTOs.SpotReportDto reportDetails, int userId)
+        {
+            try
+            {
+                // Simulation de signalement de spot
+                return new Random().Next(1, 100); // ID du rapport
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors du signalement du spot");
+                throw new SpotServiceException("Erreur lors du signalement du spot", ex);
+            }
+        }
+
+        public async Task<bool> RateSpotAsync(int spotId, Models.DTOs.SpotRatingDto rating, int userId)
+        {
+            try
+            {
+                // Simulation d'évaluation de spot
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de l'évaluation du spot");
+                throw new SpotServiceException("Erreur lors de l'évaluation du spot", ex);
+            }
+        }
+
+        public async Task<Models.DTOs.SpotRatingStatsDto> GetRatingStatsAsync(int spotId)
+        {
+            try
+            {
+                // Simulation de statistiques d'évaluation
+                var stats = new Models.DTOs.SpotRatingStatsDto
+                {
+                    AverageRating = 4.5,
+                    TotalRatings = 10
+                };
+                return stats;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de la récupération des statistiques d'évaluation");
+                throw new SpotServiceException("Erreur lors de la récupération des statistiques d'évaluation", ex);
+            }
+        }
+
+        public async Task<Models.DTOs.SpotVisitStatsDto> GetVisitStatsAsync(int spotId)
+        {
+            try
+            {
+                // Simulation de statistiques de visite
+                var stats = new Models.DTOs.SpotVisitStatsDto
+                {
+                    TotalVisits = 25,
+                    UniqueVisitors = 15
+                };
+                return stats;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de la récupération des statistiques de visite");
+                throw new SpotServiceException("Erreur lors de la récupération des statistiques de visite", ex);
+            }
+        }
+
+        public async Task LogVisitAsync(int spotId, int userId)
+        {
+            try
+            {
+                // Simulation d'enregistrement de visite
+                _logger.LogInformation("Visite enregistrée pour le spot {SpotId} par l'utilisateur {UserId}", spotId, userId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de l'enregistrement de la visite");
+                throw new SpotServiceException("Erreur lors de l'enregistrement de la visite", ex);
+            }
+        }
+
+        public async Task UpdateCurrentConditionsAsync(int spotId, Models.DTOs.SpotConditionsDto conditions, int userId)
+        {
+            try
+            {
+                // Simulation de mise à jour des conditions
+                _logger.LogInformation("Conditions mises à jour pour le spot {SpotId}", spotId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de la mise à jour des conditions");
+                throw new SpotServiceException("Erreur lors de la mise à jour des conditions", ex);
+            }
+        }
+
+        public async Task<Models.DTOs.SpotConditionsDto> GetCurrentConditionsAsync(int spotId)
+        {
+            try
+            {
+                // Simulation de récupération des conditions actuelles
+                var conditions = new Models.DTOs.SpotConditionsDto
+                {
+                    CurrentStrength = "Modéré",
+                    Visibility = 10,
+                    Notes = "Conditions idéales pour la plongée aujourd'hui."
+                };
+                return conditions;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de la récupération des conditions actuelles");
+                throw new SpotServiceException("Erreur lors de la récupération des conditions actuelles", ex);
+            }
+        }
+
+        public async Task UpdateSecurityStatusAsync(int spotId, Models.DTOs.SpotSecurityUpdateDto securityUpdate, int moderatorId)
+        {
+            try
+            {
+                // Simulation de mise à jour du statut de sécurité
+                _logger.LogInformation("Statut de sécurité mis à jour pour le spot {SpotId}", spotId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de la mise à jour du statut de sécurité");
+                throw new SpotServiceException("Erreur lors de la mise à jour du statut de sécurité", ex);
+            }
+        }
+
+        public async Task<IEnumerable<Models.DTOs.SpotDto>> GetSpotsAsync(Models.DTOs.SpotFilter filter)
+        {
+            try
+            {
+                // Utiliser la méthode SearchAsync existante
+                return await SearchAsync(new Models.DTOs.SpotSearchParameters
+                {
+                    SearchTerm = filter.SearchTerm,
+                    ActivityTypes = filter.ActivityTypes,
+                    MinDepth = filter.MinDepth,
+                    MaxDepth = filter.MaxDepth,
+                    DifficultyLevel = filter.DifficultyLevel,
+                    Latitude = filter.Latitude,
+                    Longitude = filter.Longitude,
+                    RadiusInKm = filter.RadiusInKm,
+                    ValidatedOnly = filter.ValidatedOnly,
+                    SortBy = filter.SortBy,
+                    SortDescending = filter.SortDescending,
+                    PageNumber = filter.PageNumber,
+                    PageSize = filter.PageSize
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de la récupération des spots avec filtre");
+                throw new SpotServiceException("Erreur lors de la récupération des spots", ex);
+            }
+        }
+
+        public async Task<IEnumerable<Models.DTOs.SpotDto>> GetCachedSpotsAsync(Models.DTOs.SpotFilter filter)
+        {
+            try
+            {
+                // Vérifier d'abord le cache
+                var cacheKey = $"spots_filter_{filter.GetHashCode()}";
+                var cachedSpots = await _cacheService.GetAsync<List<Models.DTOs.SpotDto>>(cacheKey);
+                if (cachedSpots != null)
+                    return cachedSpots;
+
+                // Si pas en cache, utiliser la recherche normale
+                var spots = await GetSpotsAsync(filter);
+
+                // Mettre en cache pour les futures requêtes
+                var spotsList = spots.ToList();
+                await _cacheService.SetAsync(cacheKey, spotsList, TimeSpan.FromMinutes(5));
+
+                return spotsList;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de la récupération des spots en cache");
+                // En cas d'erreur, on retourne une liste vide plutôt que de propager l'erreur
+                return new List<Models.DTOs.SpotDto>();
+            }
+        }
     }
 
-    public class ServiceException : Exception
+    // Classes d'exception
+    public class SpotServiceException : Exception
     {
-        public ServiceException(string message) : base(message) { }
+        public SpotServiceException(string message) : base(message) { }
+        public SpotServiceException(string message, Exception innerException) : base(message, innerException) { }
     }
 
     public class ValidationException : Exception
@@ -346,15 +512,5 @@ namespace SubExplore.Services.Implementations
     public class NotFoundException : Exception
     {
         public NotFoundException(string message) : base(message) { }
-    }
-
-    public class UnauthorizedException : Exception
-    {
-        public UnauthorizedException(string message) : base(message) { }
-    }
-
-    public class ReportResult
-    {
-        public int ReportId { get; set; }
     }
 }

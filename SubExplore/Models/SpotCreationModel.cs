@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SubExplore.Models.DTOs;
+using SubExplore.Models.Media;
 
 namespace SubExplore.Models
 {
@@ -23,7 +25,7 @@ namespace SubExplore.Models
         public string BottomType { get; set; }
         public List<IMediaFile> Photos { get; set; } = new();
 
-        public SpotDto ToDto() => new()
+        public DTOs.SpotDto ToDto() => new()
         {
             Name = Name,
             Latitude = Latitude,

@@ -1,4 +1,8 @@
 is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = true
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
 build_property.TargetFramework = net8.0-android
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = 
@@ -13,3 +17,99 @@ build_property.EnableComHosting =
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
+
+[D:/Développement/SubExplore/SubExplore/App.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.App.xaml
+build_metadata.AdditionalFiles.TargetPath = App.xaml
+build_metadata.AdditionalFiles.RelativePath = App.xaml
+
+[D:/Développement/SubExplore/SubExplore/AppShell.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.AppShell.xaml
+build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
+build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
+
+[D:/Développement/SubExplore/SubExplore/MainPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.MainPage.xaml
+build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
+build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Resources/Styles/Colors.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Resources.Styles.Colors.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
+
+[D:/Développement/SubExplore/SubExplore/Resources/Styles/Styles.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Resources.Styles.Styles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Auth/ForgotPasswordPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Auth.ForgotPasswordPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Auth\ForgotPasswordPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Auth\ForgotPasswordPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Auth/LoginPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Auth.LoginPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Auth\LoginPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Auth\LoginPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Auth/RegisterPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Auth.RegisterPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Auth\RegisterPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Auth\RegisterPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Auth/ResetPasswordConfirmationPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Auth.ResetPasswordConfirmationPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Auth\ResetPasswordConfirmationPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Auth\ResetPasswordConfirmationPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Main/MapPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.MapPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Main\MapPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Main\MapPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Main/SpotDetailsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.SpotDetailsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Main\SpotDetailsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Main\SpotDetailsPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Main/StoryDetailsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.StoryDetailsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Main\StoryDetailsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Main\StoryDetailsPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Main/StructureDetailsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.StructureDetailsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Main\StructureDetailsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Main\StructureDetailsPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Profile/ProfileEditPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Profile.ProfileEditPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Profile\ProfileEditPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Profile\ProfileEditPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Settings/SettingsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Settings.SettingsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Settings\SettingsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Settings\SettingsPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Spot/AddSpotPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Spot.AddSpotPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Spot\AddSpotPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Spot\AddSpotPage.xaml

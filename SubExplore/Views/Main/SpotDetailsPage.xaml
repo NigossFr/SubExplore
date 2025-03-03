@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SubExplore.Views.Main.SpotDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:SubExplore.ViewModels.Main"
+    Title="Détails du spot">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <!--  Placeholder pour le contenu du spot  -->
+            <Label
+                FontAttributes="Bold"
+                FontSize="24"
+                HorizontalOptions="Center"
+                Text="Chargement des détails..."
+                VerticalOptions="Center" />
+
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}" />
+
+            <Button
+                Margin="0,20,0,0"
+                Command="{Binding GoBackCommand}"
+                HorizontalOptions="Center"
+                Text="Retour"
+                VerticalOptions="End" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

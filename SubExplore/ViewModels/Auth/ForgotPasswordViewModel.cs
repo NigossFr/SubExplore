@@ -8,8 +8,6 @@ using CommunityToolkit.Mvvm.Input;
 using SubExplore.Extensions;
 using SubExplore.Services.Interfaces;
 using SubExplore.ViewModels.Base;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SubExplore.ViewModels.Auth
 {
@@ -18,7 +16,7 @@ namespace SubExplore.ViewModels.Auth
         private readonly IAuthenticationService _authenticationService;
 
         [ObservableProperty]
-        private ForgotPasswordModel _forgotPasswordModel;
+        private ForgotPasswordModel _forgotPasswordModel = new ForgotPasswordModel();
 
         [ObservableProperty]
         private string _submitButtonText = "Envoyer le lien de réinitialisation";
@@ -29,10 +27,10 @@ namespace SubExplore.ViewModels.Auth
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsEmailValid))]
         [NotifyPropertyChangedFor(nameof(HasEmailError))]
-        private string _emailValidationMessage;
+        private string _emailValidationMessage = string.Empty;
 
         [ObservableProperty]
-        private string _successMessage;
+        private string _successMessage = string.Empty;
 
         public bool HasSuccessMessage => !string.IsNullOrEmpty(SuccessMessage);
         public bool IsEmailValid => string.IsNullOrEmpty(EmailValidationMessage);
@@ -44,7 +42,6 @@ namespace SubExplore.ViewModels.Auth
             : base(navigationService)
         {
             _authenticationService = authenticationService;
-            _forgotPasswordModel = new ForgotPasswordModel();
             Title = "Mot de passe oublié";
         }
 
@@ -60,7 +57,7 @@ namespace SubExplore.ViewModels.Auth
             await SafeExecuteAsync(async () =>
             {
                 // Appel au service d'authentification
-                var result = await _authenticationService.GeneratePasswordResetTokenAsync(ForgotPasswordModel.Email);
+                bool result = await _authenticationService.GeneratePasswordResetTokenAsync(ForgotPasswordModel.Email) != null;
 
                 if (result)
                 {
@@ -88,7 +85,7 @@ namespace SubExplore.ViewModels.Auth
                 return false;
             }
 
-            if (!ForgotPasswordModel.Email.IsValidEmail())
+            if (!Extensions.ValidationExtensions.IsValidEmail(ForgotPasswordModel.Email))
             {
                 EmailValidationMessage = "Format d'email invalide";
                 return false;
@@ -106,7 +103,8 @@ namespace SubExplore.ViewModels.Auth
         [RelayCommand]
         private async Task CheckEmailExistsAsync()
         {
-            if (string.IsNullOrWhiteSpace(ForgotPasswordModel.Email) || !ForgotPasswordModel.Email.IsValidEmail())
+            if (string.IsNullOrWhiteSpace(ForgotPasswordModel.Email) ||
+                !Extensions.ValidationExtensions.IsValidEmail(ForgotPasswordModel.Email))
                 return;
 
             try
