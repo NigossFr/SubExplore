@@ -32,9 +32,15 @@ namespace SubExplore.ViewModels.Auth
         [ObservableProperty]
         private string _successMessage = string.Empty;
 
+        // Ajout de cette ligne pour résoudre l'erreur XFC0045
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasError))]
+        private string _errorMessage = string.Empty;
+
         public bool HasSuccessMessage => !string.IsNullOrEmpty(SuccessMessage);
         public bool IsEmailValid => string.IsNullOrEmpty(EmailValidationMessage);
         public bool HasEmailError => !string.IsNullOrEmpty(EmailValidationMessage);
+        public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
 
         public ForgotPasswordViewModel(
             INavigationService navigationService,

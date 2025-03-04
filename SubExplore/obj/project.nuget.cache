@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "Ni4m8n5FORY=",
+  "dgSpecHash": "Hnx2MVbOnjA=",
   "success": true,
   "projectFilePath": "D:\\Développement\\SubExplore\\SubExplore\\SubExplore.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\nigos\\.nuget\\packages\\communitytoolkit.maui\\8.0.1\\communitytoolkit.maui.8.0.1.nupkg.sha512",
-    "C:\\Users\\nigos\\.nuget\\packages\\communitytoolkit.maui.core\\8.0.1\\communitytoolkit.maui.core.8.0.1.nupkg.sha512",
+    "C:\\Users\\nigos\\.nuget\\packages\\communitytoolkit.maui\\9.1.1\\communitytoolkit.maui.9.1.1.nupkg.sha512",
+    "C:\\Users\\nigos\\.nuget\\packages\\communitytoolkit.maui.core\\9.1.1\\communitytoolkit.maui.core.9.1.1.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.0\\communitytoolkit.mvvm.8.2.0.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\googlegson\\2.10.1.4\\googlegson.2.10.1.4.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\9.0.2\\microsoft.extensions.caching.abstractions.9.0.2.nupkg.sha512",
@@ -143,15 +143,15 @@
     "C:\\Users\\nigos\\.nuget\\packages\\xamarin.kotlin.stdlib.jdk8\\1.9.0.1\\xamarin.kotlin.stdlib.jdk8.1.9.0.1.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\xamarin.kotlinx.coroutines.android\\1.7.2.1\\xamarin.kotlinx.coroutines.android.1.7.2.1.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\xamarin.kotlinx.coroutines.core.jvm\\1.7.2.1\\xamarin.kotlinx.coroutines.core.jvm.1.7.2.1.nupkg.sha512",
-    "C:\\Users\\nigos\\.nuget\\packages\\microsoft.android.runtime.34.android-x64\\34.0.147\\microsoft.android.runtime.34.android-x64.34.0.147.nupkg.sha512",
-    "C:\\Users\\nigos\\.nuget\\packages\\microsoft.android.runtime.34.android-arm64\\34.0.147\\microsoft.android.runtime.34.android-arm64.34.0.147.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\microsoft.android.ref.34\\34.0.147\\microsoft.android.ref.34.34.0.147.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\microsoft.android.runtime.34.android-arm\\34.0.147\\microsoft.android.runtime.34.android-arm.34.0.147.nupkg.sha512",
+    "C:\\Users\\nigos\\.nuget\\packages\\microsoft.android.runtime.34.android-arm64\\34.0.147\\microsoft.android.runtime.34.android-arm64.34.0.147.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\microsoft.android.runtime.34.android-x86\\34.0.147\\microsoft.android.runtime.34.android-x86.34.0.147.nupkg.sha512",
+    "C:\\Users\\nigos\\.nuget\\packages\\microsoft.android.runtime.34.android-x64\\34.0.147\\microsoft.android.runtime.34.android-x64.34.0.147.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\microsoft.ios.ref.net8.0_18.0\\18.0.8319\\microsoft.ios.ref.net8.0_18.0.18.0.8319.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\microsoft.ios.runtime.iossimulator-x64.net8.0_18.0\\18.0.8319\\microsoft.ios.runtime.iossimulator-x64.net8.0_18.0.18.0.8319.nupkg.sha512",
-    "C:\\Users\\nigos\\.nuget\\packages\\microsoft.maccatalyst.runtime.maccatalyst-x64.net8.0_18.0\\18.0.8319\\microsoft.maccatalyst.runtime.maccatalyst-x64.net8.0_18.0.18.0.8319.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\microsoft.maccatalyst.ref.net8.0_18.0\\18.0.8319\\microsoft.maccatalyst.ref.net8.0_18.0.18.0.8319.nupkg.sha512",
+    "C:\\Users\\nigos\\.nuget\\packages\\microsoft.maccatalyst.runtime.maccatalyst-x64.net8.0_18.0\\18.0.8319\\microsoft.maccatalyst.runtime.maccatalyst-x64.net8.0_18.0.18.0.8319.nupkg.sha512",
     "C:\\Users\\nigos\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512"
   ],
   "logs": []

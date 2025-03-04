@@ -72,17 +72,35 @@ build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Auth.Rese
 build_metadata.AdditionalFiles.TargetPath = Views\Auth\ResetPasswordConfirmationPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\Auth\ResetPasswordConfirmationPage.xaml
 
+[D:/Développement/SubExplore/SubExplore/Views/Main/MagazinePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.MagazinePage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Main\MagazinePage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Main\MagazinePage.xaml
+
 [D:/Développement/SubExplore/SubExplore/Views/Main/MapPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.MapPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\Main\MapPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\Main\MapPage.xaml
 
+[D:/Développement/SubExplore/SubExplore/Views/Main/ProfilePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.ProfilePage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Main\ProfilePage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Main\ProfilePage.xaml
+
 [D:/Développement/SubExplore/SubExplore/Views/Main/SpotDetailsPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.SpotDetailsPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\Main\SpotDetailsPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\Main\SpotDetailsPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Main/SpotsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.SpotsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Main\SpotsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Main\SpotsPage.xaml
 
 [D:/Développement/SubExplore/SubExplore/Views/Main/StoryDetailsPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
@@ -95,6 +113,12 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.StructureDetailsPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\Main\StructureDetailsPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\Main\StructureDetailsPage.xaml
+
+[D:/Développement/SubExplore/SubExplore/Views/Main/StructuresPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = SubExplore.Views.Main.StructuresPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\Main\StructuresPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\Main\StructuresPage.xaml
 
 [D:/Développement/SubExplore/SubExplore/Views/Profile/ProfileEditPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml

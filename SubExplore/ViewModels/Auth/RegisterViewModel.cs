@@ -56,6 +56,10 @@ namespace SubExplore.ViewModels.Auth
         [ObservableProperty]
         private string _confirmPasswordVisibilityIcon = "eye.png";
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasError))]
+        private string _errorMessage = string.Empty;
+
         public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
         public bool IsEmailValid => string.IsNullOrEmpty(EmailValidationMessage);
         public bool IsUsernameValid => string.IsNullOrEmpty(UsernameValidationMessage);
@@ -180,10 +184,10 @@ namespace SubExplore.ViewModels.Auth
             bool isValid = true;
 
             // Valider tous les champs
-            isValid &= await ValidateEmailAsync();
-            isValid &= await ValidateUsernameAsync();
-            isValid &= await ValidatePasswordAsync();
-            isValid &= await ValidatePasswordsMatchAsync();
+            isValid &= await ValidateEmailInternalAsync();
+            isValid &= await ValidateUsernameInternalAsync();
+            isValid &= await ValidatePasswordInternalAsync();
+            isValid &= await ValidatePasswordsMatchInternalAsync();
             isValid &= ValidateRequiredFields();
             isValid &= ValidateTermsAccepted();
 
@@ -213,13 +217,15 @@ namespace SubExplore.ViewModels.Auth
             return true;
         }
 
+        // Méthode pour le binding XAML
         [RelayCommand]
-        private async Task ValidateEmailCommand()
+        private async Task ValidateEmailAsync()
         {
-            await ValidateEmailAsync();
+            await ValidateEmailInternalAsync();
         }
 
-        private async Task<bool> ValidateEmailAsync()
+        // Méthode interne avec retour booléen pour validation
+        private async Task<bool> ValidateEmailInternalAsync()
         {
             // Vider le message d'erreur précédent
             EmailValidationMessage = string.Empty;
@@ -250,13 +256,15 @@ namespace SubExplore.ViewModels.Auth
             return true;
         }
 
+        // Méthode pour le binding XAML
         [RelayCommand]
-        private async Task ValidateUsernameCommand()
+        private async Task ValidateUsernameAsync()
         {
-            await ValidateUsernameAsync();
+            await ValidateUsernameInternalAsync();
         }
 
-        private async Task<bool> ValidateUsernameAsync()
+        // Méthode interne avec retour booléen pour validation
+        private async Task<bool> ValidateUsernameInternalAsync()
         {
             // Vider le message d'erreur précédent
             UsernameValidationMessage = string.Empty;
@@ -287,13 +295,15 @@ namespace SubExplore.ViewModels.Auth
             return true;
         }
 
+        // Méthode pour le binding XAML
         [RelayCommand]
-        private async Task ValidatePasswordCommand()
+        private async Task ValidatePasswordAsync()
         {
-            await ValidatePasswordAsync();
+            await ValidatePasswordInternalAsync();
         }
 
-        private async Task<bool> ValidatePasswordAsync()
+        // Méthode interne avec retour booléen pour validation
+        private async Task<bool> ValidatePasswordInternalAsync()
         {
             // Vider le message d'erreur précédent
             PasswordValidationMessage = string.Empty;
@@ -319,13 +329,15 @@ namespace SubExplore.ViewModels.Auth
             return true;
         }
 
+        // Méthode pour le binding XAML
         [RelayCommand]
-        private async Task ValidatePasswordsMatchCommand()
+        private async Task ValidatePasswordsMatchAsync()
         {
-            await ValidatePasswordsMatchAsync();
+            await ValidatePasswordsMatchInternalAsync();
         }
 
-        private async Task<bool> ValidatePasswordsMatchAsync()
+        // Méthode interne avec retour booléen pour validation
+        private async Task<bool> ValidatePasswordsMatchInternalAsync()
         {
             // Vider le message d'erreur précédent
             PasswordMatchValidationMessage = string.Empty;

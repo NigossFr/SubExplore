@@ -1,0 +1,2101 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SubExplore</name>
+    </assembly>
+    <members>
+        <member name="T:SubExplore.Converters.InvertedBoolConverter">
+            <summary>
+            Convertit un booléen en sa valeur inversée
+            </summary>
+        </member>
+        <member name="T:SubExplore.Converters.BoolToVisibilityConverter">
+            <summary>
+            Convertit un booléen en visibilité
+            </summary>
+        </member>
+        <member name="T:SubExplore.Converters.LoadingToActivityIndicatorConverter">
+            <summary>
+            Convertit un état de chargement en visibilité d'activité
+            </summary>
+        </member>
+        <member name="T:SubExplore.Converters.StringToBoolConverter">
+            <summary>
+            Convertit une chaîne vide en valeur booléenne
+            </summary>
+        </member>
+        <member name="T:SubExplore.Converters.EnumToStringConverter">
+            <summary>
+            Convertit une énumération en chaîne de caractères
+            </summary>
+        </member>
+        <member name="T:SubExplore.Converters.EnumToBoolConverter">
+            <summary>
+            Convertit une énumération en booléen pour comparaison de valeurs
+            </summary>
+        </member>
+        <member name="M:SubExplore.Extensions.ValidationExtensions.IsValidEmail(System.String)">
+            <summary>
+            Vérifie si une chaîne est une adresse email valide
+            </summary>
+        </member>
+        <member name="M:SubExplore.Extensions.ValidationExtensions.IsValidUsername(System.String)">
+            <summary>
+            Vérifie si un nom d'utilisateur est valide (alphanumérique + _ -)
+            </summary>
+        </member>
+        <member name="M:SubExplore.Extensions.ValidationExtensions.ValidatePassword(System.String)">
+            <summary>
+            Valide la force du mot de passe
+            </summary>
+        </member>
+        <member name="M:SubExplore.Extensions.ValidationExtensions.GetPasswordStrength(System.String)">
+            <summary>
+            Vérifie si le mot de passe répond aux exigences de sécurité minimales
+            </summary>
+        </member>
+        <member name="M:SubExplore.Extensions.ValidationExtensions.IsValidUrl(System.String)">
+            <summary>
+            Vérifie si une URL est valide
+            </summary>
+        </member>
+        <member name="T:SubExplore.Models.Auth.LoginRequest">
+            <summary>
+            Requête d'inscription utilisateur pour l'API
+            </summary>
+        </member>
+        <member name="T:SubExplore.Models.DTOs.SpotSearchParameters">
+            <summary>
+            Paramètres de recherche pour les spots
+            </summary>
+        </member>
+        <member name="T:SubExplore.Models.DTOs.SpotFilter">
+            <summary>
+            Critères de filtrage pour la recherche de spots
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.SearchTerm">
+            <summary>
+            Terme de recherche (nom, description)
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.ActivityTypes">
+            <summary>
+            Liste des types d'activité à inclure
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.MinDepth">
+            <summary>
+            Profondeur minimale en mètres
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.MaxDepth">
+            <summary>
+            Profondeur maximale en mètres
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.DifficultyLevel">
+            <summary>
+            Niveau de difficulté
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.Latitude">
+            <summary>
+            Latitude du centre de recherche
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.Longitude">
+            <summary>
+            Longitude du centre de recherche
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.RadiusInKm">
+            <summary>
+            Rayon de recherche en kilomètres
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.ValidatedOnly">
+            <summary>
+            Si vrai, ne retourne que les spots validés
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.WithinCurrentArea">
+            <summary>
+            Si vrai, recherche dans la zone actuelle (position utilisateur)
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.FavoritesOnly">
+            <summary>
+            Si vrai, recherche dans les endroits favoris
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.VisitedOnly">
+            <summary>
+            Si vrai, recherche dans les endroits visités
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.SortBy">
+            <summary>
+            Type d'ordre pour les résultats
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.SortDescending">
+            <summary>
+            Si vrai, ordre descendant
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.PageNumber">
+            <summary>
+            Numéro de la page de résultats
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.DTOs.SpotFilter.PageSize">
+            <summary>
+            Nombre d'éléments par page
+            </summary>
+        </member>
+        <member name="M:SubExplore.Models.DTOs.SpotFilter.Reset">
+            <summary>
+            Réinitialise tous les critères de filtre
+            </summary>
+        </member>
+        <member name="T:SubExplore.Models.GeoCoordinates">
+            <summary>
+            Représente des coordonnées géographiques avec latitude, longitude et précision
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.GeoCoordinates.Latitude">
+            <summary>
+            Latitude du point géographique
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.GeoCoordinates.Longitude">
+            <summary>
+            Longitude du point géographique
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.GeoCoordinates.Accuracy">
+            <summary>
+            Précision des coordonnées (optionnel)
+            </summary>
+        </member>
+        <member name="M:SubExplore.Models.GeoCoordinates.#ctor">
+            <summary>
+            Constructeur par défaut
+            </summary>
+        </member>
+        <member name="M:SubExplore.Models.GeoCoordinates.#ctor(System.Double,System.Double,System.Nullable{System.Double})">
+            <summary>
+            Constructeur avec paramètres
+            </summary>
+            <param name="latitude">Latitude</param>
+            <param name="longitude">Longitude</param>
+            <param name="accuracy">Précision optionnelle</param>
+        </member>
+        <member name="M:SubExplore.Models.GeoCoordinates.DistanceTo(SubExplore.Models.GeoCoordinates)">
+            <summary>
+            Calcule la distance entre deux points géographiques
+            </summary>
+            <param name="other">Autres coordonnées</param>
+            <returns>Distance en kilomètres</returns>
+        </member>
+        <member name="M:SubExplore.Models.GeoCoordinates.ToRadians(System.Double)">
+            <summary>
+            Convertit des degrés en radians
+            </summary>
+        </member>
+        <member name="M:SubExplore.Models.GeoCoordinates.ToString">
+            <summary>
+            Représentation textuelle des coordonnées
+            </summary>
+        </member>
+        <member name="M:SubExplore.Models.GeoCoordinates.Equals(System.Object)">
+            <summary>
+            Vérifie l'égalité de deux coordonnées
+            </summary>
+        </member>
+        <member name="M:SubExplore.Models.GeoCoordinates.GetHashCode">
+            <summary>
+            Génère un code de hachage pour les coordonnées
+            </summary>
+        </member>
+        <member name="T:SubExplore.Models.Media.IMediaFile">
+            <summary>
+            Interface pour représenter un fichier média dans l'application mobile
+            Remplace l'usage de IFormFile
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.Media.IMediaFile.FileName">
+            <summary>
+            Nom du fichier
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.Media.IMediaFile.ContentType">
+            <summary>
+            Type de contenu (MIME)
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.Media.IMediaFile.Length">
+            <summary>
+            Taille du fichier en octets
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.Media.IMediaFile.Path">
+            <summary>
+            Chemin du fichier
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.Media.IMediaFile.MimeType">
+            <summary>
+            Type MIME du fichier
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.Media.IMediaFile.Size">
+            <summary>
+            Taille du fichier
+            </summary>
+        </member>
+        <member name="P:SubExplore.Models.Media.IMediaFile.IsPrimary">
+            <summary>
+            Indique si c'est le fichier principal
+            </summary>
+        </member>
+        <member name="M:SubExplore.Models.Media.IMediaFile.OpenReadStream">
+            <summary>
+            Ouvre un stream pour lire le contenu du fichier
+            </summary>
+        </member>
+        <member name="M:SubExplore.Models.Media.IMediaFile.CopyToAsync(System.IO.Stream,System.Threading.CancellationToken)">
+            <summary>
+            Copie le contenu du fichier vers un stream
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Extensions.ServiceExtensions">
+            <summary>
+            Extensions pour la configuration des services
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Extensions.ServiceExtensions.AddCacheService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Configure le service de cache
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Extensions.ServiceExtensions.AddSecureStorage(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Configure le service de stockage sécurisé
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Implementations.AuthenticationDelegatingHandler">
+            <summary>
+            Handler HTTP qui ajoute automatiquement le token d'authentification aux requêtes
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Implementations.MemoryCacheService">
+            <summary>
+            Implémentation du service de cache utilisant IMemoryCache
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Implementations.SecureStorageService">
+            <summary>
+            Implémentation du service de stockage sécurisé utilisant MAUI SecureStorage
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Implementations.SecureStorageException">
+            <summary>
+            Exception spécifique pour les erreurs de stockage sécurisé
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.IAuthenticationService">
+            <summary>
+            Interface du service d'authentification
+            </summary>
+        </member>
+        <member name="E:SubExplore.Services.Interfaces.IAuthenticationService.AuthenticationStateChanged">
+            <summary>
+            Événement déclenché lors des changements d'état d'authentification
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.LoginAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Authentifie un utilisateur avec email et mot de passe
+            </summary>
+            <param name="email">Email de l'utilisateur</param>
+            <param name="password">Mot de passe</param>
+            <param name="cancellationToken">Token d'annulation</param>
+            <returns>Token d'authentification et token de rafraîchissement</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.LoginWithOAuthAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Authentifie un utilisateur via un fournisseur OAuth
+            </summary>
+            <param name="provider">Fournisseur OAuth (Google, Facebook)</param>
+            <param name="token">Token OAuth</param>
+            <param name="cancellationToken">Token d'annulation</param>
+            <returns>Token d'authentification et token de rafraîchissement</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.RefreshTokenAsync(System.String)">
+            <summary>
+            Renouvelle les tokens d'authentification
+            </summary>
+            <param name="refreshToken">Token de rafraîchissement</param>
+            <returns>Nouveaux tokens</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.LogoutAsync">
+            <summary>
+            Déconnecte l'utilisateur
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.GetCurrentUserAsync">
+            <summary>
+            Obtient l'utilisateur actuellement connecté
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.CheckEmailExistsAsync(System.String)">
+            <summary>
+            Vérifie si un email existe dans la base de données
+            </summary>
+            <param name="email">Email à vérifier</param>
+            <returns>true si l'email existe</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.RevokeRefreshTokenAsync(System.String)">
+            <summary>
+            Révoque un token de rafraîchissement
+            </summary>
+            <param name="token">Token à révoquer</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.ValidateTokenAsync(System.String)">
+            <summary>
+            Vérifie si un token est valide
+            </summary>
+            <param name="token">Token à vérifier</param>
+            <returns>true si le token est valide</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.GeneratePasswordResetTokenAsync(System.String)">
+            <summary>
+            Génère un token de réinitialisation de mot de passe
+            </summary>
+            <param name="email">Email de l'utilisateur</param>
+            <returns>Token de réinitialisation</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.ResetPasswordAsync(System.String,System.String)">
+            <summary>
+            Valide un token de réinitialisation de mot de passe
+            </summary>
+            <param name="token">Token de réinitialisation</param>
+            <param name="newPassword">Nouveau mot de passe</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.GenerateEmailValidationTokenAsync(System.String)">
+            <summary>
+            Génère un token de validation d'email
+            </summary>
+            <param name="email">Email à valider</param>
+            <returns>Token de validation</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.ValidateEmailAsync(System.String)">
+            <summary>
+            Valide l'email d'un utilisateur
+            </summary>
+            <param name="token">Token de validation</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.IsInRoleAsync(System.Int32,System.String)">
+            <summary>
+            Vérifie si un utilisateur est dans un rôle spécifique
+            </summary>
+            <param name="userId">ID de l'utilisateur</param>
+            <param name="role">Rôle à vérifier</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.GetClaimsFromTokenAsync(System.String)">
+            <summary>
+            Récupère les claims d'un token
+            </summary>
+            <param name="token">Token JWT</param>
+            <returns>Collection de claims</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.IsEmailAvailableAsync(System.String)">
+            <summary>
+            Vérifie si un email existe dans la base de données
+            </summary>
+            <param name="email">Email à vérifier</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.IsUsernameAvailableAsync(System.String)">
+            <summary>
+            Vérifie si un nom d'utilisateur existe dans la base de données
+            </summary>
+            <param name="username">Nom d'utilisateur à vérifier</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.AreSocialProvidersAvailableAsync">
+            <summary>
+            Vérifie si les fournisseurs d'authentification sociale sont disponibles
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IAuthenticationService.RegisterAsync(SubExplore.Models.Auth.RegistrationRequest)">
+            <summary>
+            Enregistre un nouvel utilisateur
+            </summary>
+            <param name="userCreation">Données d'inscription</param>
+        </member>
+        <member name="P:SubExplore.Services.Interfaces.AuthenticationResult.AccessTokenExpiration">
+            <summary>
+            Date d'expiration du token d'accès
+            </summary>
+        </member>
+        <member name="P:SubExplore.Services.Interfaces.AuthenticationResult.TokenType">
+            <summary>
+            Type du token (Bearer)
+            </summary>
+        </member>
+        <member name="P:SubExplore.Services.Interfaces.AuthenticationResult.User">
+            <summary>
+            Informations basiques sur l'utilisateur
+            </summary>
+        </member>
+        <member name="P:SubExplore.Services.Interfaces.AuthenticationResult.Roles">
+            <summary>
+            Rôles de l'utilisateur
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.UserBasicInfo">
+            <summary>
+            Informations basiques sur l'utilisateur
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.ICacheService">
+            <summary>
+            Interface définissant les opérations de cache
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ICacheService.GetAsync``1(System.String)">
+            <summary>
+            Récupère une valeur du cache
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ICacheService.SetAsync``1(System.String,``0,System.Nullable{System.TimeSpan})">
+            <summary>
+            Stocke une valeur dans le cache
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ICacheService.RemoveAsync(System.String)">
+            <summary>
+            Supprime une valeur du cache
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ICacheService.ExistsAsync(System.String)">
+            <summary>
+            Vérifie si une clé existe dans le cache
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ICacheService.ClearAsync">
+            <summary>
+            Vide le cache
+            </summary>
+        </member>
+        <member name="P:SubExplore.Services.Interfaces.IConnectivityService.IsConnected">
+            <summary>
+            Vérifie si l'appareil est connecté à Internet
+            </summary>
+        </member>
+        <member name="P:SubExplore.Services.Interfaces.IConnectivityService.IsWifiConnected">
+            <summary>
+            Vérifie si l'appareil est connecté via Wi-Fi
+            </summary>
+        </member>
+        <member name="P:SubExplore.Services.Interfaces.IConnectivityService.IsCellularConnected">
+            <summary>
+            Vérifie si l'appareil est connecté via données cellulaires
+            </summary>
+        </member>
+        <member name="E:SubExplore.Services.Interfaces.IConnectivityService.ConnectivityChanged">
+            <summary>
+            Événement déclenché lors d'un changement de connectivité
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IConnectivityService.IsHostReachableAsync(System.String,System.Int32)">
+            <summary>
+            Vérifie la connectivité vers un hôte spécifique
+            </summary>
+            <param name="host">Hôte à vérifier</param>
+            <param name="timeout">Timeout en millisecondes</param>
+            <returns>true si l'hôte est accessible</returns>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.ConnectivityChangedEventArgs">
+            <summary>
+            Arguments pour l'événement de changement de connectivité
+            </summary>
+        </member>
+        <member name="P:SubExplore.Services.Interfaces.ConnectivityChangedEventArgs.IsConnected">
+            <summary>
+            État de la connectivité
+            </summary>
+        </member>
+        <member name="P:SubExplore.Services.Interfaces.ConnectivityChangedEventArgs.ConnectionType">
+            <summary>
+            Type de connexion
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.ILocationService">
+            <summary>
+            Interface du service de gestion des localisations
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.GeocodeAddressAsync(System.String)">
+            <summary>
+            Convertit une adresse en coordonnées géographiques
+            </summary>
+            <param name="address">Adresse à convertir</param>
+            <returns>Coordonnées géographiques</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.ReverseGeocodeAsync(System.Double,System.Double)">
+            <summary>
+            Convertit des coordonnées en adresse
+            </summary>
+            <param name="latitude">Latitude</param>
+            <param name="longitude">Longitude</param>
+            <returns>Détails de l'adresse</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.CalculateDistanceAsync(SubExplore.Models.GeoCoordinates,SubExplore.Models.GeoCoordinates)">
+            <summary>
+            Calcule la distance entre deux points
+            </summary>
+            <param name="point1">Premier point</param>
+            <param name="point2">Second point</param>
+            <returns>Distance en kilomètres</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.FindInRadiusAsync(SubExplore.Models.GeoCoordinates,System.Double,System.Nullable{SubExplore.Models.LocationType})">
+            <summary>
+            Trouve les points d'intérêt dans un rayon donné
+            </summary>
+            <param name="center">Point central</param>
+            <param name="radiusKm">Rayon en kilomètres</param>
+            <param name="type">Type de point d'intérêt (optionnel)</param>
+            <returns>Points d'intérêt trouvés avec leur distance</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.ClusterLocationsAsync(System.Collections.Generic.IEnumerable{SubExplore.Models.GeoCoordinates},System.Int32)">
+            <summary>
+            Optimise un ensemble de points pour l'affichage sur la carte
+            </summary>
+            <param name="points">Points à optimiser</param>
+            <param name="zoomLevel">Niveau de zoom</param>
+            <returns>Points optimisés et regroupés</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.GetApproximateDepthAsync(SubExplore.Models.GeoCoordinates)">
+            <summary>
+            Récupère la profondeur approximative à une position donnée
+            </summary>
+            <param name="coordinates">Coordonnées du point</param>
+            <returns>Profondeur en mètres</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.CheckProtectedAreaAsync(SubExplore.Models.GeoCoordinates)">
+            <summary>
+            Vérifie si une position est dans une zone protégée
+            </summary>
+            <param name="coordinates">Coordonnées à vérifier</param>
+            <returns>Informations sur la zone protégée si applicable</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.GetNearbyMooringPointsAsync(SubExplore.Models.GeoCoordinates,System.Double)">
+            <summary>
+            Récupère les points d'amarrage à proximité
+            </summary>
+            <param name="coordinates">Coordonnées du point</param>
+            <param name="radiusKm">Rayon de recherche</param>
+            <returns>Points d'amarrage trouvés</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.PreloadLocationDataAsync(SubExplore.Models.BoundingBox)">
+            <summary>
+            Met en cache les données de localisation pour une région
+            </summary>
+            <param name="boundingBox">Zone à mettre en cache</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.InvalidateLocationCacheAsync(SubExplore.Models.BoundingBox)">
+            <summary>
+            Invalide le cache pour une région spécifique
+            </summary>
+            <param name="boundingBox">Zone à invalider</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.ValidateMaritimeLocationAsync(SubExplore.Models.GeoCoordinates)">
+            <summary>
+            Valide si des coordonnées sont dans une zone maritime
+            </summary>
+            <param name="coordinates">Coordonnées à valider</param>
+            <returns>Résultat de la validation avec détails</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ILocationService.CheckLocationAccessibilityAsync(SubExplore.Models.GeoCoordinates)">
+            <summary>
+            Vérifie l'accessibilité d'une position
+            </summary>
+            <param name="coordinates">Coordonnées à vérifier</param>
+            <returns>Informations sur l'accessibilité</returns>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.IMediaService">
+            <summary>
+            Interface du service de gestion des médias
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.UploadAsync(SubExplore.Models.Media.IMediaFile,SubExplore.Services.Interfaces.MediaServiceType,System.Int32)">
+            <summary>
+            Upload un fichier média
+            </summary>
+            <param name="file">Fichier à uploader</param>
+            <param name="mediaType">Type de média (Spot, Story, Profile...)</param>
+            <param name="ownerId">ID du propriétaire</param>
+            <returns>Informations sur le média uploadé</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.UploadMultipleAsync(System.Collections.Generic.IEnumerable{SubExplore.Models.Media.IMediaFile},SubExplore.Services.Interfaces.MediaServiceType,System.Int32)">
+            <summary>
+            Upload multiple fichiers médias
+            </summary>
+            <param name="files">Collection de fichiers</param>
+            <param name="mediaType">Type de média</param>
+            <param name="ownerId">ID du propriétaire</param>
+            <returns>Liste des résultats d'upload</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.DeleteAsync(System.String,System.Int32)">
+            <summary>
+            Supprime un média
+            </summary>
+            <param name="mediaId">ID du média</param>
+            <param name="userId">ID de l'utilisateur effectuant la suppression</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.MoveToPermanentStorageAsync(System.String)">
+            <summary>
+            Déplace un média d'une location temporaire vers permanente
+            </summary>
+            <param name="mediaId">ID du média</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.GetUrlAsync(System.String,SubExplore.Services.Interfaces.MediaVariant)">
+            <summary>
+            Récupère l'URL d'accès à un média
+            </summary>
+            <param name="mediaId">ID du média</param>
+            <param name="variant">Variante souhaitée (thumbnail, medium, original)</param>
+            <returns>URL d'accès</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.GetMetadataAsync(System.String)">
+            <summary>
+            Récupère les métadonnées d'un média
+            </summary>
+            <param name="mediaId">ID du média</param>
+            <returns>Métadonnées du média</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.ExistsAsync(System.String)">
+            <summary>
+            Vérifie si un média existe
+            </summary>
+            <param name="mediaId">ID du média</param>
+            <returns>true si le média existe</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.UpdateMetadataAsync(System.String,SubExplore.Services.Interfaces.MediaMetadataUpdateDto)">
+            <summary>
+            Met à jour les métadonnées d'un média
+            </summary>
+            <param name="mediaId">ID du média</param>
+            <param name="metadata">Nouvelles métadonnées</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.GenerateVariantsAsync(System.String)">
+            <summary>
+            Génère les différentes variantes d'une image
+            </summary>
+            <param name="mediaId">ID du média</param>
+            <returns>URLs des variantes générées</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.OptimizeForWebAsync(System.String)">
+            <summary>
+            Optimise une image pour le web
+            </summary>
+            <param name="mediaId">ID du média</param>
+            <returns>URL de l'image optimisée</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.ModerateImageAsync(System.String)">
+            <summary>
+            Vérifie si une image est appropriée (pas de contenu inapproprié)
+            </summary>
+            <param name="mediaId">ID du média</param>
+            <returns>Résultat de la modération</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.ValidateFileAsync(SubExplore.Models.Media.IMediaFile)">
+            <summary>
+            Valide un fichier avant upload
+            </summary>
+            <param name="file">Fichier à valider</param>
+            <returns>Résultat de la validation</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.CheckAccessPermissionAsync(System.String,System.Int32)">
+            <summary>
+            Vérifie les permissions d'accès à un média
+            </summary>
+            <param name="mediaId">ID du média</param>
+            <param name="userId">ID de l'utilisateur</param>
+            <returns>true si l'accès est autorisé</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.IMediaService.CleanupTempFilesAsync">
+            <summary>
+            Nettoie les fichiers temporaires expirés
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.INavigationService">
+            <summary>
+            Interface du service de navigation
+            </summary>
+        </member>
+        <member name="E:SubExplore.Services.Interfaces.INavigationService.NavigationFailed">
+            <summary>
+            Événement déclenché en cas d'erreur de navigation
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.NavigateToAsync(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Navigue vers une page en utilisant son nom de route
+            </summary>
+            <param name="route">Nom de la route</param>
+            <param name="parameters">Paramètres de navigation (optionnel)</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.NavigateToAsync``1(SubExplore.Services.Interfaces.INavigationParameters)">
+            <summary>
+            Navigue vers une page
+            </summary>
+            <typeparam name="TViewModel">Type du ViewModel de destination</typeparam>
+            <param name="parameters">Paramètres de navigation (optionnel)</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.GoBackAsync(SubExplore.Services.Interfaces.INavigationParameters)">
+            <summary>
+            Retourne à la page précédente
+            </summary>
+            <param name="parameters">Paramètres à passer à la page précédente</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.GoToRootAsync">
+            <summary>
+            Retourne à la racine de la navigation
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.ShowModalAsync``1(SubExplore.Services.Interfaces.INavigationParameters)">
+            <summary>
+            Affiche une page en modal
+            </summary>
+            <typeparam name="TViewModel">Type du ViewModel de la modal</typeparam>
+            <param name="parameters">Paramètres de navigation (optionnel)</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.CloseModalAsync(System.Object)">
+            <summary>
+            Ferme la modal courante
+            </summary>
+            <param name="result">Résultat à retourner (optionnel)</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.NavigateToSpotDetailsAsync(System.Int32,System.String)">
+            <summary>
+            Navigue vers la page de détails d'un spot
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <param name="highlightFeature">Feature à mettre en avant (optionnel)</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.NavigateToSpotCreationAsync(SubExplore.Models.GeoCoordinates)">
+            <summary>
+            Navigue vers la page de création de spot
+            </summary>
+            <param name="initialCoordinates">Coordonnées initiales (optionnel)</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.NavigateToUserProfileAsync(System.Int32,System.String)">
+            <summary>
+            Navigue vers le profil d'un utilisateur
+            </summary>
+            <param name="userId">ID de l'utilisateur</param>
+            <param name="section">Section à afficher (optionnel)</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.NavigateToOrganizationAsync(System.Int32)">
+            <summary>
+            Navigue vers une structure
+            </summary>
+            <param name="organizationId">ID de la structure</param>
+        </member>
+        <member name="P:SubExplore.Services.Interfaces.INavigationService.CanGoBack">
+            <summary>
+            Vérifie si la navigation arrière est possible
+            </summary>
+        </member>
+        <member name="P:SubExplore.Services.Interfaces.INavigationService.NavigationHistory">
+            <summary>
+            Obtient l'historique de navigation
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.ConfigureTimeout(System.TimeSpan)">
+            <summary>
+            Configure le timeout de navigation
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.ConfigureErrorHandling(System.Action{SubExplore.Services.Interfaces.NavigationErrorEventArgs})">
+            <summary>
+            Configure la gestion des erreurs de navigation
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.HandleDeepLinkAsync(System.String)">
+            <summary>
+            Gère les deep links
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.SaveNavigationStateAsync">
+            <summary>
+            Enregistre l'état de navigation actuel
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.RestoreNavigationStateAsync(System.String)">
+            <summary>
+            Restaure un état de navigation
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.ConfigureRoutes(System.Collections.Generic.IDictionary{System.String,System.Type})">
+            <summary>
+            Configure les routes de l'application
+            </summary>
+            <param name="routes">Configuration des routes</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.INavigationService.ConfigureNavigation(SubExplore.Services.Interfaces.NavigationOptions)">
+            <summary>
+            Configure le comportement de la navigation
+            </summary>
+            <param name="options">Options de navigation</param>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.NavigationHistoryEntry">
+            <summary>
+            Entrée dans l'historique de navigation
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.NavigationOptions">
+            <summary>
+            Options de configuration de la navigation
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.NavigationAnimationOptions">
+            <summary>
+            Options d'animation pour la navigation
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.ISecureStorageService">
+            <summary>
+            Interface pour le stockage sécurisé des données sensibles
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISecureStorageService.SetAsync(System.String,System.String)">
+            <summary>
+            Stocke une valeur de manière sécurisée
+            </summary>
+            <param name="key">Clé d'accès</param>
+            <param name="value">Valeur à stocker</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISecureStorageService.GetAsync(System.String)">
+            <summary>
+            Récupère une valeur stockée
+            </summary>
+            <param name="key">Clé d'accès</param>
+            <returns>La valeur stockée ou null si non trouvée</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISecureStorageService.RemoveAsync(System.String)">
+            <summary>
+            Supprime une valeur stockée
+            </summary>
+            <param name="key">Clé d'accès</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISecureStorageService.ContainsKeyAsync(System.String)">
+            <summary>
+            Vérifie si une clé existe
+            </summary>
+            <param name="key">Clé à vérifier</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISecureStorageService.ClearAsync">
+            <summary>
+            Supprime toutes les valeurs stockées
+            </summary>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.ISettingsService">
+            <summary>
+            Interface du service de gestion des paramètres
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.GetSettingAsync``1(System.String,``0)">
+            <summary>
+            Obtient un paramètre
+            </summary>
+            <typeparam name="T">Type de la valeur</typeparam>
+            <param name="key">Clé du paramètre</param>
+            <param name="defaultValue">Valeur par défaut</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.SetSettingAsync``1(System.String,``0)">
+            <summary>
+            Définit un paramètre
+            </summary>
+            <typeparam name="T">Type de la valeur</typeparam>
+            <param name="key">Clé du paramètre</param>
+            <param name="value">Valeur à stocker</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.RemoveSettingAsync(System.String)">
+            <summary>
+            Supprime un paramètre
+            </summary>
+            <param name="key">Clé du paramètre</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.ContainsKeyAsync(System.String)">
+            <summary>
+            Vérifie si un paramètre existe
+            </summary>
+            <param name="key">Clé du paramètre</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.GetCurrentThemeAsync">
+            <summary>
+            Obtient le thème actuel
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.SetThemeAsync(SubExplore.Services.Interfaces.AppTheme)">
+            <summary>
+            Définit le thème de l'application
+            </summary>
+            <param name="theme">Thème à appliquer</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.GetFollowSystemThemeAsync">
+            <summary>
+            Obtient si le thème suit le système
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.SetFollowSystemThemeAsync(System.Boolean)">
+            <summary>
+            Active/désactive le suivi du thème système
+            </summary>
+            <param name="follow">true pour suivre le système</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.GetThemePreferenceAsync">
+            <summary>
+            Obtient la préférence de thème (sombre ou clair)
+            </summary>
+            <returns>true pour le thème sombre, false pour le thème clair</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.SetThemePreferenceAsync(System.Boolean)">
+            <summary>
+            Définit la préférence de thème
+            </summary>
+            <param name="isDarkTheme">true pour le thème sombre, false pour le thème clair</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.GetNotificationPreferencesAsync">
+            <summary>
+            Obtient les préférences de notification
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.UpdateNotificationPreferencesAsync(SubExplore.Services.Interfaces.NotificationPreferences)">
+            <summary>
+            Met à jour les préférences de notification
+            </summary>
+            <param name="preferences">Nouvelles préférences</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.IsNotificationEnabledAsync(SubExplore.Services.Interfaces.NotificationType)">
+            <summary>
+            Vérifie si les notifications sont autorisées pour un type donné
+            </summary>
+            <param name="notificationType">Type de notification</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.GetPrivacySettingsAsync">
+            <summary>
+            Obtient les paramètres de confidentialité
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.UpdatePrivacySettingsAsync(SubExplore.Services.Interfaces.PrivacySettings)">
+            <summary>
+            Met à jour les paramètres de confidentialité
+            </summary>
+            <param name="settings">Nouveaux paramètres</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.SetSecureStorageAsync``1(System.String,``0)">
+            <summary>
+            Stocke une information de manière sécurisée
+            </summary>
+            <typeparam name="T">Type de la donnée</typeparam>
+            <param name="key">Clé</param>
+            <param name="value">Valeur à stocker</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.GetSecureStorageAsync``1(System.String)">
+            <summary>
+            Récupère une information stockée de manière sécurisée
+            </summary>
+            <typeparam name="T">Type de la donnée</typeparam>
+            <param name="key">Clé</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.GetMapPreferencesAsync">
+            <summary>
+            Obtient les préférences de carte
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.UpdateMapPreferencesAsync(SubExplore.Services.Interfaces.MapPreferences)">
+            <summary>
+            Met à jour les préférences de carte
+            </summary>
+            <param name="preferences">Nouvelles préférences</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.GetLastKnownLocationAsync">
+            <summary>
+            Obtient la dernière position connue
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:SubExplore.Services.Interfaces.ISettingsService.SaveLastKnownLocationAsync(SubExplore.Models.GeoCoordinates)" -->
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.GetCacheSizeAsync">
+            <summary>
+            Obtient la taille actuelle du cache
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.ClearCacheAsync">
+            <summary>
+            Vide le cache de l'application
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.ConfigureCacheAsync(SubExplore.Services.Interfaces.CacheSettings)">
+            <summary>
+            Configure les paramètres de mise en cache
+            </summary>
+            <param name="settings">Paramètres de cache</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.ExportSettingsAsync">
+            <summary>
+            Exporte tous les paramètres
+            </summary>
+            <returns>Paramètres au format JSON</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISettingsService.ImportSettingsAsync(System.String)">
+            <summary>
+            Importe des paramètres
+            </summary>
+            <param name="settingsJson">Paramètres au format JSON</param>
+        </member>
+        <member name="T:SubExplore.Services.Interfaces.ISpotService">
+            <summary>
+            Interface du service de gestion des spots
+            </summary>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.GetByIdAsync(System.Int32)">
+            <summary>
+            Récupère un spot par son identifiant
+            </summary>
+            <param name="id">Identifiant du spot</param>
+            <returns>Le spot ou null</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.SearchAsync(SubExplore.Models.DTOs.SpotSearchParameters)">
+            <summary>
+            Recherche des spots par critères
+            </summary>
+            <param name="searchParams">Critères de recherche</param>
+            <returns>Liste des spots correspondants</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.GetNearbyAsync(System.Double,System.Double,System.Double,System.Int32)">
+            <summary>
+            Récupère les spots à proximité d'un point
+            </summary>
+            <param name="latitude">Latitude</param>
+            <param name="longitude">Longitude</param>
+            <param name="radiusInKm">Rayon de recherche en kilomètres</param>
+            <param name="maxResults">Nombre maximum de résultats</param>
+            <returns>Liste des spots à proximité</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.GetCachedSpotsAsync(SubExplore.Models.DTOs.SpotFilter)">
+            <summary>
+            Récupère les spots filtrés depuis le cache local (mode hors-ligne)
+            </summary>
+            <param name="filter">Critères de filtrage</param>
+            <returns>Liste des spots correspondants</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.GetSpotsAsync(SubExplore.Models.DTOs.SpotFilter)">
+            <summary>
+            Récupère les spots filtrés (version simplifiée)
+            </summary>
+            <param name="filter">Critères de filtrage</param>
+            <returns>Liste des spots correspondants</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.CreateAsync(SubExplore.Models.DTOs.SpotCreationDto,System.Int32)">
+            <summary>
+            Crée un nouveau spot
+            </summary>
+            <param name="spotCreation">Données du spot</param>
+            <param name="userId">ID de l'utilisateur créateur</param>
+            <returns>Le spot créé</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.UpdateAsync(System.Int32,SubExplore.Models.DTOs.SpotUpdateDto,System.Int32)">
+            <summary>
+            Met à jour un spot existant
+            </summary>
+            <param name="id">ID du spot</param>
+            <param name="spotUpdate">Nouvelles données</param>
+            <param name="userId">ID de l'utilisateur effectuant la modification</param>
+            <returns>Le spot mis à jour</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.DeleteAsync(System.Int32,System.Int32)">
+            <summary>
+            Supprime un spot
+            </summary>
+            <param name="id">ID du spot</param>
+            <param name="userId">ID de l'utilisateur effectuant la suppression</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.AddMediaAsync(System.Int32,SubExplore.Models.DTOs.SpotMediaUploadDto,System.Int32)">
+            <summary>
+            Ajoute un média à un spot
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <param name="mediaUpload">Fichier média</param>
+            <param name="userId">ID de l'utilisateur</param>
+            <returns>Le média créé</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.GetMediaAsync(System.Int32)">
+            <summary>
+            Récupère les médias d'un spot
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <returns>Liste des médias</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.DeleteMediaAsync(System.Int32,System.Int32)">
+            <summary>
+            Supprime un média
+            </summary>
+            <param name="mediaId">ID du média</param>
+            <param name="userId">ID de l'utilisateur</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.SubmitForValidationAsync(System.Int32)">
+            <summary>
+            Soumet un spot pour validation
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <returns>true si la soumission est réussie</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.ValidateSpotAsync(System.Int32,System.Int32,SubExplore.Models.DTOs.SpotValidationDto)">
+            <summary>
+            Valide un spot par un modérateur
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <param name="moderatorId">ID du modérateur</param>
+            <param name="validationDetails">Détails de la validation</param>
+            <returns>true si la validation est réussie</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.RejectSpotAsync(System.Int32,System.Int32,SubExplore.Models.DTOs.SpotRejectionDto)">
+            <summary>
+            Rejette un spot par un modérateur
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <param name="moderatorId">ID du modérateur</param>
+            <param name="rejectionDetails">Détails du rejet</param>
+            <returns>true si le rejet est réussi</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.ReportSpotAsync(System.Int32,SubExplore.Models.DTOs.SpotReportDto,System.Int32)">
+            <summary>
+            Signale un problème sur un spot
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <param name="reportDetails">Détails du signalement</param>
+            <param name="userId">ID de l'utilisateur signalant</param>
+            <returns>ID du rapport créé</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.RateSpotAsync(System.Int32,SubExplore.Models.DTOs.SpotRatingDto,System.Int32)">
+            <summary>
+            Ajoute une évaluation pour un spot
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <param name="rating">Évaluation</param>
+            <param name="userId">ID de l'utilisateur</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.GetRatingStatsAsync(System.Int32)">
+            <summary>
+            Récupère la note moyenne d'un spot
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <returns>Note moyenne et nombre d'évaluations</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.GetVisitStatsAsync(System.Int32)">
+            <summary>
+            Récupère les statistiques de visite d'un spot
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <returns>Statistiques de visite</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.LogVisitAsync(System.Int32,System.Int32)">
+            <summary>
+            Enregistre une visite sur un spot
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <param name="userId">ID de l'utilisateur</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.UpdateCurrentConditionsAsync(System.Int32,SubExplore.Models.DTOs.SpotConditionsDto,System.Int32)">
+            <summary>
+            Met à jour les conditions actuelles d'un spot
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <param name="conditions">Nouvelles conditions</param>
+            <param name="userId">ID de l'utilisateur</param>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.GetCurrentConditionsAsync(System.Int32)">
+            <summary>
+            Récupère les conditions actuelles d'un spot
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <returns>Conditions actuelles</returns>
+        </member>
+        <member name="M:SubExplore.Services.Interfaces.ISpotService.UpdateSecurityStatusAsync(System.Int32,SubExplore.Models.DTOs.SpotSecurityUpdateDto,System.Int32)">
+            <summary>
+            Met à jour le statut de sécurité d'un spot
+            </summary>
+            <param name="spotId">ID du spot</param>
+            <param name="securityUpdate">Mise à jour de sécurité</param>
+            <param name="moderatorId">ID du modérateur</param>
+        </member>
+        <member name="T:SubExplore.ViewModels.AppShellViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SubExplore.ViewModels.AppShellViewModel.IsUserLoggedIn">
+            <inheritdoc cref="F:SubExplore.ViewModels.AppShellViewModel._isUserLoggedIn"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.AppShellViewModel.Username">
+            <inheritdoc cref="F:SubExplore.ViewModels.AppShellViewModel._username"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.AppShellViewModel.IsDarkTheme">
+            <inheritdoc cref="F:SubExplore.ViewModels.AppShellViewModel._isDarkTheme"/>
+        </member>
+        <member name="F:SubExplore.ViewModels.AppShellViewModel.navigateToProfileCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.AppShellViewModel.NavigateToProfileCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.AppShellViewModel.NavigateToProfileCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.AppShellViewModel.NavigateToProfileAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.AppShellViewModel.navigateToMapCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.AppShellViewModel.NavigateToMapCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.AppShellViewModel.NavigateToMapCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.AppShellViewModel.NavigateToMapAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.AppShellViewModel.navigateToMagazineCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.AppShellViewModel.NavigateToMagazineCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.AppShellViewModel.NavigateToMagazineCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.AppShellViewModel.NavigateToMagazineAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.AppShellViewModel.navigateToStructuresCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.AppShellViewModel.NavigateToStructuresCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.AppShellViewModel.NavigateToStructuresCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.AppShellViewModel.NavigateToStructuresAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.AppShellViewModel.logoutCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.AppShellViewModel.LogoutCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.AppShellViewModel.LogoutCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.AppShellViewModel.LogoutAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.AppShellViewModel.toggleThemeCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.AppShellViewModel.ToggleThemeCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.AppShellViewModel.ToggleThemeCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.AppShellViewModel.ToggleThemeAsync"/>.</summary>
+        </member>
+        <member name="T:SubExplore.ViewModels.Auth.ForgotPasswordViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.ForgotPasswordModel">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.ForgotPasswordViewModel._forgotPasswordModel"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.SubmitButtonText">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.ForgotPasswordViewModel._submitButtonText"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.IsEmailSent">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.ForgotPasswordViewModel._isEmailSent"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.EmailValidationMessage">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.ForgotPasswordViewModel._emailValidationMessage"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.SuccessMessage">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.ForgotPasswordViewModel._successMessage"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.ErrorMessage">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.ForgotPasswordViewModel._errorMessage"/>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.sendResetLinkCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.SendResetLinkCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.SendResetLinkCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.SendResetLinkAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.navigateToLoginCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.NavigateToLoginCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.NavigateToLoginCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.NavigateToLoginAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.checkEmailExistsCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.CheckEmailExistsCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.CheckEmailExistsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.ForgotPasswordViewModel.CheckEmailExistsAsync"/>.</summary>
+        </member>
+        <member name="T:SubExplore.ViewModels.Auth.LoginViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.LoginViewModel.LoginModel">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.LoginViewModel._loginModel"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.LoginViewModel.IsPasswordVisible">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.LoginViewModel._isPasswordVisible"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.LoginViewModel.LoginButtonText">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.LoginViewModel._loginButtonText"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.LoginViewModel.IsSocialLoginEnabled">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.LoginViewModel._isSocialLoginEnabled"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.LoginViewModel.PasswordVisibilityIcon">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.LoginViewModel._passwordVisibilityIcon"/>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.LoginViewModel.togglePasswordCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.LoginViewModel.TogglePasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.LoginViewModel.TogglePasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.LoginViewModel.TogglePassword"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.LoginViewModel.loginCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.LoginViewModel.LoginCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.LoginViewModel.LoginCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.LoginViewModel.LoginAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.LoginViewModel.navigateToRegisterCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.LoginViewModel.NavigateToRegisterCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.LoginViewModel.NavigateToRegisterCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.LoginViewModel.NavigateToRegisterAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.LoginViewModel.navigateToForgotPasswordCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.LoginViewModel.NavigateToForgotPasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.LoginViewModel.NavigateToForgotPasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.LoginViewModel.NavigateToForgotPasswordAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.LoginViewModel.loginWithProviderCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.LoginViewModel.LoginWithProviderCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.LoginViewModel.LoginWithProviderCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.LoginViewModel.LoginWithProviderAsync(System.String)"/>.</summary>
+        </member>
+        <member name="T:SubExplore.ViewModels.Auth.RegisterViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.RegistrationModel">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._registrationModel"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.IsPasswordVisible">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._isPasswordVisible"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.IsConfirmPasswordVisible">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._isConfirmPasswordVisible"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.RegisterButtonText">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._registerButtonText"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.EmailValidationMessage">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._emailValidationMessage"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.UsernameValidationMessage">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._usernameValidationMessage"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.PasswordValidationMessage">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._passwordValidationMessage"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.PasswordMatchValidationMessage">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._passwordMatchValidationMessage"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.PasswordStrength">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._passwordStrength"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.PasswordVisibilityIcon">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._passwordVisibilityIcon"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.ConfirmPasswordVisibilityIcon">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._confirmPasswordVisibilityIcon"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.ErrorMessage">
+            <inheritdoc cref="F:SubExplore.ViewModels.Auth.RegisterViewModel._errorMessage"/>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.RegisterViewModel.togglePasswordCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.RegisterViewModel.TogglePasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.TogglePasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.RegisterViewModel.TogglePassword"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.RegisterViewModel.toggleConfirmPasswordCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.RegisterViewModel.ToggleConfirmPasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.ToggleConfirmPasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.RegisterViewModel.ToggleConfirmPassword"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.RegisterViewModel.registerCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.RegisterViewModel.RegisterCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.RegisterCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.RegisterViewModel.RegisterAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.RegisterViewModel.validateEmailCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.RegisterViewModel.ValidateEmailCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.ValidateEmailCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.RegisterViewModel.ValidateEmailAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.RegisterViewModel.validateUsernameCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.RegisterViewModel.ValidateUsernameCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.ValidateUsernameCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.RegisterViewModel.ValidateUsernameAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.RegisterViewModel.validatePasswordCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.RegisterViewModel.ValidatePasswordCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.ValidatePasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.RegisterViewModel.ValidatePasswordAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.RegisterViewModel.validatePasswordsMatchCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.RegisterViewModel.ValidatePasswordsMatchCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.ValidatePasswordsMatchCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.RegisterViewModel.ValidatePasswordsMatchAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.RegisterViewModel.navigateToLoginCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.RegisterViewModel.NavigateToLoginCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.NavigateToLoginCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.RegisterViewModel.NavigateToLoginAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.RegisterViewModel.showTermsAndConditionsCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.RegisterViewModel.ShowTermsAndConditionsCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.RegisterViewModel.ShowTermsAndConditionsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.RegisterViewModel.ShowTermsAndConditionsAsync"/>.</summary>
+        </member>
+        <member name="T:SubExplore.ViewModels.Auth.ResetPasswordConfirmationViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="F:SubExplore.ViewModels.Auth.ResetPasswordConfirmationViewModel.navigateToLoginCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Auth.ResetPasswordConfirmationViewModel.NavigateToLoginCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Auth.ResetPasswordConfirmationViewModel.NavigateToLoginCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Auth.ResetPasswordConfirmationViewModel.NavigateToLoginAsync"/>.</summary>
+        </member>
+        <member name="T:SubExplore.ViewModels.Base.ViewModelBase">
+            <inheritdoc/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Base.ViewModelBase.IsLoading">
+            <inheritdoc cref="F:SubExplore.ViewModels.Base.ViewModelBase._isLoading"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Base.ViewModelBase.IsBusy">
+            <inheritdoc cref="F:SubExplore.ViewModels.Base.ViewModelBase._isBusy"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Base.ViewModelBase.Title">
+            <inheritdoc cref="F:SubExplore.ViewModels.Base.ViewModelBase._title"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Base.ViewModelBase.IsRefreshing">
+            <inheritdoc cref="F:SubExplore.ViewModels.Base.ViewModelBase._isRefreshing"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Base.ViewModelBase.IsEmpty">
+            <inheritdoc cref="F:SubExplore.ViewModels.Base.ViewModelBase._isEmpty"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Base.ViewModelBase.IsError">
+            <inheritdoc cref="F:SubExplore.ViewModels.Base.ViewModelBase._isError"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Base.ViewModelBase.ErrorMessage">
+            <inheritdoc cref="F:SubExplore.ViewModels.Base.ViewModelBase._errorMessage"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Base.ViewModelBase.CanNavigateBack">
+            <inheritdoc cref="F:SubExplore.ViewModels.Base.ViewModelBase._canNavigateBack"/>
+        </member>
+        <member name="T:SubExplore.ViewModels.Main.MapViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.Spots">
+            <inheritdoc cref="F:SubExplore.ViewModels.Main.MapViewModel._spots"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.IsLocationAvailable">
+            <inheritdoc cref="F:SubExplore.ViewModels.Main.MapViewModel._isLocationAvailable"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.ActiveFilter">
+            <inheritdoc cref="F:SubExplore.ViewModels.Main.MapViewModel._activeFilter"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.IsFilterPanelVisible">
+            <inheritdoc cref="F:SubExplore.ViewModels.Main.MapViewModel._isFilterPanelVisible"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.IsOfflineMode">
+            <inheritdoc cref="F:SubExplore.ViewModels.Main.MapViewModel._isOfflineMode"/>
+        </member>
+        <member name="F:SubExplore.ViewModels.Main.MapViewModel.loadSpotsCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Main.MapViewModel.LoadSpotsCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.LoadSpotsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Main.MapViewModel.LoadSpotsAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Main.MapViewModel.spotSelectedCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Main.MapViewModel.SpotSelectedCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.SpotSelectedCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:SubExplore.ViewModels.Main.MapViewModel.SpotSelectedAsync(SubExplore.Models.SpotMarker)"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Main.MapViewModel.addSpotCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Main.MapViewModel.AddSpotCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.AddSpotCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Main.MapViewModel.AddSpotAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Main.MapViewModel.toggleFilterPanelCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Main.MapViewModel.ToggleFilterPanelCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.ToggleFilterPanelCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Main.MapViewModel.ToggleFilterPanel"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Main.MapViewModel.applyFilterCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Main.MapViewModel.ApplyFilterCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.ApplyFilterCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Main.MapViewModel.ApplyFilterAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Main.MapViewModel.resetFilterCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Main.MapViewModel.ResetFilterCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.ResetFilterCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Main.MapViewModel.ResetFilterAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Main.MapViewModel.centerOnLocationCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Main.MapViewModel.CenterOnLocationCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.MapViewModel.CenterOnLocationCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Main.MapViewModel.CenterOnLocationAsync"/>.</summary>
+        </member>
+        <member name="T:SubExplore.ViewModels.Main.SpotDetailsViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.SpotDetailsViewModel.SpotName">
+            <inheritdoc cref="F:SubExplore.ViewModels.Main.SpotDetailsViewModel._spotName"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.SpotDetailsViewModel.SpotDescription">
+            <inheritdoc cref="F:SubExplore.ViewModels.Main.SpotDetailsViewModel._spotDescription"/>
+        </member>
+        <member name="F:SubExplore.ViewModels.Main.SpotDetailsViewModel.goBackCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Main.SpotDetailsViewModel.GoBackCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.SpotDetailsViewModel.GoBackCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Main.SpotDetailsViewModel.GoBackAsync"/>.</summary>
+        </member>
+        <member name="T:SubExplore.ViewModels.Main.StoryDetailsViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="F:SubExplore.ViewModels.Main.StoryDetailsViewModel.goBackCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Main.StoryDetailsViewModel.GoBackCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.StoryDetailsViewModel.GoBackCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Main.StoryDetailsViewModel.GoBackAsync"/>.</summary>
+        </member>
+        <member name="T:SubExplore.ViewModels.Main.StructureDetailsViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="F:SubExplore.ViewModels.Main.StructureDetailsViewModel.goBackCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Main.StructureDetailsViewModel.GoBackCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Main.StructureDetailsViewModel.GoBackCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Main.StructureDetailsViewModel.GoBackAsync"/>.</summary>
+        </member>
+        <member name="T:SubExplore.ViewModels.Profile.ProfileEditViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="F:SubExplore.ViewModels.Profile.ProfileEditViewModel.saveCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Profile.ProfileEditViewModel.SaveCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Profile.ProfileEditViewModel.SaveCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Profile.ProfileEditViewModel.SaveAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Profile.ProfileEditViewModel.cancelCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Profile.ProfileEditViewModel.CancelCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Profile.ProfileEditViewModel.CancelCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Profile.ProfileEditViewModel.CancelAsync"/>.</summary>
+        </member>
+        <member name="T:SubExplore.ViewModels.Settings.SettingsViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Settings.SettingsViewModel.IsDarkTheme">
+            <inheritdoc cref="F:SubExplore.ViewModels.Settings.SettingsViewModel._isDarkTheme"/>
+        </member>
+        <member name="M:SubExplore.ViewModels.Settings.SettingsViewModel.OnIsDarkThemeChanged(System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:SubExplore.ViewModels.Settings.SettingsViewModel.IsDarkTheme"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:SubExplore.ViewModels.Settings.SettingsViewModel.IsDarkTheme"/> is changed.</remarks>
+        </member>
+        <member name="F:SubExplore.ViewModels.Settings.SettingsViewModel.goBackCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Settings.SettingsViewModel.GoBackCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Settings.SettingsViewModel.GoBackCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Settings.SettingsViewModel.GoBackAsync"/>.</summary>
+        </member>
+        <member name="T:SubExplore.ViewModels.Spot.AddSpotViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Spot.AddSpotViewModel.Spot">
+            <inheritdoc cref="F:SubExplore.ViewModels.Spot.AddSpotViewModel._spot"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Spot.AddSpotViewModel.IsLocationValid">
+            <inheritdoc cref="F:SubExplore.ViewModels.Spot.AddSpotViewModel._isLocationValid"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Spot.AddSpotViewModel.Photos">
+            <inheritdoc cref="F:SubExplore.ViewModels.Spot.AddSpotViewModel._photos"/>
+        </member>
+        <member name="P:SubExplore.ViewModels.Spot.AddSpotViewModel.HasUnsavedChanges">
+            <inheritdoc cref="F:SubExplore.ViewModels.Spot.AddSpotViewModel._hasUnsavedChanges"/>
+        </member>
+        <member name="F:SubExplore.ViewModels.Spot.AddSpotViewModel.submitCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Spot.AddSpotViewModel.SubmitCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Spot.AddSpotViewModel.SubmitCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Spot.AddSpotViewModel.SubmitAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Spot.AddSpotViewModel.addPhotosCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Spot.AddSpotViewModel.AddPhotosCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Spot.AddSpotViewModel.AddPhotosCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:SubExplore.ViewModels.Spot.AddSpotViewModel.AddPhotosAsync"/>.</summary>
+        </member>
+        <member name="F:SubExplore.ViewModels.Spot.AddSpotViewModel.removePhotoCommand">
+            <summary>The backing field for <see cref="P:SubExplore.ViewModels.Spot.AddSpotViewModel.RemovePhotoCommand"/>.</summary>
+        </member>
+        <member name="P:SubExplore.ViewModels.Spot.AddSpotViewModel.RemovePhotoCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand`1"/> instance wrapping <see cref="M:SubExplore.ViewModels.Spot.AddSpotViewModel.RemovePhoto(SubExplore.Models.Media.IMediaFile)"/>.</summary>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Button.TextColorTo(Microsoft.Maui.Controls.Button,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_DatePicker.TextColorTo(Microsoft.Maui.Controls.DatePicker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Editor.TextColorTo(Microsoft.Maui.Controls.Editor,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Entry.TextColorTo(Microsoft.Maui.Controls.Entry,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_InputView.TextColorTo(Microsoft.Maui.Controls.InputView,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Label.TextColorTo(Microsoft.Maui.Controls.Label,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_Picker.TextColorTo(Microsoft.Maui.Controls.Picker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_RadioButton.TextColorTo(Microsoft.Maui.Controls.RadioButton,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_SearchBar.TextColorTo(Microsoft.Maui.Controls.SearchBar,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="M:Microsoft.Maui.Controls.ColorAnimationExtensions_TimePicker.TextColorTo(Microsoft.Maui.Controls.TimePicker,Microsoft.Maui.Graphics.Color,System.UInt32,System.UInt32,Microsoft.Maui.Easing,System.Threading.CancellationToken)">
+            <summary>
+            Animates the TextColor of an <see cref = "T:Microsoft.Maui.ITextStyle"/> to the given color
+            </summary>
+            <param name = "element"></param>
+            <param name = "color">The target color to animate the <see cref = "P:Microsoft.Maui.ITextStyle.TextColor"/> to</param>
+            <param name = "rate">The time, in milliseconds, between the frames of the animation</param>
+            <param name = "length">The duration, in milliseconds, of the animation</param>
+            <param name = "easing">The easing function to be used in the animation</param>
+            <param name = "token"><see cref = "T:System.Threading.CancellationToken"/></param>
+            <returns>Value indicating if the animation completed successfully or not</returns>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsUserLoggedIn">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsUserLoggedIn" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Username">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Username" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsDarkTheme">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsDarkTheme" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ForgotPasswordModel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ForgotPasswordModel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SubmitButtonText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SubmitButtonText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsEmailSent">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsEmailSent" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.EmailValidationMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "EmailValidationMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SuccessMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SuccessMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ErrorMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ErrorMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LoginModel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LoginModel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsPasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsPasswordVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LoginButtonText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LoginButtonText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsSocialLoginEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsSocialLoginEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PasswordVisibilityIcon">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PasswordVisibilityIcon" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.RegistrationModel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "RegistrationModel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsConfirmPasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsConfirmPasswordVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.RegisterButtonText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "RegisterButtonText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UsernameValidationMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UsernameValidationMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PasswordValidationMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PasswordValidationMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PasswordMatchValidationMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PasswordMatchValidationMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PasswordStrength">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PasswordStrength" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ConfirmPasswordVisibilityIcon">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ConfirmPasswordVisibilityIcon" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBusy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Title">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Title" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsRefreshing">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsRefreshing" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsEmpty">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsEmpty" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CanNavigateBack">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CanNavigateBack" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Spots">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Spots" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLocationAvailable">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLocationAvailable" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ActiveFilter">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ActiveFilter" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsFilterPanelVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsFilterPanelVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsOfflineMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsOfflineMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SpotName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SpotName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SpotDescription">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SpotDescription" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Spot">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Spot" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLocationValid">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLocationValid" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Photos">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Photos" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.HasUnsavedChanges">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "HasUnsavedChanges" generated properties.</summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsUserLoggedIn">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsUserLoggedIn" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Username">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Username" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsDarkTheme">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsDarkTheme" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ForgotPasswordModel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ForgotPasswordModel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SubmitButtonText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SubmitButtonText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsEmailSent">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsEmailSent" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.EmailValidationMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "EmailValidationMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsEmailValid">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsEmailValid" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasEmailError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasEmailError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SuccessMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SuccessMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ErrorMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ErrorMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LoginModel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LoginModel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsPasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsPasswordVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LoginButtonText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LoginButtonText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsSocialLoginEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsSocialLoginEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PasswordVisibilityIcon">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PasswordVisibilityIcon" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.RegistrationModel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "RegistrationModel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsConfirmPasswordVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsConfirmPasswordVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.RegisterButtonText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "RegisterButtonText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UsernameValidationMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UsernameValidationMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsUsernameValid">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsUsernameValid" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasUsernameError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasUsernameError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PasswordValidationMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PasswordValidationMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsPasswordValid">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsPasswordValid" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasPasswordError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasPasswordError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PasswordMatchValidationMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PasswordMatchValidationMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsPasswordsMatch">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsPasswordsMatch" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasPasswordMatchError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasPasswordMatchError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PasswordStrength">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PasswordStrength" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ConfirmPasswordVisibilityIcon">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ConfirmPasswordVisibilityIcon" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBusy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsNotBusy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsNotBusy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Title">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Title" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsRefreshing">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsRefreshing" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsEmpty">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsEmpty" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CanNavigateBack">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CanNavigateBack" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Spots">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Spots" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLocationAvailable">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLocationAvailable" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ActiveFilter">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ActiveFilter" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CanApplyFilter">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CanApplyFilter" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsFilterPanelVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsFilterPanelVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsOfflineMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsOfflineMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SpotName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SpotName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SpotDescription">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SpotDescription" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Spot">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Spot" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLocationValid">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLocationValid" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Photos">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Photos" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasUnsavedChanges">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasUnsavedChanges" generated properties.</summary>
+        </member>
+    </members>
+</doc>

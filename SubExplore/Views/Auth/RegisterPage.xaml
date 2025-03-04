@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:converters="clr-namespace:SubExplore.Converters"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewmodels="clr-namespace:SubExplore.ViewModels.Auth"
     x:DataType="viewmodels:RegisterViewModel"
     BackgroundColor="{StaticResource Background}"
@@ -179,8 +180,8 @@
                                             Style="{StaticResource EntryStyle}"
                                             Text="{Binding RegistrationModel.Email}">
                                             <Entry.Behaviors>
-                                                <EventToCommandBehavior Command="{Binding ValidateEmailCommand}" EventName="Completed" />
-                                                <EventToCommandBehavior Command="{Binding ValidateEmailCommand}" EventName="Unfocused" />
+                                                <toolkit:EventToCommandBehavior Command="{Binding ValidateEmailCommand}" EventName="Completed" />
+                                                <toolkit:EventToCommandBehavior Command="{Binding ValidateEmailCommand}" EventName="Unfocused" />
                                             </Entry.Behaviors>
                                         </Entry>
                                         <Image
@@ -214,8 +215,8 @@
                                             Style="{StaticResource EntryStyle}"
                                             Text="{Binding RegistrationModel.Username}">
                                             <Entry.Behaviors>
-                                                <EventToCommandBehavior Command="{Binding ValidateUsernameCommand}" EventName="Completed" />
-                                                <EventToCommandBehavior Command="{Binding ValidateUsernameCommand}" EventName="Unfocused" />
+                                                <toolkit:EventToCommandBehavior Command="{Binding ValidateUsernameCommand}" EventName="Completed" />
+                                                <toolkit:EventToCommandBehavior Command="{Binding ValidateUsernameCommand}" EventName="Unfocused" />
                                             </Entry.Behaviors>
                                         </Entry>
                                         <Image
@@ -250,7 +251,7 @@
                                             Style="{StaticResource EntryStyle}"
                                             Text="{Binding RegistrationModel.Password}">
                                             <Entry.Behaviors>
-                                                <EventToCommandBehavior Command="{Binding ValidatePasswordCommand}" EventName="TextChanged" />
+                                                <toolkit:EventToCommandBehavior Command="{Binding ValidatePasswordCommand}" EventName="TextChanged" />
                                             </Entry.Behaviors>
                                         </Entry>
                                         <ImageButton
@@ -296,7 +297,7 @@
                                             Style="{StaticResource EntryStyle}"
                                             Text="{Binding RegistrationModel.ConfirmPassword}">
                                             <Entry.Behaviors>
-                                                <EventToCommandBehavior Command="{Binding ValidatePasswordsMatchCommand}" EventName="TextChanged" />
+                                                <toolkit:EventToCommandBehavior Command="{Binding ValidatePasswordsMatchCommand}" EventName="TextChanged" />
                                             </Entry.Behaviors>
                                         </Entry>
                                         <ImageButton

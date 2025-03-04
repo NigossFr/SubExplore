@@ -1,0 +1,1 @@
+D:\Développement\SubExplore\SubExplore\SubExplore.csproj;x64
