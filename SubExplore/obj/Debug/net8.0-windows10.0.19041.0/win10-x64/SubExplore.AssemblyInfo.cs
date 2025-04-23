@@ -18,7 +18,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SubExplore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+0fd1f63615bc9339df7e8866036bd09ff469f22c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+5235cfdedf8cfa19e5a60482bcd15b10c3741922")]
 [assembly: System.Reflection.AssemblyProductAttribute("SubExplore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SubExplore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

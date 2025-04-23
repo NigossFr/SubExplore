@@ -24,6 +24,12 @@ using Microsoft.Maui.Devices.Sensors;
 using Microsoft.Maui.ApplicationModel;
 using SubExplore.Models;
 using CommunityToolkit.Maui;
+using Microsoft.EntityFrameworkCore;
+using SubExplore.Data;
+using Microsoft.Extensions.Configuration;
+using System.Reflection;
+using System.IO;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace SubExplore;
 
@@ -42,8 +48,17 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
+        // Chargement de la configuration
+        var assembly = Assembly.GetExecutingAssembly();
+        using var stream = assembly.GetManifestResourceStream("SubExplore.appsettings.json");
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: true)
+            .Build();
+
+        builder.Configuration.AddConfiguration(configuration);
+
         // Configuration des services
-        RegisterServices(builder.Services);
+        RegisterServices(builder.Services, configuration);
 
         // Configuration des ViewModels
         RegisterViewModels(builder.Services);
@@ -55,16 +70,40 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        return builder.Build();
+        var app = builder.Build();
+
+        // Initialiser la base de données si nécessaire
+        using (var scope = app.Services.CreateScope())
+        {
+            try
+            {
+                var seedService = scope.ServiceProvider.GetRequiredService<SeedService>();
+                seedService.SeedDatabaseAsync().Wait();
+            }
+            catch (Exception ex)
+            {
+                // Logger l'erreur d'initialisation de la BDD
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<App>>();
+                logger.LogError(ex, "Une erreur s'est produite lors de l'initialisation de la base de données.");
+            }
+        }
+
+        return app;
     }
 
-    private static void RegisterServices(IServiceCollection services)
+    private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
     {
+        // Configuration de la base de données
+        ConfigureDatabase(services, configuration);
+
         // Services essentiels
         services.AddSingleton<IConnectivity>(Connectivity.Current);
         services.AddSingleton<IGeolocation>(Geolocation.Default);
         services.AddSingleton<ISecureStorage>(SecureStorage.Default);
         services.AddMemoryCache();
+
+        // Service pour l'initialisation des données
+        services.AddTransient<SeedService>();
 
         // Services Core
         services.AddSingleton<ISecureStorageService, SecureStorageService>();
@@ -82,10 +121,48 @@ public static class MauiProgram
         // Client HTTP
         services.AddHttpClient("SubExploreAPI", client =>
         {
-            client.BaseAddress = new Uri("https://api.subexplore.com/");
+            client.BaseAddress = new Uri(configuration["AppSettings:ApiBaseUrl"] ?? "https://api.subexplore.com/");
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.Timeout = TimeSpan.FromSeconds(30);
         });
+    }
+
+    private static void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
+    {
+        var provider = configuration["DatabaseProvider"] ?? "MySQL";
+        var environmentName = GetEnvironment();
+        var connectionString = configuration.GetConnectionString(environmentName);
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new InvalidOperationException($"Chaîne de connexion pour l'environnement {environmentName} non trouvée dans la configuration.");
+        }
+
+        switch (provider)
+        {
+            case "MySQL":
+                services.AddDbContext<SubExploreDbContext>(options =>
+                    options.UseMySql(connectionString,
+                        ServerVersion.AutoDetect(connectionString)));
+                break;
+
+            case "AzureSQL":
+                services.AddDbContext<SubExploreDbContext>(options =>
+                    options.UseSqlServer(connectionString));
+                break;
+
+            default:
+                throw new NotSupportedException($"Le fournisseur de base de données '{provider}' n'est pas pris en charge.");
+        }
+    }
+
+    private static string GetEnvironment()
+    {
+#if DEBUG
+        return "Development";
+#else
+        return "Production";
+#endif
     }
 
     private static void RegisterViewModels(IServiceCollection services)
