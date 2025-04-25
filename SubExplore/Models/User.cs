@@ -158,6 +158,13 @@ namespace SubExplore.Models
 
         [ForeignKey("UserId")]
         public virtual User? User { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public virtual StoryCategory? Category { get; set; }
+
+        public virtual ICollection<StoryMedia> Media { get; set; } = new List<StoryMedia>();
+
+        public virtual ICollection<StoryComment> Comments { get; set; } = new List<StoryComment>();
     }
 
     public class UserRating
